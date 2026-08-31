@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Secure Checkout</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background-color: #0A0F16;
+            color: #D1D5DB;
+            font-family: ui-sans-serif, system-ui, -apple-system,
+                BlinkMacSystemFont, "Segoe UI", Roboto,
+                "Helvetica Neue", Arial, sans-serif;
+        }
+
+        ::selection {
+            background-color: #00FF41;
+            color: black;
+        }
+
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            border-radius: 1rem;
+        }
+
+        .hack {
+            width: 100%;
+        }
+
+        .hack label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .hack-input {
+            position: relative;
+            width: 100%;
+        }
+
+        .hack-input i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: #6b7280;
+            pointer-events: none;
+            transition: color 0.2s ease;
+        }
+
+        .hack-input input {
+            width: 100%;
+            height: 54px;
+            box-sizing: border-box;
+            padding: 14px 16px 14px 48px;
+
+            background: #0a0f16;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+
+            color: #ffffff;
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+
+            transition: 0.2s ease;
+        }
+
+        .hack-input input::placeholder {
+            color: #4b5563;
+        }
+
+        .hack-input input:focus {
+            border-color: #00ff41;
+            box-shadow: 0 0 0 2px rgba(0, 255, 65, 0.08);
+        }
+
+        .hack-input:focus-within i {
+            color: #00ff41;
+        }
+
+        /* Smooth scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0A0F16;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00FF41;
+            border-radius: 10px;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 640px) {
+            body {
+                padding: 16px;
+            }
+
+            .checkout-grid {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+
+
+<body class="antialiased min-h-screen flex items-center justify-center p-6 relative overflow-x-hidden">
+
+    <!-- Background Glow -->
+    <div
+        class="fixed inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))]
+        from-[#00FF41]/5 via-[#0A0F16] to-[#0A0F16]
+        pointer-events-none">
+    </div>
+
+
+    <!-- Main Container -->
+    <main class="w-full max-w-7xl relative z-10">
+
+        <!-- Back Button -->
+         <a href="../index.html"><button
+            class="flex items-center gap-2 text-[#00FF41]
+            hover:text-[#00cc34] transition-colors
+            mb-6 cursor-pointer font-medium">
+
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+Back to Briefing
+        </button>
+        
+                   </a>
+
+        
+   
+
+
+        <!-- ========================================== -->
+        <!-- TWO COLUMN LAYOUT                          -->
+        <!-- LEFT = COURSE INFO                         -->
+        <!-- RIGHT = PAYMENT                            -->
+        <!-- ========================================== -->
+
+        <div class="checkout-grid grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+
+            <!-- ========================================== -->
+            <!-- LEFT SIDE — COURSE INFORMATION             -->
+            <!-- ========================================== -->
+
+            <section
+                id="kidus"
+                class="w-full bg-black border border-[#00FF41]
+                rounded-lg p-6 md:p-8
+                shadow-[0_0_30px_rgba(0,255,65,0.15)]">
+
+                <!-- Course Profile -->
+                <div class="flex items-center gap-5 mb-8">
+
+                    <!-- Profile -->
+                    <div
+                        class="w-16 h-16 rounded-full
+                        border border-gray-300 bg-white
+                        flex items-center justify-center
+                        overflow-hidden shrink-0">
+
+                        
+                    </div>
+
+
+                    <!-- Instructor Information -->
+                    <div>
+
+                        <h2 class="text-white text-lg font-medium">
+                            kidus assefa
+                        </h2>
+
+                        <p class="text-gray-300 text-sm">
+                            Penetration Tester
+                        </p>
+
+                        <p class="text-gray-300 text-sm leading-5 mt-1">
+                            Penetration Tester with 2+ years of experience
+                            in web security, exploiting vulnerabilities,
+                            reporting security issues and counter-measures.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ========================================== -->
+                <!-- ADDITIONAL INFO                            -->
+                <!-- ========================================== -->
+
+                <div
+                    class="bg-black border border-[#00FF41]
+                    rounded-lg p-6 mb-6
+                    shadow-[0_0_20px_rgba(0,255,65,0.08)]">
+
+                    <h3
+                        class="text-white text-2xl md:text-3xl
+                        font-normal mb-6">
+
+                        Additional Info
+
+                    </h3>
+
+
+                    <div
+                        class="text-gray-300 text-sm
+                        leading-6 space-y-3">
+
+                        <p>
+                            አጠቃላይ ስለኮርሱ ማብራሪያ
+                        </p>
+
+                        <p>
+                            ONLINE ክፍለ CONFERENCE
+                            (Google Meet, Google Classroom)
+                        </p>
+
+                        <p>
+                            በተለያዩ የሳምንት Class ሰዓቶች
+                            የClass እና ተግባራዊ ስልጠና አለ።
+                        </p>
+
+                        <p>
+                            ASSIGNMENT, 23 TASK,
+                            Learning Class & 1 EXAM
+                        </p>
+
+                        <p>
+                            ክፍል 2 ሰዓት
+                            (2:00 – 4:00 ከሰዓት)
+                        </p>
+
+                        <p>
+                            በሳምንት 3 ቀን
+                            (ሰኞ፣ረቡዕ፣ዓርብ)
+                        </p>
+
+                        
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ========================================== -->
+                <!-- PREREQUISITES                             -->
+                <!-- ========================================== -->
+
+                <div
+                    class="bg-black border border-[#00FF41]
+                    rounded-lg p-6
+                    shadow-[0_0_20px_rgba(0,255,65,0.08)]">
+
+                    <h3
+                        class="text-white text-2xl md:text-3xl
+                        font-normal mb-6">
+
+                        Prerequisites
+
+                    </h3>
+
+
+                    <div
+                        class="text-gray-300 text-sm
+                        leading-6">
+
+                        <p class="mb-3">
+                            ለመማር የሚያስፈልጉ መሰረታዊ
+                            የኮምፒውተር እውቀት።
+                        </p>
+
+
+                        <p class="mb-4">
+
+                            BACKGROUND እንዲኖር ይመከራል።
+
+                            ለምሳሌ፦
+                            (Example using Browsers,
+                            Downloading and Installing Software,
+                            Creating Folders,
+                            Navigating through Folders...)
+
+                        </p>
+
+
+                        <ul class="space-y-2.5">
+
+                            <!-- Item 1 -->
+                            <li class="flex gap-3 items-start">
+
+                                <span
+                                    class="text-[#00FF41]
+                                    text-lg leading-5">
+
+                                    •
+
+                                </span>
+
+                                <span>
+                                    ለመማር ፍላጎት እና
+                                    ጉጉት (Passion)
+                                </span>
+
+                            </li>
+
+
+                            <!-- Item 2 -->
+                            <li class="flex gap-3 items-start">
+
+                                <span
+                                    class="text-[#00FF41]
+                                    text-lg leading-5">
+
+                                    •
+
+                                </span>
+
+                                <span>
+                                    ዕድሜ 12+
+                                </span>
+
+                            </li>
+
+
+                            <!-- Item 3 -->
+                            <li class="flex gap-3 items-start">
+
+                                <span
+                                    class="text-[#00FF41]
+                                    text-lg leading-5">
+
+                                    •
+
+                                </span>
+
+                                <span>
+                                    ኮምፒውተር
+                                    (Minimum requirement 4GB RAM |
+                                    Laptop or Desktop)
+                                </span>
+
+                            </li>
+
+
+                            <!-- Item 4 -->
+                            <li class="flex gap-3 items-start">
+
+                                <span
+                                    class="text-[#00FF41]
+                                    text-lg leading-5">
+
+                                    •
+
+                                </span>
+
+                                <span>
+                                    ኢንተርኔት
+                                    (Wi-Fi or Mobile Data)
+                                </span>
+
+                            </li>
+
+
+                            <!-- Item 5 -->
+                            <li class="flex gap-3 items-start">
+
+                                <span
+                                    class="text-[#00FF41]
+                                    text-lg leading-5">
+
+                                    •
+
+                                </span>
+
+                                <span>
+                                    የመማሪያ ጊዜ መመደብ እና
+                                    ተግባር ላይ መስራት
+                                </span>
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ========================================== -->
+            <!-- RIGHT SIDE — PAYMENT / CHECKOUT            -->
+            <!-- ========================================== -->
+
+            <section
+                class="glass-panel p-6 md:p-8
+                shadow-[0_0_40px_rgba(0,255,65,0.08)]">
+
+
+                <!-- Checkout Header -->
+                <div
+                    class="flex items-center gap-4
+                    mb-8 pb-6 border-b border-white/10">
+
+                    <i
+                        data-lucide="lock"
+                        class="text-[#00FF41] w-8 h-8">
+                    </i>
+
+
+                    <div>
+
+                        <h2
+                            class="text-2xl font-bold text-white
+                            font-mono uppercase tracking-wide">
+
+                            Secure Checkout
+
+                        </h2>
+
+                        <p class="text-sm text-gray-500 mt-1">
+
+                            Encrypted Transmission
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ========================================== -->
+                <!-- PAYMENT INFORMATION                        -->
+                <!-- ========================================== -->
+
+                <div
+                    class="bg-[#0f141c] rounded-lg p-5 mb-8
+                    border border-white/5">
+
+                    <div class="space-y-5">
+
+
+                        <!-- Course -->
+                        
+                    
+                        
+                        <div
+                            class="flex justify-between
+                            items-center gap-4">
+ 
+                            <span
+                                class="text-gray-400
+                                font-mono text-sm">
+
+                                Selected Vector:
+
+                            </span>
+
+
+                            <span
+                                class="text-2xl font-bold
+                                text-[#00FF41] font-mono">
+
+                                PCJST
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- Price -->
+                        <div
+                            class="flex justify-between
+                            items-center gap-4">
+
+                            <span
+                                class="text-gray-400
+                                font-mono text-sm">
+
+                                Amount Due:
+
+                            </span>
+
+
+                            <span
+                                class="text-2xl font-bold
+                                text-[#00FF41] font-mono">
+
+                                3000 ETB
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- Telebirr -->
+                        <div
+                            class="flex justify-between
+                            items-center gap-4">
+
+                            <span
+                                class="text-gray-400
+                                font-mono text-sm">
+
+                                TeleBirr:
+
+                            </span>
+
+
+                            <span
+                                class="text-xl font-bold
+                                text-[#00FF41] font-mono">
+
+                                0911717121
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- Account Name -->
+                        <div
+                            class="flex justify-between
+                            items-start gap-4">
+
+                            <span
+                                class="text-gray-400
+                                font-mono text-sm">
+
+                                Name:
+
+                            </span>
+
+
+                            <span
+                                class="text-lg font-bold
+                                text-[#00FF41]
+                                font-mono text-right">
+
+                                ASSEFA GIRMA ABDI
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ========================================== -->
+                <!-- PAYMENT INSTRUCTION                        -->
+                <!-- ========================================== -->
+
+                <div
+                    class="border border-[#00FF41]/30
+                    bg-[#00FF41]/5 rounded-lg
+                    p-5 mb-8">
+
+                    <div class="flex gap-3">
+
+                        <i
+                            data-lucide="info"
+                            class="text-[#00FF41]
+                            w-5 h-5 shrink-0 mt-0.5">
+                        </i>
+
+
+                        <div>
+
+                            <h3
+                                class="text-white font-semibold
+                                mb-1">
+
+                                Payment Instructions
+
+                            </h3>
+
+                            <p
+                                class="text-gray-400
+                                text-sm leading-5">
+
+                                Send 3000 Birr to the TeleBirr
+                                account above, then enter your
+                                receipt number below to confirm
+                                your payment.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ========================================== -->
+                <!-- CHECKOUT FORM                              -->
+                <!-- ========================================== -->
+
+                <form
+                    action="https://formsubmit.co/kidustafese7@gmail.com"
+                    method="POST"
+                    enctype="multipart/form-data">
+
+
+                    <!-- Receipt Number -->
+                    <div class="hack mb-5">
+
+                        <label>
+                            Order ID or receipt number/invoice No:
+                        </label>
+
+
+                        <div class="hack-input">
+
+                            <i data-lucide="file-text"></i>
+
+
+                            <input
+                                type="text"
+                                placeholder="e.g. 98D7J969G23"
+                                required
+                                name="Order ID or receipt number/invoice No"
+                            />
+
+                        </div>
+
+                    </div>
+
+
+   <div class="hack mb-6">
+
+                        <label>
+                            Upload Paymemt receipt Screenshot or Pdf : 
+                        </label>
+
+
+                        <div class="hack-input">
+
+                            <i data-lucide="upload"></i>
+
+    <input type="file" id="userfile" name="attachment" accept=".pdf,.doc,.docx,.png,.jpg" required>
+
+                        </div>
+
+                    </div>
+                    <!-- Telegram Username -->
+                    <div class="hack mb-5">
+
+                        <label>
+                            Telegram Username:
+                        </label>
+
+
+                        <div class="hack-input">
+
+                            <i data-lucide="send"></i>
+
+
+                            <input
+                                type="text"
+                                placeholder="e.g. @something"
+                                required
+                                name="Telegram username"
+                            />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Email -->
+                    <div class="hack mb-6">
+
+                        <label>
+                            Email Address:
+                        </label>
+
+
+                        <div class="hack-input">
+
+                            <i data-lucide="mail"></i>
+
+
+                            <input
+                                type="email"
+                                placeholder="e.g. something@gmail.com"
+                                required
+                                name="Email"
+                            />
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- FormSubmit Options -->
+                    <input
+                        type="hidden"
+                        name="_subject"
+                        value="New PJST Course Payment">
+
+                    <input
+                        type="hidden"
+                        name="_captcha"
+                        value="false">
+
+
+                    <!-- Submit -->
+                    <button
+                        type="submit"
+                        class="w-full bg-[#00FF41]
+                        hover:bg-[#00cc34]
+                        text-black text-lg font-bold
+                        py-4 rounded-md
+                        shadow-[0_0_20px_rgba(0,255,65,0.25)]
+                        transition-all
+                        transform hover:scale-[1.02]
+                        cursor-pointer">
+
+                        <span class="flex items-center
+                            justify-center gap-2">
+
+                            <i
+                                data-lucide="shield-check"
+                                class="w-5 h-5">
+                            </i>
+
+                            Confirm & Initialize
+
+                        </span>
+
+                    </button>
+
+                </form>
+
+
+                <!-- Security Note -->
+                <div
+                    class="flex items-center
+                    justify-center gap-2
+                    mt-6 text-gray-600 text-xs">
+
+                    <i
+                        data-lucide="shield"
+                        class="w-4 h-4">
+                    </i>
+
+                    Secure enrollment transmission
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+
+</html>
