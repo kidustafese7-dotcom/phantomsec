@@ -1,0 +1,737 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Phantom Security</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #050505;
+            color: white;
+            font-family: Arial, sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .box {
+            background: #0d0d0d;
+            border: 1px solid #1cff72;
+            border-radius: 12px;
+            padding: 30px;
+
+            box-shadow:
+                0 0 30px rgba(28, 255, 114, 0.12);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1cff72;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        p {
+            color: #888;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 14px;
+
+            background: #050505;
+            border: 1px solid #333;
+            color: white;
+
+            border-radius: 7px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #1cff72;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+
+            background: #1cff72;
+            border: none;
+            border-radius: 7px;
+
+            color: black;
+            font-weight: bold;
+
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            background: #00dd59;
+        }
+
+        .link {
+            margin-top: 18px;
+            text-align: center;
+
+            color: #1cff72;
+            cursor: pointer;
+        }
+
+        .dashboard {
+            text-align: center;
+        }
+
+        .dashboard h2 {
+            color: #1cff72;
+            margin-bottom: 15px;
+        }
+
+        .dashboard .username {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        .admin {
+            border-color: #ff3b3b;
+
+            box-shadow:
+                0 0 30px rgba(255, 59, 59, 0.12);
+        }
+
+        .admin h2 {
+            color: #ff3b3b;
+        }
+
+        .logout {
+            background: #ff3b3b;
+            color: white;
+            margin-top: 15px;
+        }
+
+        .logout:hover {
+            background: #d92f2f;
+        }
+
+        .error {
+            color: #ff4d4d;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .success {
+            color: #1cff72;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LOGIN -->
+
+    <div id="loginPage" class="box">
+
+        <h1>PHANTOM SEC</h1>
+
+        <h2>Login</h2>
+
+        <div id="loginMessage"></div>
+
+        <input
+            type="text"
+            id="loginUsername"
+            placeholder="Username"
+        >
+
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+        >
+
+        <button onclick="login()">
+            LOGIN
+        </button>
+
+        <div class="link" onclick="showRegister()">
+            Create an account
+        </div>
+
+    </div>
+
+
+    <!-- REGISTER -->
+
+    <div
+        id="registerPage"
+        class="box"
+        style="display:none;"
+    >
+
+        <h1>PHANTOM SEC</h1>
+
+        <h2>Register</h2>
+
+        <div id="registerMessage"></div>
+
+        <input
+            type="text"
+            id="registerUsername"
+            placeholder="Username"
+        >
+
+        <input
+            type="password"
+            id="registerPassword"
+            placeholder="Password"
+        >
+
+        <input
+            type="password"
+            id="registerConfirm"
+            placeholder="Confirm password"
+        >
+
+        <button onclick="register()">
+            REGISTER
+        </button>
+
+        <div class="link" onclick="showLogin()">
+            Already have an account?
+        </div>
+
+    </div>
+
+
+    <!-- USER DASHBOARD -->
+
+    <div
+        id="userPage"
+        class="box dashboard"
+        style="display:none;"
+    >
+
+        <h1>PHANTOM SEC</h1>
+
+        <h2>Welcome Operative</h2>
+
+        <div
+            class="username"
+            id="userNameDisplay"
+        ></div>
+
+        <p>
+            You are successfully authenticated.
+        </p>
+
+        <button
+            class="logout"
+            onclick="logout()"
+        >
+            LOGOUT
+        </button>
+
+    </div>
+
+
+    <!-- ADMIN DASHBOARD -->
+
+    <div
+        id="adminPage"
+        class="box dashboard admin"
+        style="display:none;"
+    >
+
+        <h1>PHANTOM SEC</h1>
+
+        <h2>Hii Admin</h2>
+
+        <div
+            class="username"
+            id="adminFlag"
+        ></div>
+
+        <p>
+            Welcome to the Phantom Security
+            administration panel.
+        </p>
+
+        <button
+            class="logout"
+            onclick="logout()"
+        >
+            LOGOUT
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /*
+    ==========================================
+            PHANTOM SECURITY AUTH SYSTEM
+    ==========================================
+
+    DEFAULT ADMIN ACCOUNT
+
+    Username:
+    admin
+
+    Password:
+    admin123
+
+    CTF OBJECTIVE:
+    Manipulate the "user" cookie.
+
+    Example:
+
+    user=admin
+
+    ==========================================
+    */
+
+
+    // ==========================================
+    // ENCODED FLAG
+    // ==========================================
+
+    const encodedFlag =
+        "cGhhbnRvbntjMDBrMTNfbTRuMXB1bDR0MTBufQ==";
+
+
+    // ==========================================
+    // USER DATABASE
+    // ==========================================
+
+    let users = JSON.parse(
+        localStorage.getItem("phantomUsers")
+    ) || {};
+
+
+    // ==========================================
+    // CREATE DEFAULT ADMIN
+    // ==========================================
+
+    if (!users["admin"]) {
+
+        users["admin"] = {
+
+            username: "admin",
+
+            password: "admin123",
+
+            role: "admin"
+
+        };
+
+        localStorage.setItem(
+            "phantomUsers",
+            JSON.stringify(users)
+        );
+    }
+
+
+    // ==========================================
+    // COOKIE FUNCTIONS
+    // ==========================================
+
+    function setCookie(name, value) {
+
+        document.cookie =
+            name +
+            "=" +
+            encodeURIComponent(value) +
+            "; path=/; SameSite=Lax";
+    }
+
+
+    function getCookie(name) {
+
+        const cookies =
+            document.cookie.split(";");
+
+        for (let cookie of cookies) {
+
+            cookie = cookie.trim();
+
+            if (
+                cookie.startsWith(
+                    name + "="
+                )
+            ) {
+
+                return decodeURIComponent(
+                    cookie.substring(
+                        name.length + 1
+                    )
+                );
+            }
+        }
+
+        return null;
+    }
+
+
+    function deleteCookie(name) {
+
+        document.cookie =
+            name +
+            "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+
+
+    // ==========================================
+    // PAGE CONTROLS
+    // ==========================================
+
+    function hideAllPages() {
+
+        document.getElementById(
+            "loginPage"
+        ).style.display = "none";
+
+        document.getElementById(
+            "registerPage"
+        ).style.display = "none";
+
+        document.getElementById(
+            "userPage"
+        ).style.display = "none";
+
+        document.getElementById(
+            "adminPage"
+        ).style.display = "none";
+    }
+
+
+    function showLogin() {
+
+        hideAllPages();
+
+        document.getElementById(
+            "loginPage"
+        ).style.display = "block";
+    }
+
+
+    function showRegister() {
+
+        hideAllPages();
+
+        document.getElementById(
+            "registerPage"
+        ).style.display = "block";
+    }
+
+
+    // ==========================================
+    // REGISTER
+    // ==========================================
+
+    function register() {
+
+        const username =
+            document
+                .getElementById(
+                    "registerUsername"
+                )
+                .value
+                .trim();
+
+
+        const password =
+            document
+                .getElementById(
+                    "registerPassword"
+                )
+                .value;
+
+
+        const confirm =
+            document
+                .getElementById(
+                    "registerConfirm"
+                )
+                .value;
+
+
+        const message =
+            document.getElementById(
+                "registerMessage"
+            );
+
+
+        if (!username || !password) {
+
+            message.innerHTML =
+                '<div class="error">' +
+                'All fields are required.' +
+                '</div>';
+
+            return;
+        }
+
+
+        if (password !== confirm) {
+
+            message.innerHTML =
+                '<div class="error">' +
+                'Passwords do not match.' +
+                '</div>';
+
+            return;
+        }
+
+
+        if (
+            users[
+                username.toLowerCase()
+            ]
+        ) {
+
+            message.innerHTML =
+                '<div class="error">' +
+                'Username already exists.' +
+                '</div>';
+
+            return;
+        }
+
+
+        users[
+            username.toLowerCase()
+        ] = {
+
+            username: username,
+
+            password: password,
+
+            role: "user"
+
+        };
+
+
+        localStorage.setItem(
+            "phantomUsers",
+            JSON.stringify(users)
+        );
+
+
+        setCookie(
+            "user",
+            username
+        );
+
+
+        message.innerHTML =
+            '<div class="success">' +
+            'Registration successful.' +
+            '</div>';
+
+
+        setTimeout(() => {
+
+            showCurrentUser();
+
+        }, 500);
+    }
+
+
+    // ==========================================
+    // LOGIN
+    // ==========================================
+
+    function login() {
+
+        const username =
+            document
+                .getElementById(
+                    "loginUsername"
+                )
+                .value
+                .trim();
+
+
+        const password =
+            document
+                .getElementById(
+                    "loginPassword"
+                )
+                .value;
+
+
+        const message =
+            document.getElementById(
+                "loginMessage"
+            );
+
+
+        const user =
+            users[
+                username.toLowerCase()
+            ];
+
+
+        if (!user) {
+
+            message.innerHTML =
+                '<div class="error">' +
+                'User does not exist.' +
+                '</div>';
+
+            return;
+        }
+
+
+        if (
+            user.password !== password
+        ) {
+
+            message.innerHTML =
+                '<div class="error">' +
+                'Incorrect password.' +
+                '</div>';
+
+            return;
+        }
+
+
+        setCookie(
+            "user",
+            user.username
+        );
+
+
+        showCurrentUser();
+    }
+
+
+    // ==========================================
+    // CURRENT USER
+    // ==========================================
+
+    function showCurrentUser() {
+
+        const username =
+            getCookie("user");
+
+
+        if (!username) {
+
+            showLogin();
+
+            return;
+        }
+
+
+        // ======================================
+        // ADMIN CHECK
+        // ======================================
+
+        if (
+            username.toLowerCase() ===
+            "admin"
+        ) {
+
+            hideAllPages();
+
+
+            document.getElementById(
+                "adminPage"
+            ).style.display = "block";
+
+
+            // Decode the flag only here
+
+            const flag =
+                atob(encodedFlag);
+
+
+            document.getElementById(
+                "adminFlag"
+            ).textContent = flag;
+
+
+            return;
+        }
+
+
+        // ======================================
+        // NORMAL USER
+        // ======================================
+
+        hideAllPages();
+
+
+        document.getElementById(
+            "userPage"
+        ).style.display = "block";
+
+
+        document.getElementById(
+            "userNameDisplay"
+        ).textContent =
+            username;
+    }
+
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
+
+    function logout() {
+
+        deleteCookie("user");
+
+        showLogin();
+    }
+
+
+    // ==========================================
+    // AUTO LOGIN
+    // ==========================================
+
+    window.onload = function() {
+
+        showCurrentUser();
+
+    };
+
+</script>
+
+</body>
+</html>
