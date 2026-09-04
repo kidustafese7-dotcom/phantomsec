@@ -13,6 +13,7 @@
     
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -37,24 +38,40 @@
         }
     </script>
 
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+
     <style>
         body {
-            background-color: #f8fafc;
-            color: #0f172a;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .hero-pattern {
-            background-image: radial-gradient(rgba(79, 70, 229, 0.08) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(79, 70, 229, 0.12) 1px, transparent 1px);
             background-size: 24px 24px;
+        }
+        .dark .hero-pattern {
+            background-image: radial-gradient(rgba(99, 102, 241, 0.18) 1px, transparent 1px);
         }
         .card-shadow {
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+        }
+        .dark .card-shadow {
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
         }
         .card-shadow-hover {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .card-shadow-hover:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 35px -10px rgba(79, 70, 229, 0.12);
+            box-shadow: 0 20px 35px -10px rgba(79, 70, 229, 0.15);
         }
         ::-webkit-scrollbar {
             width: 8px;
@@ -62,18 +79,23 @@
         ::-webkit-scrollbar-track {
             background: #f1f5f9;
         }
+        .dark ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
         ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
         }
         ::-webkit-scrollbar-thumb:hover {
             background: #4f46e5;
         }
     </style>
 </head>
-<body class="font-sans antialiased text-slate-900 bg-slate-50 selection:bg-indigo-500 selection:text-white">
+<body class="font-sans antialiased text-slate-900 bg-slate-50 dark:bg-slate-950 dark:text-slate-100 selection:bg-indigo-500 selection:text-white transition-colors duration-300">
 
-    <!-- Top Announcement Bar -->
     <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white text-xs py-2 px-4 text-center font-medium border-b border-indigo-900/40">
         <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
             <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -82,8 +104,7 @@
         </div>
     </div>
 
-    <!-- Navigation Header -->
-    <nav class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all duration-300">
+    <nav class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <!-- Brand Logo -->
@@ -94,31 +115,35 @@
                         </div>
                     </div>
                     <div>
-                        <span class="font-extrabold text-xl tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">KIDUS ASSEFA</span>
-                        <div class="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 uppercase tracking-wider">
+                        <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">KIDUS ASSEFA</span>
+                        <div class="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                             <span>DEV &amp; SEC SPECIALIST</span>
                         </div>
                     </div>
                 </a>
 
-                <!-- Desktop Menu -->
-                <div class="hidden lg:flex items-center gap-7 text-xs font-semibold uppercase tracking-wider text-slate-600">
-                    <a href="#home" class="hover:text-indigo-600 transition-colors py-1">Home</a>
-                    <a href="#about" class="hover:text-indigo-600 transition-colors py-1">About</a>
-                    <a href="#capabilities" class="hover:text-indigo-600 transition-colors py-1">Capabilities</a>
-                    <a href="#services" class="hover:text-indigo-600 transition-colors py-1">Services</a>
-                    <a href="#seclab" class="hover:text-indigo-600 transition-colors py-1 flex items-center gap-1 text-indigo-600 font-bold">
+                <!-- Desktop Navigation Menu -->
+                <div class="hidden lg:flex items-center gap-7 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                    <a href="#home" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors py-1">Home</a>
+                    <a href="#about" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors py-1">About</a>
+                    <a href="#capabilities" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors py-1">Capabilities</a>
+                    <a href="#services" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors py-1">Services</a>
+                    <a href="#seclab" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors py-1 flex items-center gap-1 text-indigo-600 dark:text-indigo-400 font-bold">
                         <i class="fa-solid fa-shield-halved"></i> SecLab
                     </a>
-                    <a href="#projects" class="hover:text-indigo-600 transition-colors py-1">Projects</a>
-                    <a href="#journey" class="hover:text-indigo-600 transition-colors py-1">Journey</a>
-                    <a href="#contact" class="hover:text-indigo-600 transition-colors py-1">Contact</a>
+                    <a href="#projects" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors py-1">Projects</a>
+                    <a href="#journey" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors py-1">Journey</a>
+                    <a href="#contact" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors py-1">Contact</a>
                 </div>
 
-                <!-- Header Actions -->
                 <div class="hidden md:flex items-center gap-3">
-                    <button onclick="toggleTerminal()" class="px-3.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 text-xs font-mono font-bold flex items-center gap-2 transition-all">
-                        <i class="fa-solid fa-terminal text-indigo-600"></i>
+                    <!-- Color Mode Toggle Button -->
+                    <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 transition-all flex items-center justify-center" title="Toggle White & Black Mode">
+                        <i id="themeToggleIcon" class="fa-solid fa-moon text-sm"></i>
+                    </button>
+
+                    <button onclick="toggleTerminal()" class="px-3.5 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs font-mono font-bold flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-terminal text-indigo-600 dark:text-indigo-400"></i>
                         <span>Terminal</span>
                     </button>
                     <a href="#contact" class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-indigo-500/25 transition-all hover:scale-105">
@@ -126,43 +151,48 @@
                     </a>
                 </div>
 
-                <!-- Mobile Trigger -->
+                <!-- Mobile Action & Trigger Buttons -->
                 <div class="flex lg:hidden items-center gap-2">
-                    <button onclick="toggleTerminal()" class="p-2 rounded-lg bg-slate-100 border border-slate-200 text-indigo-600">
+                    <button id="themeToggleMobileBtn" onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200">
+                        <i id="themeToggleMobileIcon" class="fa-solid fa-moon text-base"></i>
+                    </button>
+                    <button onclick="toggleTerminal()" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-indigo-600 dark:text-indigo-400">
                         <i class="fa-solid fa-terminal"></i>
                     </button>
-                    <button id="mobileMenuBtn" class="p-2 rounded-lg text-slate-700 hover:text-slate-900 focus:outline-none">
+                    <button id="mobileMenuBtn" class="p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:text-slate-900 focus:outline-none">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Drawer Menu -->
-        <div id="mobileMenu" class="hidden lg:hidden border-b border-slate-200 bg-white px-6 pt-3 pb-6 space-y-3 font-semibold text-sm">
-            <a href="#home" class="block py-2 text-slate-700 hover:text-indigo-600">Home</a>
-            <a href="#about" class="block py-2 text-slate-700 hover:text-indigo-600">About</a>
-            <a href="#capabilities" class="block py-2 text-slate-700 hover:text-indigo-600">Capabilities</a>
-            <a href="#services" class="block py-2 text-slate-700 hover:text-indigo-600">Services</a>
-            <a href="#seclab" class="block py-2 text-indigo-600 font-bold">SecLab Interactive Sandbox</a>
-            <a href="#projects" class="block py-2 text-slate-700 hover:text-indigo-600">Projects</a>
-            <a href="#journey" class="block py-2 text-slate-700 hover:text-indigo-600">Journey</a>
-            <a href="#contact" class="block py-2 text-slate-700 hover:text-indigo-600">Contact</a>
-            <a href="#contact" class="block w-full text-center mt-4 py-3 rounded-xl bg-indigo-600 text-white font-bold">
+        <div id="mobileMenu" class="hidden lg:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 pt-3 pb-6 space-y-3 font-semibold text-sm">
+            <a href="#home" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400">Home</a>
+            <a href="#about" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400">About</a>
+            <a href="#capabilities" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400">Capabilities</a>
+            <a href="#services" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400">Services</a>
+            <a href="#seclab" class="block py-2 text-indigo-600 dark:text-indigo-400 font-bold">SecLab Interactive Sandbox</a>
+            <a href="#projects" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400">Projects</a>
+            <a href="#journey" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400">Journey</a>
+            <a href="#contact" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400">Contact</a>
+            
+            <button onclick="toggleTheme()" class="w-full py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold flex items-center justify-center gap-2">
+                <i id="themeToggleDrawerIcon" class="fa-solid fa-moon"></i>
+                <span id="themeToggleDrawerText">Switch Theme Mode</span>
+            </button>
+
+            <a href="#contact" class="block w-full text-center mt-3 py-3 rounded-xl bg-indigo-600 text-white font-bold">
                 Hire Kidus Assefa
             </a>
         </div>
     </nav>
 
-    <!-- HERO SECTION (Laura Academy Style) -->
-    <section id home class="relative py-16 md:py-24 overflow-hidden bg-slate-900 text-white hero-pattern">
-        <!-- Glow accents -->
+    <section id="home" class="relative py-16 md:py-24 overflow-hidden bg-slate-900 text-white hero-pattern">
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            
             <div class="text-center max-w-4xl mx-auto space-y-6">
-                <!-- Pill Badge -->
+                <!-- Badge -->
                 <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-400/30 text-indigo-300 font-mono text-xs uppercase tracking-widest font-semibold">
                     <i class="fa-solid fa-shield-virus text-indigo-400"></i>
                     <span>KIDUS ASSEFA • WEB DEV &amp; CERTIFIED WEB SECURITY TESTER</span>
@@ -193,7 +223,7 @@
                 </div>
             </div>
 
-            <!-- Floating Statistics Banner (As seen in Laura Academy video) -->
+            <!-- Floating Statistics Banner -->
             <div class="mt-16 bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-6 sm:p-8 max-w-5xl mx-auto shadow-2xl">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-white/10">
                     <div class="p-2">
@@ -214,54 +244,52 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 
-    <!-- HIGHLIGHT BANNER: "Education Designed for Tomorrow" style -->
-    <section id="about" class="py-20 bg-white border-b border-slate-200">
+    <section id="about" class="py-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-12 gap-12 items-center">
                 
                 <!-- Left Text Box -->
                 <div class="lg:col-span-6 space-y-6">
-                    <span class="text-indigo-600 text-xs font-mono font-extrabold uppercase tracking-widest block">
+                    <span class="text-indigo-600 dark:text-indigo-400 text-xs font-mono font-extrabold uppercase tracking-widest block">
                         — DEV &amp; SECURITY SPECIALIST
                     </span>
 
-                    <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 leading-tight">
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight">
                         Web Engineering Designed for the Secure Future
                     </h2>
 
-                    <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
+                    <p class="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
                         Kidus Assefa combines rigorous front-end engineering with modern offensive security testing. I build pixel-perfect, accessible user interfaces using HTML, CSS, and modern JavaScript while protecting applications against XSS, SQL injection, CSRF, and logic flaws.
                     </p>
 
                     <div class="pt-2">
-                        <a href="#capabilities" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-indigo-600 text-white font-bold text-xs uppercase tracking-wider transition-all">
+                        <a href="#capabilities" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900 dark:bg-indigo-600 hover:bg-indigo-600 dark:hover:bg-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition-all">
                             <span>Discover The Story</span>
                             <i class="fa-solid fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
 
-                <!-- Right Visual Mockup (Image layout matching video) -->
+                <!-- Right Visual Mockup -->
                 <div class="lg:col-span-6 relative">
-                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800">
                         <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80" alt="Code and Security Testing" class="w-full h-[380px] object-cover"/>
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
                         
-                        <div class="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-white/95 backdrop-blur-md shadow-xl border border-slate-100 flex items-center justify-between">
+                        <div class="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl border border-slate-100 dark:border-slate-800 flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xl">
+                                <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl">
                                     <i class="fa-solid fa-shield-halved"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-slate-900 text-sm">Security Audit Verified</h4>
-                                    <p class="text-xs text-slate-500">Zero Unpatched OWASP Top 10 Risks</p>
+                                    <h4 class="font-bold text-slate-900 dark:text-white text-sm">Security Audit Verified</h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Zero Unpatched OWASP Top 10 Risks</p>
                                 </div>
                             </div>
-                            <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-mono text-xs font-bold">Passed</span>
+                            <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-mono text-xs font-bold border border-emerald-300/30">Passed</span>
                         </div>
                     </div>
                 </div>
@@ -270,17 +298,16 @@
         </div>
     </section>
 
-    <!-- CORE PILLARS SECTION ("More Than Education" style) -->
-    <section id="capabilities" class="py-20 bg-slate-50 border-b border-slate-200">
+    <section id="capabilities" class="py-20 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
-                <span class="text-indigo-600 text-xs font-mono font-bold uppercase tracking-widest block">
+                <span class="text-indigo-600 dark:text-indigo-400 text-xs font-mono font-bold uppercase tracking-widest block">
                     — WHY WORK WITH KIDUS
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
                     More Than Code. Complete Digital Resilience.
                 </h2>
-                <p class="text-slate-600 text-sm sm:text-base">
+                <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
                     Every web application built or audited by Kidus Assefa is crafted to remain responsive, scalable, and secure under attack.
                 </p>
             </div>
@@ -288,45 +315,45 @@
             <!-- 4 Pillars Grid -->
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Pillar 1 -->
-                <div class="bg-white p-8 rounded-2xl border border-slate-200/80 card-shadow card-shadow-hover space-y-4">
-                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold">
+                <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800 card-shadow card-shadow-hover space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl font-bold">
                         <i class="fa-solid fa-code"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-900">Code Excellence</h3>
-                    <p class="text-xs text-slate-600 leading-relaxed">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Code Excellence</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                         Clean HTML5 semantics, responsive modern CSS/Tailwind layouts, and efficient JavaScript ES6+ architecture.
                     </p>
                 </div>
 
                 <!-- Pillar 2 -->
-                <div class="bg-white p-8 rounded-2xl border border-slate-200/80 card-shadow card-shadow-hover space-y-4">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
+                <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800 card-shadow card-shadow-hover space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl font-bold">
                         <i class="fa-solid fa-shield-virus"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-900">Certified Security</h3>
-                    <p class="text-xs text-slate-600 leading-relaxed">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Certified Security</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                         Rigorous web vulnerability assessments, penetration testing, and HTTP security header hardening.
                     </p>
                 </div>
 
                 <!-- Pillar 3 -->
-                <div class="bg-white p-8 rounded-2xl border border-slate-200/80 card-shadow card-shadow-hover space-y-4">
-                    <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl font-bold">
+                <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800 card-shadow card-shadow-hover space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-sky-50 dark:bg-sky-950 text-sky-600 dark:text-sky-400 flex items-center justify-center text-xl font-bold">
                         <i class="fa-solid fa-laptop-code"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-900">Future-Proof Stack</h3>
-                    <p class="text-xs text-slate-600 leading-relaxed">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Future-Proof Stack</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                         Building lightweight, fast client-side applications that load instantly and operate securely across all modern browsers.
                     </p>
                 </div>
 
                 <!-- Pillar 4 -->
-                <div class="bg-white p-8 rounded-2xl border border-slate-200/80 card-shadow card-shadow-hover space-y-4">
-                    <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold">
+                <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800 card-shadow card-shadow-hover space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl font-bold">
                         <i class="fa-solid fa-user-shield"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-900">Ethical Leadership</h3>
-                    <p class="text-xs text-slate-600 leading-relaxed">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Ethical Leadership</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                         Providing comprehensive security audit reporting with step-by-step remediation strategies for developers.
                     </p>
                 </div>
@@ -334,22 +361,21 @@
         </div>
     </section>
 
-    <!-- SERVICES / PATHWAYS SECTION ("Academic Programs" style) -->
-    <section id="services" class="py-20 bg-white border-b border-slate-200">
+    <section id="services" class="py-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
-                <span class="text-indigo-600 text-xs font-mono font-bold uppercase tracking-widest block">
+                <span class="text-indigo-600 dark:text-indigo-400 text-xs font-mono font-bold uppercase tracking-widest block">
                     — SPECIALIZED SERVICES
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
                     Web Engineering &amp; Security Services
                 </h2>
-                <p class="text-slate-600 text-sm sm:text-base">
+                <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
                     Targeted solutions for building high-performance web applications and fortifying digital assets.
                 </p>
             </div>
 
-            <!-- Service Cards with Dark Overlay Styles -->
+            <!-- Service Cards -->
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Card 1 -->
                 <div class="group relative rounded-2xl overflow-hidden shadow-xl bg-slate-900 text-white min-h-[360px] flex flex-col justify-end p-8 border border-slate-800">
@@ -411,8 +437,7 @@
         </div>
     </section>
 
-    <!-- INTERACTIVE VULNERABILITY LAB (SecLab) -->
-    <section id="seclab" class="py-20 bg-slate-900 text-white border-b border-slate-800 relative">
+    <section id="seclab" class="py-20 bg-slate-900 dark:bg-slate-950 text-white border-b border-slate-800 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
                 <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs uppercase font-bold">
@@ -427,9 +452,9 @@
             </div>
 
             <!-- SecLab Interactive Container -->
-            <div class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl max-w-4xl mx-auto">
+            <div class="bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl max-w-4xl mx-auto">
                 <!-- Header Controls -->
-                <div class="bg-slate-900 px-6 py-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-4">
+                <div class="bg-slate-900 dark:bg-slate-950 px-6 py-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-4">
                     <div class="flex items-center gap-2">
                         <span class="w-3 h-3 rounded-full bg-red-500"></span>
                         <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
@@ -439,7 +464,7 @@
                     
                     <div class="flex items-center gap-2 text-xs font-mono">
                         <span class="text-slate-400">Payload Vector:</span>
-                        <select id="payloadSelect" onchange="loadPresetPayload()" class="bg-slate-900 text-indigo-400 border border-slate-700 rounded px-3 py-1 focus:outline-none focus:border-indigo-500">
+                        <select id="payloadSelect" onchange="loadPresetPayload()" class="bg-slate-900 dark:bg-slate-900 text-indigo-400 border border-slate-700 rounded px-3 py-1 focus:outline-none focus:border-indigo-500">
                             <option value="xss">&lt;script&gt;alert('XSS Payload')&lt;/script&gt;</option>
                             <option value="sqli">' OR '1'='1' -- (SQL Injection)</option>
                             <option value="html">&lt;img src=x onerror=alert('DOM Injected')&gt;</option>
@@ -455,7 +480,7 @@
                         <label class="block font-mono text-xs font-bold text-slate-300 uppercase">
                             1. Input Exploit Payload:
                         </label>
-                        <textarea id="labInput" rows="5" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all" placeholder="Enter input payload here..."></textarea>
+                        <textarea id="labInput" rows="5" class="w-full bg-slate-900 dark:bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all" placeholder="Enter input payload here..."></textarea>
                         
                         <button onclick="runSecurityAudit()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-600/25">
                             <i class="fa-solid fa-play"></i> Run Live Security Audit
@@ -468,7 +493,7 @@
                             2. Audit Output &amp; Defensive Patch:
                         </label>
                         
-                        <div id="auditStatusBox" class="p-4 rounded-xl bg-slate-900 border border-slate-800 min-h-[140px] flex flex-col justify-between">
+                        <div id="auditStatusBox" class="p-4 rounded-xl bg-slate-900 dark:bg-slate-950 border border-slate-800 min-h-[140px] flex flex-col justify-between">
                             <div class="flex items-center gap-3">
                                 <div id="statusBadgeIcon" class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400">
                                     <i class="fa-solid fa-shield"></i>
@@ -490,7 +515,7 @@
                 </div>
 
                 <!-- Defensive Strategy Footer -->
-                <div class="bg-slate-900 p-5 border-t border-slate-800 font-mono text-xs">
+                <div class="bg-slate-900 dark:bg-slate-950 p-5 border-t border-slate-800 font-mono text-xs">
                     <div class="flex items-center justify-between mb-1">
                         <span class="text-slate-300 font-bold flex items-center gap-2">
                             <i class="fa-solid fa-shield-halved text-indigo-400"></i> Kidus's Security Patch
@@ -507,17 +532,16 @@
         </div>
     </section>
 
-    <!-- PROJECTS & RECENT WORKS -->
-    <section id="projects" class="py-20 bg-white border-b border-slate-200">
+    <section id="projects" class="py-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
-                <span class="text-indigo-600 text-xs font-mono font-bold uppercase tracking-widest block">
+                <span class="text-indigo-600 dark:text-indigo-400 text-xs font-mono font-bold uppercase tracking-widest block">
                     — PORTFOLIO AUDITS
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
                     Featured Projects &amp; Security Audits
                 </h2>
-                <p class="text-slate-600 text-sm sm:text-base">
+                <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
                     Selected web applications and penetration testing projects executed by Kidus Assefa.
                 </p>
             </div>
@@ -526,7 +550,7 @@
             <div class="grid md:grid-cols-3 gap-8">
                 
                 <!-- Project 1 -->
-                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden card-shadow card-shadow-hover flex flex-col justify-between">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden card-shadow card-shadow-hover flex flex-col justify-between">
                     <div>
                         <div class="h-48 bg-slate-900 relative overflow-hidden flex items-center justify-center p-6">
                             <i class="fa-solid fa-shield-virus text-6xl text-indigo-500/30"></i>
@@ -535,29 +559,29 @@
                             </span>
                         </div>
                         <div class="p-6 space-y-3">
-                            <h3 class="text-xl font-bold text-slate-900">OWASP Security Header &amp; XSS Scanner</h3>
-                            <p class="text-xs text-slate-600 leading-relaxed">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">OWASP Security Header &amp; XSS Scanner</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                                 Automated web scanner built using JavaScript and HTML APIs to evaluate target web applications for security headers (CSP, HSTS) and script execution risks.
                             </p>
                             <div class="flex flex-wrap gap-2 pt-2">
-                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs">HTML5</span>
-                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs">JS ES6</span>
-                                <span class="px-2.5 py-1 rounded bg-indigo-50 text-indigo-700 font-mono text-xs font-bold">OWASP</span>
+                                <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-xs">HTML5</span>
+                                <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-xs">JS ES6</span>
+                                <span class="px-2.5 py-1 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-400 font-mono text-xs font-bold">OWASP</span>
                             </div>
                         </div>
                     </div>
-                    <div class="p-6 pt-2 border-t border-slate-100 flex items-center justify-between">
-                        <span class="text-xs text-emerald-600 font-bold flex items-center gap-1">
+                    <div class="p-6 pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <span class="text-xs text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
                             <i class="fa-solid fa-circle text-[8px]"></i> Audit Ready
                         </span>
-                        <button onclick="openProjectModal('scanner')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+                        <button onclick="openProjectModal('scanner')" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
                             Details &rarr;
                         </button>
                     </div>
                 </div>
 
                 <!-- Project 2 -->
-                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden card-shadow card-shadow-hover flex flex-col justify-between">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden card-shadow card-shadow-hover flex flex-col justify-between">
                     <div>
                         <div class="h-48 bg-slate-900 relative overflow-hidden flex items-center justify-center p-6">
                             <i class="fa-solid fa-cart-shopping text-6xl text-sky-500/30"></i>
@@ -566,29 +590,29 @@
                             </span>
                         </div>
                         <div class="p-6 space-y-3">
-                            <h3 class="text-xl font-bold text-slate-900">Hardened Modern E-Commerce Platform</h3>
-                            <p class="text-xs text-slate-600 leading-relaxed">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Hardened Modern E-Commerce Platform</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                                 High-performance responsive online shop interface developed with Tailwind CSS and ES6 JavaScript. Built with sanitized checkout forms and client encryption.
                             </p>
                             <div class="flex flex-wrap gap-2 pt-2">
-                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs">Tailwind</span>
-                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs">JavaScript</span>
-                                <span class="px-2.5 py-1 rounded bg-sky-50 text-sky-700 font-mono text-xs font-bold">Sanitized DOM</span>
+                                <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-xs">Tailwind</span>
+                                <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-xs">JavaScript</span>
+                                <span class="px-2.5 py-1 rounded bg-sky-50 dark:bg-sky-950 text-sky-700 dark:text-sky-400 font-mono text-xs font-bold">Sanitized DOM</span>
                             </div>
                         </div>
                     </div>
-                    <div class="p-6 pt-2 border-t border-slate-100 flex items-center justify-between">
-                        <span class="text-xs text-sky-600 font-bold flex items-center gap-1">
+                    <div class="p-6 pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <span class="text-xs text-sky-600 dark:text-sky-400 font-bold flex items-center gap-1">
                             <i class="fa-solid fa-lock text-[10px]"></i> Encrypted
                         </span>
-                        <button onclick="openProjectModal('ecommerce')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+                        <button onclick="openProjectModal('ecommerce')" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
                             Details &rarr;
                         </button>
                     </div>
                 </div>
 
                 <!-- Project 3 -->
-                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden card-shadow card-shadow-hover flex flex-col justify-between">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden card-shadow card-shadow-hover flex flex-col justify-between">
                     <div>
                         <div class="h-48 bg-slate-900 relative overflow-hidden flex items-center justify-center p-6">
                             <i class="fa-solid fa-chart-line text-6xl text-purple-500/30"></i>
@@ -597,22 +621,22 @@
                             </span>
                         </div>
                         <div class="p-6 space-y-3">
-                            <h3 class="text-xl font-bold text-slate-900">Cyber Threat Monitoring Dashboard UI</h3>
-                            <p class="text-xs text-slate-600 leading-relaxed">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Cyber Threat Monitoring Dashboard UI</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                                 Real-time incident dashboard tracking network traffic alerts, active vulnerabilities, and automated mitigation progress with interactive charts.
                             </p>
                             <div class="flex flex-wrap gap-2 pt-2">
-                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs">HTML Grid</span>
-                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs">Vanilla JS</span>
-                                <span class="px-2.5 py-1 rounded bg-purple-50 text-purple-700 font-mono text-xs font-bold">Dashboard</span>
+                                <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-xs">HTML Grid</span>
+                                <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-xs">Vanilla JS</span>
+                                <span class="px-2.5 py-1 rounded bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-400 font-mono text-xs font-bold">Dashboard</span>
                             </div>
                         </div>
                     </div>
-                    <div class="p-6 pt-2 border-t border-slate-100 flex items-center justify-between">
-                        <span class="text-xs text-purple-600 font-bold flex items-center gap-1">
+                    <div class="p-6 pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <span class="text-xs text-purple-600 dark:text-purple-400 font-bold flex items-center gap-1">
                             <i class="fa-solid fa-shield text-[10px]"></i> Live Metrics
                         </span>
-                        <button onclick="openProjectModal('dashboard')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+                        <button onclick="openProjectModal('dashboard')" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
                             Details &rarr;
                         </button>
                     </div>
@@ -622,31 +646,30 @@
         </div>
     </section>
 
-    <!-- TIMELINE / JOURNEY SECTION (As seen in video "Way To Excellence") -->
-    <section id="journey" class="py-20 bg-slate-50 border-b border-slate-200">
+    <section id="journey" class="py-20 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
-                <span class="text-indigo-600 text-xs font-mono font-bold uppercase tracking-widest block">
+                <span class="text-indigo-600 dark:text-indigo-400 text-xs font-mono font-bold uppercase tracking-widest block">
                     — HISTORY &amp; MILESTONES
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
                     Way to Web &amp; Security Excellence
                 </h2>
-                <p class="text-slate-600 text-sm sm:text-base">
+                <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
                     The progression of Kidus Assefa's web engineering mastery and web security certifications over the years.
                 </p>
             </div>
 
-            <!-- Vertical Timeline Grid -->
-            <div class="max-w-4xl mx-auto relative border-l-2 border-indigo-200 pl-6 md:pl-10 space-y-12">
+            <!-- Vertical Timeline -->
+            <div class="max-w-4xl mx-auto relative border-l-2 border-indigo-200 dark:border-indigo-900 pl-6 md:pl-10 space-y-12">
                 
                 <!-- Timeline Item 1 -->
                 <div class="relative group">
-                    <div class="absolute -left-[31px] md:-left-[47px] top-0 w-6 h-6 rounded-full bg-indigo-600 border-4 border-white shadow-md"></div>
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-                        <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">2023</span>
-                        <h3 class="text-lg font-bold text-slate-900">Front-End Development Mastery</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
+                    <div class="absolute -left-[31px] md:-left-[47px] top-0 w-6 h-6 rounded-full bg-indigo-600 border-4 border-white dark:border-slate-950 shadow-md"></div>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+                        <span class="px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-800 dark:text-indigo-300 font-mono text-xs font-bold">2023</span>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Front-End Development Mastery</h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                             Specialized in raw HTML5, CSS3 styling systems, and modern asynchronous JavaScript (ES6+), building high-speed responsive user interfaces.
                         </p>
                     </div>
@@ -654,11 +677,11 @@
 
                 <!-- Timeline Item 2 -->
                 <div class="relative group">
-                    <div class="absolute -left-[31px] md:-left-[47px] top-0 w-6 h-6 rounded-full bg-purple-600 border-4 border-white shadow-md"></div>
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-                        <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-800 font-mono text-xs font-bold">2024</span>
-                        <h3 class="text-lg font-bold text-slate-900">Certified Web Security Tester Certification</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
+                    <div class="absolute -left-[31px] md:-left-[47px] top-0 w-6 h-6 rounded-full bg-purple-600 border-4 border-white dark:border-slate-950 shadow-md"></div>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+                        <span class="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 font-mono text-xs font-bold">2024</span>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Certified Web Security Tester Certification</h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                             Earned official credentials in web application penetration testing, focusing on OWASP vulnerability assessments, traffic interception, and secure DOM architecture.
                         </p>
                     </div>
@@ -666,11 +689,11 @@
 
                 <!-- Timeline Item 3 -->
                 <div class="relative group">
-                    <div class="absolute -left-[31px] md:-left-[47px] top-0 w-6 h-6 rounded-full bg-emerald-600 border-4 border-white shadow-md"></div>
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-                        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-mono text-xs font-bold">2025 - Present</span>
-                        <h3 class="text-lg font-bold text-slate-900">Full-Stack Security-First Engineering</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
+                    <div class="absolute -left-[31px] md:-left-[47px] top-0 w-6 h-6 rounded-full bg-emerald-600 border-4 border-white dark:border-slate-950 shadow-md"></div>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+                        <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-mono text-xs font-bold">2025 - Present</span>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Full-Stack Security-First Engineering</h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                             Delivering end-to-end web app development integrated with automated threat scanning and secure code reviews for global clients.
                         </p>
                     </div>
@@ -680,60 +703,59 @@
         </div>
     </section>
 
-    <!-- MEET THE SECURITY TESTER / TEAM SECTION ("Meet the People Behind the Learning" style) -->
-    <section class="py-20 bg-white border-b border-slate-200">
+    <section class="py-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
-                <span class="text-indigo-600 text-xs font-mono font-bold uppercase tracking-widest block">
+                <span class="text-indigo-600 dark:text-indigo-400 text-xs font-mono font-bold uppercase tracking-widest block">
                     — CREDENTIALS &amp; CERTIFICATIONS
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
                     Verified Security Certifications
                 </h2>
-                <p class="text-slate-600 text-sm sm:text-base">
+                <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
                     Validated credentials guaranteeing industry-standard security and web development practices.
                 </p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Cert Card 1 -->
-                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center space-y-4 card-shadow-hover">
+                <div class="bg-slate-50 dark:bg-slate-950 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 text-center space-y-4 card-shadow-hover">
                     <div class="w-16 h-16 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl mx-auto shadow-lg shadow-indigo-600/30">
                         <i class="fa-solid fa-award"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-bold text-slate-900">Certified Web Security Tester</h3>
-                        <p class="text-xs text-indigo-600 font-mono font-bold mt-1">Web Vulnerability Specialist</p>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Certified Web Security Tester</h3>
+                        <p class="text-xs text-indigo-600 dark:text-indigo-400 font-mono font-bold mt-1">Web Vulnerability Specialist</p>
                     </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                         Authorized to assess web infrastructure, execute penetration testing, and remediate XSS and SQLi vulnerabilities.
                     </p>
                 </div>
 
                 <!-- Cert Card 2 -->
-                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center space-y-4 card-shadow-hover">
+                <div class="bg-slate-50 dark:bg-slate-950 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 text-center space-y-4 card-shadow-hover">
                     <div class="w-16 h-16 rounded-2xl bg-purple-600 text-white flex items-center justify-center text-2xl mx-auto shadow-lg shadow-purple-600/30">
                         <i class="fa-solid fa-code"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-bold text-slate-900">Full-Stack Front-End Specialist</h3>
-                        <p class="text-xs text-purple-600 font-mono font-bold mt-1">HTML5, CSS3 &amp; JS (ES6+)</p>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Full-Stack Front-End Specialist</h3>
+                        <p class="text-xs text-purple-600 dark:text-purple-400 font-mono font-bold mt-1">HTML5, CSS3 &amp; JS (ES6+)</p>
                     </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                         Certified front-end web developer building responsive web layouts, UI components, and API integrations.
                     </p>
                 </div>
 
                 <!-- Cert Card 3 -->
-                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center space-y-4 card-shadow-hover">
+                <div class="bg-slate-50 dark:bg-slate-950 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 text-center space-y-4 card-shadow-hover">
                     <div class="w-16 h-16 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-2xl mx-auto shadow-lg shadow-emerald-600/30">
                         <i class="fa-solid fa-shield-halved"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-bold text-slate-900">OWASP Web Defense Practitioner</h3>
-                        <p class="text-xs text-emerald-600 font-mono font-bold mt-1">Application Hardening</p>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">OWASP Web Defense Practitioner</h3>
+                        <p class="text-xs text-emerald-600 dark:text-emerald-400 font-mono font-bold mt-1">Application Hardening</p>
                     </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                         Specialized in strict Content Security Policies, CORS security, input sanitization, and authorization defense.
                     </p>
                 </div>
@@ -741,7 +763,6 @@
         </div>
     </section>
 
-    <!-- CALL TO ACTION / ENROLLMENT BANNER ("Your Future Starts Here") -->
     <section class="py-16 bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-900 text-white relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
             <span class="px-3.5 py-1 rounded-full bg-white/10 text-indigo-300 font-mono text-xs uppercase tracking-widest font-bold">
@@ -761,45 +782,44 @@
         </div>
     </section>
 
-    <!-- CONTACT FORM SECTION -->
-    <section id="contact" class="py-20 bg-white">
+    <section id="contact" class="py-20 bg-white dark:bg-slate-900 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-12 gap-12 items-center">
                 
-                <!-- Contact Direct Info -->
+                <!-- Direct Info -->
                 <div class="lg:col-span-5 space-y-6">
                     <div>
-                        <span class="text-indigo-600 text-xs font-mono font-bold uppercase tracking-widest block">
+                        <span class="text-indigo-600 dark:text-indigo-400 text-xs font-mono font-bold uppercase tracking-widest block">
                             — DIRECT CONTACT
                         </span>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2">
                             Let's Start a Conversation.
                         </h2>
-                        <p class="text-slate-600 text-sm mt-3 leading-relaxed">
+                        <p class="text-slate-600 dark:text-slate-400 text-sm mt-3 leading-relaxed">
                             Have a web application project or require a thorough web security vulnerability assessment? Send Kidus Assefa a direct message.
                         </p>
                     </div>
 
                     <div class="space-y-4 pt-2">
-                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
-                            <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg">
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <div class="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-lg">
                                 <i class="fa-solid fa-envelope"></i>
                             </div>
                             <div>
-                                <span class="text-xs text-slate-500 font-bold block">Email Kidus</span>
-                                <a href="mailto:kidus.assefa.dev@gmail.com" class="text-sm font-bold text-slate-900 hover:text-indigo-600 transition-colors">
+                                <span class="text-xs text-slate-500 dark:text-slate-400 font-bold block">Email Kidus</span>
+                                <a href="mailto:kidus.assefa.dev@gmail.com" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                     kidus.assefa.dev@gmail.com
                                 </a>
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
-                            <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg">
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <div class="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">
                                 <i class="fa-solid fa-shield-virus"></i>
                             </div>
                             <div>
-                                <span class="text-xs text-slate-500 font-bold block">Services Scope</span>
-                                <span class="text-sm font-bold text-slate-900">
+                                <span class="text-xs text-slate-500 dark:text-slate-400 font-bold block">Services Scope</span>
+                                <span class="text-sm font-bold text-slate-900 dark:text-white">
                                     Web Dev • Penetration Audits • Code Hardening
                                 </span>
                             </div>
@@ -809,23 +829,23 @@
 
                 <!-- Contact Form -->
                 <div class="lg:col-span-7">
-                    <form id="contactForm" onsubmit="handleContactSubmit(event)" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-5 card-shadow">
-                        <h3 class="text-2xl font-bold text-slate-900">Send Kidus a Message</h3>
+                    <form id="contactForm" onsubmit="handleContactSubmit(event)" class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-5 card-shadow">
+                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Send Kidus a Message</h3>
 
                         <div class="grid sm:grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-xs font-mono font-bold text-slate-700 mb-1">Your Name *</label>
-                                <input type="text" id="contactName" required placeholder="e.g. Alex Rivera" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-indigo-600 transition-all">
+                                <label class="block text-xs font-mono font-bold text-slate-700 dark:text-slate-300 mb-1">Your Name *</label>
+                                <input type="text" id="contactName" required placeholder="e.g. Alex Rivera" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-600 transition-all">
                             </div>
                             <div>
-                                <label class="block text-xs font-mono font-bold text-slate-700 mb-1">Your Email *</label>
-                                <input type="email" id="contactEmail" required placeholder="e.g. alex@company.com" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-indigo-600 transition-all">
+                                <label class="block text-xs font-mono font-bold text-slate-700 dark:text-slate-300 mb-1">Your Email *</label>
+                                <input type="email" id="contactEmail" required placeholder="e.g. alex@company.com" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-600 transition-all">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-mono font-bold text-slate-700 mb-1">Service Required *</label>
-                            <select id="contactService" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-indigo-600 transition-all">
+                            <label class="block text-xs font-mono font-bold text-slate-700 dark:text-slate-300 mb-1">Service Required *</label>
+                            <select id="contactService" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-600 transition-all">
                                 <option value="webdev">Full-Stack Web Development (HTML/CSS/JS)</option>
                                 <option value="pentest">Web Security Penetration Testing &amp; Vulnerability Audit</option>
                                 <option value="codereview">Secure Code Hardening &amp; CSP Configuration</option>
@@ -833,8 +853,8 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-mono font-bold text-slate-700 mb-1">Message Details *</label>
-                            <textarea id="contactMessage" rows="4" required placeholder="Describe your web application or security testing scope..." class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-indigo-600 transition-all"></textarea>
+                            <label class="block text-xs font-mono font-bold text-slate-700 dark:text-slate-300 mb-1">Message Details *</label>
+                            <textarea id="contactMessage" rows="4" required placeholder="Describe your web application or security testing scope..." class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-600 transition-all"></textarea>
                         </div>
 
                         <button type="submit" id="submitBtn" class="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-600/25">
@@ -850,7 +870,6 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="bg-slate-950 text-slate-400 py-12 text-xs border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -881,7 +900,6 @@
         </div>
     </footer>
 
-    <!-- INTERACTIVE TERMINAL DRAWER -->
     <div id="terminalDrawer" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col h-[500px]">
             <!-- Terminal Header -->
@@ -911,10 +929,9 @@
         </div>
     </div>
 
-    <!-- PROJECT MODAL -->
     <div id="projectModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xl p-6 relative shadow-2xl space-y-4">
-            <button onclick="closeProjectModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 text-lg">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white rounded-2xl w-full max-w-xl p-6 relative shadow-2xl space-y-4">
+            <button onclick="closeProjectModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 dark:hover:text-white text-lg">
                 <i class="fa-solid fa-xmark"></i>
             </button>
             <div id="projectModalContent">
@@ -923,15 +940,47 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT CONTROLLERS -->
     <script>
-        // Mobile Navigation Toggle
+        function updateThemeUI(isDark) {
+            const themeToggleIcon = document.getElementById('themeToggleIcon');
+            const themeToggleMobileIcon = document.getElementById('themeToggleMobileIcon');
+            const themeToggleDrawerIcon = document.getElementById('themeToggleDrawerIcon');
+            const themeToggleDrawerText = document.getElementById('themeToggleDrawerText');
+
+            if (isDark) {
+                if (themeToggleIcon) themeToggleIcon.className = 'fa-solid fa-sun text-yellow-400';
+                if (themeToggleMobileIcon) themeToggleMobileIcon.className = 'fa-solid fa-sun text-yellow-400';
+                if (themeToggleDrawerIcon) themeToggleDrawerIcon.className = 'fa-solid fa-sun text-yellow-400';
+                if (themeToggleDrawerText) themeToggleDrawerText.textContent = 'Switch to Light Mode';
+            } else {
+                if (themeToggleIcon) themeToggleIcon.className = 'fa-solid fa-moon text-slate-700';
+                if (themeToggleMobileIcon) themeToggleMobileIcon.className = 'fa-solid fa-moon text-slate-700';
+                if (themeToggleDrawerIcon) themeToggleDrawerIcon.className = 'fa-solid fa-moon text-slate-700';
+                if (themeToggleDrawerText) themeToggleDrawerText.textContent = 'Switch to Dark Mode';
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeUI(isDark);
+        }
+
+        // Set initial icon states on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            updateThemeUI(isDark);
+        });
+
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
 
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
 
         document.querySelectorAll('#mobileMenu a').forEach(link => {
             link.addEventListener('click', () => {
@@ -939,7 +988,6 @@
             });
         });
 
-        // Interactive Security Lab Engine
         const presetPayloads = {
             xss: "<script>alert('XSS Penetration Test Executed')<\/script>",
             sqli: "' OR '1'='1' -- SELECT * FROM users;",
@@ -947,11 +995,16 @@
             safe: "Hello! Kidus Assefa is reviewing this clean input."
         };
 
-        document.getElementById('labInput').value = presetPayloads.xss;
+        const labInputElem = document.getElementById('labInput');
+        if (labInputElem) {
+            labInputElem.value = presetPayloads.xss;
+        }
 
         function loadPresetPayload() {
             const select = document.getElementById('payloadSelect');
-            document.getElementById('labInput').value = presetPayloads[select.value] || '';
+            if (select && labInputElem) {
+                labInputElem.value = presetPayloads[select.value] || '';
+            }
         }
 
         function runSecurityAudit() {
@@ -1013,7 +1066,6 @@
             }
         }
 
-        // Terminal Toggle Engine
         function toggleTerminal() {
             const drawer = document.getElementById('terminalDrawer');
             drawer.classList.toggle('hidden');
@@ -1038,7 +1090,11 @@
 
                 switch(cmd) {
                     case 'help':
-                        respLine.innerHTML = `Commands:<br/>• <span class="text-yellow-400">about</span> - Summary<br/>• <span class="text-yellow-400">skills</span> - Stack<br/>• <span class="text-yellow-400">scan</span> - Vulnerability scan<br/>• <span class="text-yellow-400">contact</span> - Email Kidus`;
+                        respLine.innerHTML = `Commands:<br/>• <span class="text-yellow-400">about</span> - Summary<br/>• <span class="text-yellow-400">theme</span> - Toggle light/dark<br/>• <span class="text-yellow-400">skills</span> - Tech stack<br/>• <span class="text-yellow-400">scan</span> - Vulnerability scan<br/>• <span class="text-yellow-400">contact</span> - Email Kidus`;
+                        break;
+                    case 'theme':
+                        toggleTheme();
+                        respLine.innerHTML = `Theme toggled to <span class="text-emerald-400">${document.documentElement.classList.contains('dark') ? 'Dark' : 'Light'}</span> mode.`;
                         break;
                     case 'about':
                         respLine.innerHTML = "Kidus Assefa: Web Developer & Certified Web Security Tester using HTML, CSS & JavaScript.";
@@ -1047,7 +1103,7 @@
                         respLine.innerHTML = "HTML5, CSS3, JavaScript ES6+, OWASP Pentesting, XSS Remediation, Secure Header Hardening.";
                         break;
                     case 'scan':
-                        respLine.innerHTML = `<span class="text-emerald-400">[+] Scanning local application...</span><br/>[✓] CSP Status: Active<br/>[✓] XSS Defense: Enforced<br/><span class="text-emerald-400 font-bold">SUCCESS: Site is Secure!</span>`;
+                        respLine.innerHTML = `<span class="text-emerald-400">[+] Scanning local application...</span><br/>[✓] CSP Status: Active<br/>[✓] Theme Engine: Operational<br/>[✓] XSS Defense: Enforced<br/><span class="text-emerald-400 font-bold">SUCCESS: Site is Secure!</span>`;
                         break;
                     case 'contact':
                         respLine.innerHTML = "Direct Email: kidus.assefa.dev@gmail.com";
@@ -1072,7 +1128,6 @@
             );
         }
 
-        // Modal Handler
         const projectData = {
             scanner: {
                 title: "OWASP Security Header & XSS Scanner",
@@ -1103,19 +1158,19 @@
 
             content.innerHTML = `
                 <div class="space-y-4">
-                    <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">
+                    <span class="px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-800 dark:text-indigo-300 font-mono text-xs font-bold border border-indigo-200 dark:border-indigo-800">
                         ${data.type}
                     </span>
-                    <h3 class="text-2xl font-bold text-slate-900">${data.title}</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">${data.desc}</p>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">${data.title}</h3>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">${data.desc}</p>
                     <div>
-                        <span class="text-xs font-mono font-bold text-slate-500 block mb-2">Stack &amp; Frameworks:</span>
+                        <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 block mb-2">Stack &amp; Frameworks:</span>
                         <div class="flex flex-wrap gap-2">
-                            ${data.tech.map(t => `<span class="px-2.5 py-1 rounded bg-slate-100 text-slate-800 font-mono text-xs font-bold">${t}</span>`).join('')}
+                            ${data.tech.map(t => `<span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-mono text-xs font-bold">${t}</span>`).join('')}
                         </div>
                     </div>
-                    <div class="pt-4 flex justify-end gap-3 border-t border-slate-100">
-                        <button onclick="closeProjectModal()" class="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">
+                    <div class="pt-4 flex justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
+                        <button onclick="closeProjectModal()" class="px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">
                             Close
                         </button>
                         <a href="#contact" onclick="closeProjectModal()" class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-xs font-bold">
@@ -1132,7 +1187,7 @@
             document.getElementById('projectModal').classList.add('hidden');
         }
 
-        // Contact Form
+        // Contact Form Submission Handler
         function handleContactSubmit(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -1146,7 +1201,7 @@
                 btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Send Message to Kidus`;
                 
                 status.classList.remove('hidden');
-                status.className = "p-4 rounded-xl text-xs font-mono text-center bg-emerald-100 border border-emerald-200 text-emerald-800 font-bold";
+                status.className = "p-4 rounded-xl text-xs font-mono text-center bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-bold";
                 status.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i> Thank you! Message sent successfully to Kidus Assefa.`;
                 
                 document.getElementById('contactForm').reset();
