@@ -1,1 +1,1157 @@
-<script>alert(0)</script>
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kidus Assefa | Web Developer & Certified Web Security Tester</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        academy: {
+                            50: '#f4f6fb',
+                            100: '#e8ecf6',
+                            200: '#d1d9ee',
+                            500: '#4f46e5',
+                            600: '#4338ca',
+                            700: '#3730a3',
+                            900: '#0f172a',
+                            purple: '#6366f1',
+                            accent: '#38bdf8'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .hero-pattern {
+            background-image: radial-gradient(rgba(79, 70, 229, 0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+        }
+        .card-shadow-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-shadow-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 35px -10px rgba(79, 70, 229, 0.12);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4f46e5;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-slate-900 bg-slate-50 selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white text-xs py-2 px-4 text-center font-medium border-b border-indigo-900/40">
+        <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Available for Full-Stack Web Development & Certified Penetration Audits in 2026</span>
+            <a href="#contact" class="underline hover:text-indigo-300 font-bold ml-2">Book Audit &rarr;</a>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo -->
+                <a href="#home" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-600 p-0.5 shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
+                        <div class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
+                            <span class="font-mono text-indigo-400 font-bold text-lg">&lt;KA/&gt;</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-xl tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">KIDUS ASSEFA</span>
+                        <div class="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 uppercase tracking-wider">
+                            <span>DEV &amp; SEC SPECIALIST</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center gap-7 text-xs font-semibold uppercase tracking-wider text-slate-600">
+                    <a href="#home" class="hover:text-indigo-600 transition-colors py-1">Home</a>
+                    <a href="#about" class="hover:text-indigo-600 transition-colors py-1">About</a>
+                    <a href="#capabilities" class="hover:text-indigo-600 transition-colors py-1">Capabilities</a>
+                    <a href="#services" class="hover:text-indigo-600 transition-colors py-1">Services</a>
+                    <a href="#seclab" class="hover:text-indigo-600 transition-colors py-1 flex items-center gap-1 text-indigo-600 font-bold">
+                        <i class="fa-solid fa-shield-halved"></i> SecLab
+                    </a>
+                    <a href="#projects" class="hover:text-indigo-600 transition-colors py-1">Projects</a>
+                    <a href="#journey" class="hover:text-indigo-600 transition-colors py-1">Journey</a>
+                    <a href="#contact" class="hover:text-indigo-600 transition-colors py-1">Contact</a>
+                </div>
+
+                <!-- Header Actions -->
+                <div class="hidden md:flex items-center gap-3">
+                    <button onclick="toggleTerminal()" class="px-3.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 text-xs font-mono font-bold flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-terminal text-indigo-600"></i>
+                        <span>Terminal</span>
+                    </button>
+                    <a href="#contact" class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-indigo-500/25 transition-all hover:scale-105">
+                        Hire Kidus Now &rarr;
+                    </a>
+                </div>
+
+                <!-- Mobile Trigger -->
+                <div class="flex lg:hidden items-center gap-2">
+                    <button onclick="toggleTerminal()" class="p-2 rounded-lg bg-slate-100 border border-slate-200 text-indigo-600">
+                        <i class="fa-solid fa-terminal"></i>
+                    </button>
+                    <button id="mobileMenuBtn" class="p-2 rounded-lg text-slate-700 hover:text-slate-900 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileMenu" class="hidden lg:hidden border-b border-slate-200 bg-white px-6 pt-3 pb-6 space-y-3 font-semibold text-sm">
+            <a href="#home" class="block py-2 text-slate-700 hover:text-indigo-600">Home</a>
+            <a href="#about" class="block py-2 text-slate-700 hover:text-indigo-600">About</a>
+            <a href="#capabilities" class="block py-2 text-slate-700 hover:text-indigo-600">Capabilities</a>
+            <a href="#services" class="block py-2 text-slate-700 hover:text-indigo-600">Services</a>
+            <a href="#seclab" class="block py-2 text-indigo-600 font-bold">SecLab Interactive Sandbox</a>
+            <a href="#projects" class="block py-2 text-slate-700 hover:text-indigo-600">Projects</a>
+            <a href="#journey" class="block py-2 text-slate-700 hover:text-indigo-600">Journey</a>
+            <a href="#contact" class="block py-2 text-slate-700 hover:text-indigo-600">Contact</a>
+            <a href="#contact" class="block w-full text-center mt-4 py-3 rounded-xl bg-indigo-600 text-white font-bold">
+                Hire Kidus Assefa
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION (Laura Academy Style) -->
+    <section id home class="relative py-16 md:py-24 overflow-hidden bg-slate-900 text-white hero-pattern">
+        <!-- Glow accents -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <div class="text-center max-w-4xl mx-auto space-y-6">
+                <!-- Pill Badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-400/30 text-indigo-300 font-mono text-xs uppercase tracking-widest font-semibold">
+                    <i class="fa-solid fa-shield-virus text-indigo-400"></i>
+                    <span>KIDUS ASSEFA • WEB DEV &amp; CERTIFIED WEB SECURITY TESTER</span>
+                </div>
+
+                <!-- Hero Headline -->
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight">
+                    Building Modern Web Apps. <br class="hidden sm:block"/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-sky-300 to-purple-400">
+                        Securing Every Line of Code.
+                    </span>
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="text-slate-300 text-base sm:text-xl max-w-3xl mx-auto leading-relaxed font-normal">
+                    Where clean UI design meets offensive security standards. Kidus Assefa crafts high-performance web applications using HTML, CSS, and modern JavaScript while fortifying every endpoint against OWASP vulnerabilities.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
+                    <a href="#seclab" class="px-7 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm flex items-center gap-2 shadow-xl shadow-indigo-600/30 transition-all hover:scale-105">
+                        <span>Explore Security Lab</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="#contact" class="px-7 py-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm transition-all">
+                        Request Security Audit
+                    </a>
+                </div>
+            </div>
+
+            <!-- Floating Statistics Banner (As seen in Laura Academy video) -->
+            <div class="mt-16 bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-6 sm:p-8 max-w-5xl mx-auto shadow-2xl">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-white/10">
+                    <div class="p-2">
+                        <div class="font-mono text-3xl sm:text-4xl font-extrabold text-white">100%</div>
+                        <div class="text-xs uppercase tracking-wider text-indigo-200 mt-1 font-semibold">Security Compliance</div>
+                    </div>
+                    <div class="p-2 pt-4 md:pt-2">
+                        <div class="font-mono text-3xl sm:text-4xl font-extrabold text-emerald-400">50+</div>
+                        <div class="text-xs uppercase tracking-wider text-indigo-200 mt-1 font-semibold">Vulnerabilities Patched</div>
+                    </div>
+                    <div class="p-2 pt-4 md:pt-2">
+                        <div class="font-mono text-3xl sm:text-4xl font-extrabold text-sky-400">30+</div>
+                        <div class="text-xs uppercase tracking-wider text-indigo-200 mt-1 font-semibold">Web Applications Built</div>
+                    </div>
+                    <div class="p-2 pt-4 md:pt-2">
+                        <div class="font-mono text-3xl sm:text-4xl font-extrabold text-purple-400">99.8%</div>
+                        <div class="text-xs uppercase tracking-wider text-indigo-200 mt-1 font-semibold">OWASP Audit Pass Rate</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- HIGHLIGHT BANNER: "Education Designed for Tomorrow" style -->
+    <section id="about" class="py-20 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Text Box -->
+                <div class="lg:col-span-6 space-y-6">
+                    <span class="text-indigo-600 text-xs font-mono font-extrabold uppercase tracking-widest block">
+                        — DEV &amp; SECURITY SPECIALIST
+                    </span>
+
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 leading-tight">
+                        Web Engineering Designed for the Secure Future
+                    </h2>
+
+                    <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
+                        Kidus Assefa combines rigorous front-end engineering with modern offensive security testing. I build pixel-perfect, accessible user interfaces using HTML, CSS, and modern JavaScript while protecting applications against XSS, SQL injection, CSRF, and logic flaws.
+                    </p>
+
+                    <div class="pt-2">
+                        <a href="#capabilities" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-indigo-600 text-white font-bold text-xs uppercase tracking-wider transition-all">
+                            <span>Discover The Story</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Visual Mockup (Image layout matching video) -->
+                <div class="lg:col-span-6 relative">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80" alt="Code and Security Testing" class="w-full h-[380px] object-cover"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+                        
+                        <div class="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-white/95 backdrop-blur-md shadow-xl border border-slate-100 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Security Audit Verified</h4>
+                                    <p class="text-xs text-slate-500">Zero Unpatched OWASP Top 10 Risks</p>
+                                </div>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-mono text-xs font-bold">Passed</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CORE PILLARS SECTION ("More Than Education" style) -->
+    <section id="capabilities" class="py-20 bg-slate-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span class="text-indigo-600 text-xs font-mono font-bold uppercase tracking-widest block">
+                    — WHY WORK WITH KIDUS
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                    More Than Code. Complete Digital Resilience.
+                </h2>
+                <p class="text-slate-600 text-sm sm:text-base">
+                    Every web application built or audited by Kidus Assefa is crafted to remain responsive, scalable, and secure under attack.
+                </p>
+            </div>
+
+            <!-- 4 Pillars Grid -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Pillar 1 -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-200/80 card-shadow card-shadow-hover space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900">Code Excellence</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Clean HTML5 semantics, responsive modern CSS/Tailwind layouts, and efficient JavaScript ES6+ architecture.
+                    </p>
+                </div>
+
+                <!-- Pillar 2 -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-200/80 card-shadow card-shadow-hover space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-shield-virus"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900">Certified Security</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Rigorous web vulnerability assessments, penetration testing, and HTTP security header hardening.
+                    </p>
+                </div>
+
+                <!-- Pillar 3 -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-200/80 card-shadow card-shadow-hover space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-laptop-code"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900">Future-Proof Stack</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Building lightweight, fast client-side applications that load instantly and operate securely across all modern browsers.
+                    </p>
+                </div>
+
+                <!-- Pillar 4 -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-200/80 card-shadow card-shadow-hover space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900">Ethical Leadership</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Providing comprehensive security audit reporting with step-by-step remediation strategies for developers.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES / PATHWAYS SECTION ("Academic Programs" style) -->
+    <section id="services" class="py-20 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span class="text-indigo-600 text-xs font-mono font-bold uppercase tracking-widest block">
+                    — SPECIALIZED SERVICES
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                    Web Engineering &amp; Security Services
+                </h2>
+                <p class="text-slate-600 text-sm sm:text-base">
+                    Targeted solutions for building high-performance web applications and fortifying digital assets.
+                </p>
+            </div>
+
+            <!-- Service Cards with Dark Overlay Styles -->
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="group relative rounded-2xl overflow-hidden shadow-xl bg-slate-900 text-white min-h-[360px] flex flex-col justify-end p-8 border border-slate-800">
+                    <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=800&q=80" alt="Web Development" class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-500"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+                    
+                    <div class="relative z-10 space-y-3">
+                        <span class="px-3 py-1 rounded-full bg-indigo-500/30 text-indigo-300 font-mono text-xs font-bold border border-indigo-400/30 inline-block">
+                            Front-End Dev
+                        </span>
+                        <h3 class="text-2xl font-bold">HTML, CSS &amp; JS Web Engineering</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Custom web applications built with semantic HTML5, utility-first CSS, and responsive JavaScript.
+                        </p>
+                        <a href="#contact" class="inline-flex items-center gap-2 text-xs font-bold text-indigo-400 hover:text-indigo-300 uppercase tracking-wider pt-2">
+                            <span>Request Quote</span> &rarr;
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="group relative rounded-2xl overflow-hidden shadow-xl bg-slate-900 text-white min-h-[360px] flex flex-col justify-end p-8 border border-slate-800">
+                    <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80" alt="Security Testing" class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-500"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+                    
+                    <div class="relative z-10 space-y-3">
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/30 text-emerald-300 font-mono text-xs font-bold border border-emerald-400/30 inline-block">
+                            Penetration Testing
+                        </span>
+                        <h3 class="text-2xl font-bold">Web Vulnerability Auditing</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Comprehensive web security testing covering OWASP Top 10 vulnerabilities, XSS, SQLi, and CORS flaws.
+                        </p>
+                        <a href="#contact" class="inline-flex items-center gap-2 text-xs font-bold text-emerald-400 hover:text-emerald-300 uppercase tracking-wider pt-2">
+                            <span>Schedule Audit</span> &rarr;
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="group relative rounded-2xl overflow-hidden shadow-xl bg-slate-900 text-white min-h-[360px] flex flex-col justify-end p-8 border border-slate-800">
+                    <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80" alt="Code Review" class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-500"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+                    
+                    <div class="relative z-10 space-y-3">
+                        <span class="px-3 py-1 rounded-full bg-purple-500/30 text-purple-300 font-mono text-xs font-bold border border-purple-400/30 inline-block">
+                            Hardening &amp; CSP
+                        </span>
+                        <h3 class="text-2xl font-bold">Secure Code Review &amp; Patching</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Sanitizing input pipelines, enforcing strict Content Security Policies, and hardening authentication loops.
+                        </p>
+                        <a href="#contact" class="inline-flex items-center gap-2 text-xs font-bold text-purple-400 hover:text-purple-300 uppercase tracking-wider pt-2">
+                            <span>Patch Application</span> &rarr;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE VULNERABILITY LAB (SecLab) -->
+    <section id="seclab" class="py-20 bg-slate-900 text-white border-b border-slate-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs uppercase font-bold">
+                    <i class="fa-solid fa-flask"></i> Interactive Sandbox
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
+                    Kidus's Web Security Sandbox
+                </h2>
+                <p class="text-slate-400 text-sm sm:text-base">
+                    Select or type exploit payloads below to watch Kidus Assefa's defensive sanitization logic intercept and patch vulnerabilities in real time.
+                </p>
+            </div>
+
+            <!-- SecLab Interactive Container -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl max-w-4xl mx-auto">
+                <!-- Header Controls -->
+                <div class="bg-slate-900 px-6 py-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                        <span class="text-xs font-mono text-slate-300 ml-2 font-bold">Kidus_SecLab_Tester_v2.6</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 text-xs font-mono">
+                        <span class="text-slate-400">Payload Vector:</span>
+                        <select id="payloadSelect" onchange="loadPresetPayload()" class="bg-slate-900 text-indigo-400 border border-slate-700 rounded px-3 py-1 focus:outline-none focus:border-indigo-500">
+                            <option value="xss">&lt;script&gt;alert('XSS Payload')&lt;/script&gt;</option>
+                            <option value="sqli">' OR '1'='1' -- (SQL Injection)</option>
+                            <option value="html">&lt;img src=x onerror=alert('DOM Injected')&gt;</option>
+                            <option value="safe">Hello, Kidus Assefa! Clean Safe Input.</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Body Grid -->
+                <div class="p-6 grid md:grid-cols-2 gap-6">
+                    <!-- Left: Input Area -->
+                    <div class="space-y-3">
+                        <label class="block font-mono text-xs font-bold text-slate-300 uppercase">
+                            1. Input Exploit Payload:
+                        </label>
+                        <textarea id="labInput" rows="5" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all" placeholder="Enter input payload here..."></textarea>
+                        
+                        <button onclick="runSecurityAudit()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-600/25">
+                            <i class="fa-solid fa-play"></i> Run Live Security Audit
+                        </button>
+                    </div>
+
+                    <!-- Right: Results Area -->
+                    <div class="space-y-3">
+                        <label class="block font-mono text-xs font-bold text-slate-300 uppercase">
+                            2. Audit Output &amp; Defensive Patch:
+                        </label>
+                        
+                        <div id="auditStatusBox" class="p-4 rounded-xl bg-slate-900 border border-slate-800 min-h-[140px] flex flex-col justify-between">
+                            <div class="flex items-center gap-3">
+                                <div id="statusBadgeIcon" class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400">
+                                    <i class="fa-solid fa-shield"></i>
+                                </div>
+                                <div>
+                                    <h4 id="statusBadgeTitle" class="font-bold text-sm text-white">Ready for Scanning</h4>
+                                    <p id="statusBadgeSubtitle" class="text-xs text-slate-400">Click "Run Live Security Audit" above.</p>
+                                </div>
+                            </div>
+
+                            <div id="sanitizedOutputContainer" class="mt-4 pt-3 border-t border-slate-800 hidden">
+                                <span class="text-[11px] font-mono text-slate-400 block mb-1">Sanitized DOM Output:</span>
+                                <div id="sanitizedOutputText" class="p-2.5 rounded bg-slate-950 font-mono text-xs text-emerald-400 break-all border border-slate-800">
+                                    --
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Defensive Strategy Footer -->
+                <div class="bg-slate-900 p-5 border-t border-slate-800 font-mono text-xs">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-slate-300 font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-indigo-400"></i> Kidus's Security Patch
+                        </span>
+                        <span id="threatLevel" class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400 uppercase font-bold">
+                            Idle
+                        </span>
+                    </div>
+                    <p id="remediationDesc" class="text-slate-400 text-xs">
+                        Select or enter a test vector above to inspect Kidus's defensive sanitization logic.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS & RECENT WORKS -->
+    <section id="projects" class="py-20 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span class="text-indigo-600 text-xs font-mono font-bold uppercase tracking-widest block">
+                    — PORTFOLIO AUDITS
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                    Featured Projects &amp; Security Audits
+                </h2>
+                <p class="text-slate-600 text-sm sm:text-base">
+                    Selected web applications and penetration testing projects executed by Kidus Assefa.
+                </p>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <!-- Project 1 -->
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden card-shadow card-shadow-hover flex flex-col justify-between">
+                    <div>
+                        <div class="h-48 bg-slate-900 relative overflow-hidden flex items-center justify-center p-6">
+                            <i class="fa-solid fa-shield-virus text-6xl text-indigo-500/30"></i>
+                            <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 font-mono text-xs font-bold border border-indigo-400/30">
+                                Security Tool
+                            </span>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="text-xl font-bold text-slate-900">OWASP Security Header &amp; XSS Scanner</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Automated web scanner built using JavaScript and HTML APIs to evaluate target web applications for security headers (CSP, HSTS) and script execution risks.
+                            </p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs">HTML5</span>
+                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs">JS ES6</span>
+                                <span class="px-2.5 py-1 rounded bg-indigo-50 text-indigo-700 font-mono text-xs font-bold">OWASP</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-2 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-emerald-600 font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-circle text-[8px]"></i> Audit Ready
+                        </span>
+                        <button onclick="openProjectModal('scanner')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+                            Details &rarr;
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden card-shadow card-shadow-hover flex flex-col justify-between">
+                    <div>
+                        <div class="h-48 bg-slate-900 relative overflow-hidden flex items-center justify-center p-6">
+                            <i class="fa-solid fa-cart-shopping text-6xl text-sky-500/30"></i>
+                            <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 font-mono text-xs font-bold border border-sky-400/30">
+                                E-Commerce App
+                            </span>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="text-xl font-bold text-slate-900">Hardened Modern E-Commerce Platform</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                High-performance responsive online shop interface developed with Tailwind CSS and ES6 JavaScript. Built with sanitized checkout forms and client encryption.
+                            </p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs">Tailwind</span>
+                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs">JavaScript</span>
+                                <span class="px-2.5 py-1 rounded bg-sky-50 text-sky-700 font-mono text-xs font-bold">Sanitized DOM</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-2 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-sky-600 font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-lock text-[10px]"></i> Encrypted
+                        </span>
+                        <button onclick="openProjectModal('ecommerce')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+                            Details &rarr;
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden card-shadow card-shadow-hover flex flex-col justify-between">
+                    <div>
+                        <div class="h-48 bg-slate-900 relative overflow-hidden flex items-center justify-center p-6">
+                            <i class="fa-solid fa-chart-line text-6xl text-purple-500/30"></i>
+                            <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 font-mono text-xs font-bold border border-purple-400/30">
+                                Threat Monitor
+                            </span>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="text-xl font-bold text-slate-900">Cyber Threat Monitoring Dashboard UI</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Real-time incident dashboard tracking network traffic alerts, active vulnerabilities, and automated mitigation progress with interactive charts.
+                            </p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs">HTML Grid</span>
+                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs">Vanilla JS</span>
+                                <span class="px-2.5 py-1 rounded bg-purple-50 text-purple-700 font-mono text-xs font-bold">Dashboard</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-2 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-purple-600 font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-shield text-[10px]"></i> Live Metrics
+                        </span>
+                        <button onclick="openProjectModal('dashboard')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+                            Details &rarr;
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMELINE / JOURNEY SECTION (As seen in video "Way To Excellence") -->
+    <section id="journey" class="py-20 bg-slate-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span class="text-indigo-600 text-xs font-mono font-bold uppercase tracking-widest block">
+                    — HISTORY &amp; MILESTONES
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                    Way to Web &amp; Security Excellence
+                </h2>
+                <p class="text-slate-600 text-sm sm:text-base">
+                    The progression of Kidus Assefa's web engineering mastery and web security certifications over the years.
+                </p>
+            </div>
+
+            <!-- Vertical Timeline Grid -->
+            <div class="max-w-4xl mx-auto relative border-l-2 border-indigo-200 pl-6 md:pl-10 space-y-12">
+                
+                <!-- Timeline Item 1 -->
+                <div class="relative group">
+                    <div class="absolute -left-[31px] md:-left-[47px] top-0 w-6 h-6 rounded-full bg-indigo-600 border-4 border-white shadow-md"></div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                        <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">2023</span>
+                        <h3 class="text-lg font-bold text-slate-900">Front-End Development Mastery</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Specialized in raw HTML5, CSS3 styling systems, and modern asynchronous JavaScript (ES6+), building high-speed responsive user interfaces.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="relative group">
+                    <div class="absolute -left-[31px] md:-left-[47px] top-0 w-6 h-6 rounded-full bg-purple-600 border-4 border-white shadow-md"></div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                        <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-800 font-mono text-xs font-bold">2024</span>
+                        <h3 class="text-lg font-bold text-slate-900">Certified Web Security Tester Certification</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Earned official credentials in web application penetration testing, focusing on OWASP vulnerability assessments, traffic interception, and secure DOM architecture.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 3 -->
+                <div class="relative group">
+                    <div class="absolute -left-[31px] md:-left-[47px] top-0 w-6 h-6 rounded-full bg-emerald-600 border-4 border-white shadow-md"></div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-mono text-xs font-bold">2025 - Present</span>
+                        <h3 class="text-lg font-bold text-slate-900">Full-Stack Security-First Engineering</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Delivering end-to-end web app development integrated with automated threat scanning and secure code reviews for global clients.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- MEET THE SECURITY TESTER / TEAM SECTION ("Meet the People Behind the Learning" style) -->
+    <section class="py-20 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span class="text-indigo-600 text-xs font-mono font-bold uppercase tracking-widest block">
+                    — CREDENTIALS &amp; CERTIFICATIONS
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                    Verified Security Certifications
+                </h2>
+                <p class="text-slate-600 text-sm sm:text-base">
+                    Validated credentials guaranteeing industry-standard security and web development practices.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Cert Card 1 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center space-y-4 card-shadow-hover">
+                    <div class="w-16 h-16 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl mx-auto shadow-lg shadow-indigo-600/30">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Certified Web Security Tester</h3>
+                        <p class="text-xs text-indigo-600 font-mono font-bold mt-1">Web Vulnerability Specialist</p>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Authorized to assess web infrastructure, execute penetration testing, and remediate XSS and SQLi vulnerabilities.
+                    </p>
+                </div>
+
+                <!-- Cert Card 2 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center space-y-4 card-shadow-hover">
+                    <div class="w-16 h-16 rounded-2xl bg-purple-600 text-white flex items-center justify-center text-2xl mx-auto shadow-lg shadow-purple-600/30">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Full-Stack Front-End Specialist</h3>
+                        <p class="text-xs text-purple-600 font-mono font-bold mt-1">HTML5, CSS3 &amp; JS (ES6+)</p>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Certified front-end web developer building responsive web layouts, UI components, and API integrations.
+                    </p>
+                </div>
+
+                <!-- Cert Card 3 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center space-y-4 card-shadow-hover">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-2xl mx-auto shadow-lg shadow-emerald-600/30">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">OWASP Web Defense Practitioner</h3>
+                        <p class="text-xs text-emerald-600 font-mono font-bold mt-1">Application Hardening</p>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Specialized in strict Content Security Policies, CORS security, input sanitization, and authorization defense.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CALL TO ACTION / ENROLLMENT BANNER ("Your Future Starts Here") -->
+    <section class="py-16 bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-900 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
+            <span class="px-3.5 py-1 rounded-full bg-white/10 text-indigo-300 font-mono text-xs uppercase tracking-widest font-bold">
+                — SECURE YOUR APPLICATION TODAY
+            </span>
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white">
+                Ready to Build or Secure Your Web Application?
+            </h2>
+            <p class="text-slate-300 text-sm sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                Take the next step towards an elegant, ultra-fast web app hardened against cyber threats by Kidus Assefa.
+            </p>
+            <div>
+                <a href="#contact" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-indigo-950 hover:bg-slate-100 font-extrabold text-sm uppercase tracking-wider transition-all shadow-xl shadow-white/10 hover:scale-105">
+                    <span>Start Your Project Audit</span> &rarr;
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT FORM SECTION -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Contact Direct Info -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div>
+                        <span class="text-indigo-600 text-xs font-mono font-bold uppercase tracking-widest block">
+                            — DIRECT CONTACT
+                        </span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">
+                            Let's Start a Conversation.
+                        </h2>
+                        <p class="text-slate-600 text-sm mt-3 leading-relaxed">
+                            Have a web application project or require a thorough web security vulnerability assessment? Send Kidus Assefa a direct message.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-500 font-bold block">Email Kidus</span>
+                                <a href="mailto:kidus.assefa.dev@gmail.com" class="text-sm font-bold text-slate-900 hover:text-indigo-600 transition-colors">
+                                    kidus.assefa.dev@gmail.com
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-shield-virus"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-500 font-bold block">Services Scope</span>
+                                <span class="text-sm font-bold text-slate-900">
+                                    Web Dev • Penetration Audits • Code Hardening
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="lg:col-span-7">
+                    <form id="contactForm" onsubmit="handleContactSubmit(event)" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-5 card-shadow">
+                        <h3 class="text-2xl font-bold text-slate-900">Send Kidus a Message</h3>
+
+                        <div class="grid sm:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-xs font-mono font-bold text-slate-700 mb-1">Your Name *</label>
+                                <input type="text" id="contactName" required placeholder="e.g. Alex Rivera" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-indigo-600 transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono font-bold text-slate-700 mb-1">Your Email *</label>
+                                <input type="email" id="contactEmail" required placeholder="e.g. alex@company.com" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-indigo-600 transition-all">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono font-bold text-slate-700 mb-1">Service Required *</label>
+                            <select id="contactService" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-indigo-600 transition-all">
+                                <option value="webdev">Full-Stack Web Development (HTML/CSS/JS)</option>
+                                <option value="pentest">Web Security Penetration Testing &amp; Vulnerability Audit</option>
+                                <option value="codereview">Secure Code Hardening &amp; CSP Configuration</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono font-bold text-slate-700 mb-1">Message Details *</label>
+                            <textarea id="contactMessage" rows="4" required placeholder="Describe your web application or security testing scope..." class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-indigo-600 transition-all"></textarea>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-600/25">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Send Message to Kidus</span>
+                        </button>
+
+                        <div id="contactFormStatus" class="hidden p-4 rounded-xl text-xs font-mono text-center"></div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 text-slate-400 py-12 text-xs border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-mono font-bold text-sm">
+                        &lt;KA/&gt;
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-white text-sm">Kidus Assefa</span>
+                        <p class="text-[11px] text-slate-500">Web Developer &amp; Certified Web Security Tester</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-6 font-mono">
+                    <a href="#home" class="hover:text-indigo-400 transition-colors">Home</a>
+                    <a href="#about" class="hover:text-indigo-400 transition-colors">About</a>
+                    <a href="#capabilities" class="hover:text-indigo-400 transition-colors">Capabilities</a>
+                    <a href="#seclab" class="hover:text-indigo-400 transition-colors">SecLab</a>
+                    <a href="#contact" class="hover:text-indigo-400 transition-colors">Contact</a>
+                </div>
+
+                <div class="text-[11px] text-slate-500 text-center md:text-right">
+                    © 2026 Kidus Assefa. Built with HTML, CSS &amp; JavaScript. <br/>
+                    <span class="text-emerald-400 font-mono">Security Audit Verified &amp; Passed</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE TERMINAL DRAWER -->
+    <div id="terminalDrawer" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col h-[500px]">
+            <!-- Terminal Header -->
+            <div class="bg-slate-950 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500 cursor-pointer" onclick="toggleTerminal()"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                    <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                    <span class="text-xs font-mono text-slate-300 ml-2">kidus@sec-shell:~</span>
+                </div>
+                <button onclick="toggleTerminal()" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Terminal Output -->
+            <div id="terminalOutput" class="p-4 font-mono text-xs text-indigo-300 overflow-y-auto flex-1 space-y-2 bg-slate-950">
+                <p class="text-slate-400">Welcome to Kidus Assefa's Security Command Engine v1.0</p>
+                <p class="text-slate-500">Type <span class="text-yellow-400">'help'</span> for options or <span class="text-yellow-400">'scan'</span> to execute diagnostic scan.</p>
+            </div>
+
+            <!-- Terminal Input -->
+            <div class="p-3 bg-slate-900 border-t border-slate-800 flex items-center gap-2 font-mono text-xs">
+                <span class="text-indigo-400 font-bold">kidus$&nbsp;</span>
+                <input type="text" id="terminalInput" onkeydown="handleTerminalCommand(event)" class="w-full bg-transparent text-white focus:outline-none" placeholder="Type command here..." autofocus>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROJECT MODAL -->
+    <div id="projectModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xl p-6 relative shadow-2xl space-y-4">
+            <button onclick="closeProjectModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="projectModalContent">
+                <!-- Dynamically filled by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT CONTROLLERS -->
+    <script>
+        // Mobile Navigation Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Interactive Security Lab Engine
+        const presetPayloads = {
+            xss: "<script>alert('XSS Penetration Test Executed')<\/script>",
+            sqli: "' OR '1'='1' -- SELECT * FROM users;",
+            html: "<img src=x onerror=alert('DOM Exploited')>",
+            safe: "Hello! Kidus Assefa is reviewing this clean input."
+        };
+
+        document.getElementById('labInput').value = presetPayloads.xss;
+
+        function loadPresetPayload() {
+            const select = document.getElementById('payloadSelect');
+            document.getElementById('labInput').value = presetPayloads[select.value] || '';
+        }
+
+        function runSecurityAudit() {
+            const inputVal = document.getElementById('labInput').value;
+            const statusIcon = document.getElementById('statusBadgeIcon');
+            const statusTitle = document.getElementById('statusBadgeTitle');
+            const statusSubtitle = document.getElementById('statusBadgeSubtitle');
+            const container = document.getElementById('sanitizedOutputContainer');
+            const sanitizedText = document.getElementById('sanitizedOutputText');
+            const threatLevel = document.getElementById('threatLevel');
+            const remediationDesc = document.getElementById('remediationDesc');
+
+            container.classList.remove('hidden');
+
+            const sanitized = inputVal
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+            sanitizedText.textContent = sanitized;
+
+            if (inputVal.includes('<script>') || inputVal.includes('onerror=') || inputVal.includes('javascript:')) {
+                statusIcon.className = "w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center";
+                statusIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-lg"></i>';
+                statusTitle.textContent = "CRITICAL: XSS Payload Intercepted!";
+                statusTitle.className = "font-bold text-sm text-red-400";
+                statusSubtitle.textContent = "Script injection vector detected and neutralized with HTML entity encoding.";
+                
+                threatLevel.className = "px-2 py-0.5 rounded text-[10px] bg-red-500/20 text-red-400 uppercase font-bold border border-red-500/30";
+                threatLevel.textContent = "High Risk (XSS)";
+
+                remediationDesc.innerHTML = `<span class="text-indigo-400 font-bold">Kidus's Fix:</span> Raw innerHTML injection blocked; replaced with sanitized textContent escaping.`;
+            } 
+            else if (inputVal.toUpperCase().includes("OR '1'='1'") || inputVal.includes("--")) {
+                statusIcon.className = "w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center";
+                statusIcon.innerHTML = '<i class="fa-solid fa-database text-lg"></i>';
+                statusTitle.textContent = "WARNING: SQL Injection Vector";
+                statusTitle.className = "font-bold text-sm text-amber-400";
+                statusSubtitle.textContent = "SQL statement bypass syntax identified.";
+
+                threatLevel.className = "px-2 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-400 uppercase font-bold border border-amber-500/30";
+                threatLevel.textContent = "Medium Risk (SQLi)";
+
+                remediationDesc.innerHTML = `<span class="text-indigo-400 font-bold">Kidus's Fix:</span> Prepared Statements & Parameterized Binding enforced.`;
+            } 
+            else {
+                statusIcon.className = "w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center";
+                statusIcon.innerHTML = '<i class="fa-solid fa-circle-check text-lg"></i>';
+                statusTitle.textContent = "PASSED: Input Clean & Safe";
+                statusTitle.className = "font-bold text-sm text-emerald-400";
+                statusSubtitle.textContent = "No active script execution or injection syntax detected.";
+
+                threatLevel.className = "px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-400 uppercase font-bold border border-emerald-500/30";
+                threatLevel.textContent = "Safe Input";
+
+                remediationDesc.innerHTML = `<span class="text-emerald-400 font-bold">Status:</span> Input meets secure string criteria for safe DOM rendering.`;
+            }
+        }
+
+        // Terminal Toggle Engine
+        function toggleTerminal() {
+            const drawer = document.getElementById('terminalDrawer');
+            drawer.classList.toggle('hidden');
+            if (!drawer.classList.contains('hidden')) {
+                document.getElementById('terminalInput').focus();
+            }
+        }
+
+        function handleTerminalCommand(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('terminalInput');
+                const cmd = input.value.trim().toLowerCase();
+                const output = document.getElementById('terminalOutput');
+
+                const userLine = document.createElement('div');
+                userLine.className = 'text-white flex items-center gap-1 mt-2';
+                userLine.innerHTML = `<span class="text-indigo-400">kidus$&nbsp;</span><span>${escapeHTML(input.value)}</span>`;
+                output.appendChild(userLine);
+
+                const respLine = document.createElement('div');
+                respLine.className = 'text-slate-300 ml-2 mb-2';
+
+                switch(cmd) {
+                    case 'help':
+                        respLine.innerHTML = `Commands:<br/>• <span class="text-yellow-400">about</span> - Summary<br/>• <span class="text-yellow-400">skills</span> - Stack<br/>• <span class="text-yellow-400">scan</span> - Vulnerability scan<br/>• <span class="text-yellow-400">contact</span> - Email Kidus`;
+                        break;
+                    case 'about':
+                        respLine.innerHTML = "Kidus Assefa: Web Developer & Certified Web Security Tester using HTML, CSS & JavaScript.";
+                        break;
+                    case 'skills':
+                        respLine.innerHTML = "HTML5, CSS3, JavaScript ES6+, OWASP Pentesting, XSS Remediation, Secure Header Hardening.";
+                        break;
+                    case 'scan':
+                        respLine.innerHTML = `<span class="text-emerald-400">[+] Scanning local application...</span><br/>[✓] CSP Status: Active<br/>[✓] XSS Defense: Enforced<br/><span class="text-emerald-400 font-bold">SUCCESS: Site is Secure!</span>`;
+                        break;
+                    case 'contact':
+                        respLine.innerHTML = "Direct Email: kidus.assefa.dev@gmail.com";
+                        break;
+                    case 'clear':
+                        output.innerHTML = '';
+                        input.value = '';
+                        return;
+                    default:
+                        respLine.innerHTML = `<span class="text-red-400">Command not recognized: '${escapeHTML(cmd)}'. Type 'help'.</span>`;
+                }
+
+                output.appendChild(respLine);
+                input.value = '';
+                output.scrollTop = output.scrollHeight;
+            }
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // Modal Handler
+        const projectData = {
+            scanner: {
+                title: "OWASP Security Header & XSS Scanner",
+                type: "Security Utility Tool",
+                desc: "An automated web security auditing tool crafted in HTML5 and JavaScript to evaluate target sites for missing CSP headers and inline script vulnerabilities.",
+                tech: ["HTML5", "CSS3", "JavaScript", "Security API"]
+            },
+            ecommerce: {
+                title: "Hardened Modern E-Commerce Platform",
+                type: "Web Application",
+                desc: "Responsive online shop UI developed with Tailwind CSS and JavaScript ES6+. Features sanitized checkout input forms and CSRF protection.",
+                tech: ["HTML5", "Tailwind CSS", "JavaScript ES6+", "DOM Sanitization"]
+            },
+            dashboard: {
+                title: "Cyber Threat Monitoring Dashboard UI",
+                type: "Monitoring Tool",
+                desc: "Real-time incident dashboard tracking network threat alerts, pending patches, and security status charts.",
+                tech: ["HTML5 Grid", "CSS3 Animations", "Vanilla JS"]
+            }
+        };
+
+        function openProjectModal(key) {
+            const data = projectData[key];
+            if (!data) return;
+
+            const modal = document.getElementById('projectModal');
+            const content = document.getElementById('projectModalContent');
+
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">
+                        ${data.type}
+                    </span>
+                    <h3 class="text-2xl font-bold text-slate-900">${data.title}</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">${data.desc}</p>
+                    <div>
+                        <span class="text-xs font-mono font-bold text-slate-500 block mb-2">Stack &amp; Frameworks:</span>
+                        <div class="flex flex-wrap gap-2">
+                            ${data.tech.map(t => `<span class="px-2.5 py-1 rounded bg-slate-100 text-slate-800 font-mono text-xs font-bold">${t}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="pt-4 flex justify-end gap-3 border-t border-slate-100">
+                        <button onclick="closeProjectModal()" class="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">
+                            Close
+                        </button>
+                        <a href="#contact" onclick="closeProjectModal()" class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-xs font-bold">
+                            Request Similar Audit
+                        </a>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeProjectModal() {
+            document.getElementById('projectModal').classList.add('hidden');
+        }
+
+        // Contact Form
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const status = document.getElementById('contactFormStatus');
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Encrypting Message...`;
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Send Message to Kidus`;
+                
+                status.classList.remove('hidden');
+                status.className = "p-4 rounded-xl text-xs font-mono text-center bg-emerald-100 border border-emerald-200 text-emerald-800 font-bold";
+                status.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i> Thank you! Message sent successfully to Kidus Assefa.`;
+                
+                document.getElementById('contactForm').reset();
+            }, 1200);
+        }
+    </script>
+</body>
+</html>
