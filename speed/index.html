@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phantom Speed</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Three.js for 3D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Michroma&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #030008; /* Deep phantom dark */
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling for 3D canvas */
+        }
+        
+        .brand-font {
+            font-family: 'Michroma', sans-serif;
+        }
+
+        /* Smooth transitions for the numbers */
+        .number-transition {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Loading Dots Animation */
+        .dot-flashing {
+            position: relative;
+            width: 8px;
+            height: 8px;
+            border-radius: 5px;
+            background-color: #a855f7;
+            color: #a855f7;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: 0.5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+        }
+        .dot-flashing::before {
+            left: -12px;
+            width: 8px;
+            height: 8px;
+            border-radius: 5px;
+            background-color: #a855f7;
+            color: #a855f7;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 12px;
+            width: 8px;
+            height: 8px;
+            border-radius: 5px;
+            background-color: #a855f7;
+            color: #a855f7;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 1s;
+        }
+
+        @keyframes dot-flashing {
+            0% { background-color: #a855f7; }
+            50%, 100% { background-color: rgba(168, 85, 247, 0.2); }
+        }
+
+        /* Start Button Pulse */
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7); }
+            70% { box-shadow: 0 0 0 30px rgba(168, 85, 247, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
+        }
+        .btn-pulse {
+            animation: pulse-glow 2s infinite;
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen flex flex-col relative selection:bg-purple-500 selection:text-white">
+    
+    <!-- 3D Canvas Background -->
+    <canvas id="bg-canvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
+
+    <!-- UI Overlay -->
+    <div class="relative z-10 flex flex-col min-h-screen w-full bg-black/40 backdrop-blur-[2px]">
+        
+        <!-- Header -->
+        <header class="w-full p-6 sm:p-8 flex items-center justify-between">
+            <div class="text-2xl brand-font tracking-widest text-white font-bold drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]">
+                PHANTOM<span class="text-purple-500">-SPEED</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col items-center justify-center w-full max-w-3xl mx-auto px-6">
+            
+            <!-- Start Screen -->
+            <div id="startScreen" class="flex flex-col items-center justify-center transition-all duration-500 transform scale-100 opacity-100">
+                <button id="mainStartBtn" class="btn-pulse relative group w-40 h-40 rounded-full bg-gradient-to-br from-purple-600 to-indigo-900 border-2 border-purple-400/50 flex items-center justify-center overflow-hidden transition-transform hover:scale-105 active:scale-95">
+                    <div class="absolute inset-0 bg-purple-500 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    <span class="brand-font text-2xl font-bold tracking-widest text-white drop-shadow-lg z-10">GO</span>
+                </button>
+                <p class="mt-8 text-purple-300/70 uppercase tracking-[0.3em] text-sm font-semibold">Initiate Network Scan</p>
+            </div>
+
+            <!-- Testing Screen (Hidden initially) -->
+            <div id="testScreen" class="flex flex-col items-center w-full transition-all duration-700 ease-out absolute opacity-0 pointer-events-none scale-95">
+                
+                <h2 class="text-purple-300 font-semibold tracking-[0.2em] uppercase text-xs sm:text-sm mb-4 sm:mb-6 h-4 transition-colors" id="statusText">
+                    <!-- Status text injected via JS -->
+                </h2>
+                
+                <!-- Speed Display -->
+                <div class="flex flex-col md:flex-row items-center md:items-baseline md:space-x-4 mb-8 sm:mb-12 relative">
+                    <span id="speedValue" class="number-transition text-7xl sm:text-8xl md:text-[11rem] font-black leading-none text-white transition-colors duration-500 drop-shadow-[0_0_20px_rgba(168,85,247,0.4)]">0</span>
+                    <div class="flex flex-col items-center md:items-start mt-2 md:mt-0 md:pb-6">
+                        <span class="text-xl sm:text-2xl md:text-4xl text-purple-400/80 font-bold tracking-tight">Mbps</span>
+                        
+                        <!-- Loading Animation -->
+                        <div id="loadingIndicator" class="mt-4 md:mt-2 opacity-0 transition-opacity duration-300 h-2 flex items-center justify-center w-full">
+                            <div class="dot-flashing scale-75 md:scale-100"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full max-w-sm sm:max-w-md relative">
+                    <div class="absolute -inset-1 bg-purple-500 rounded-full blur opacity-20"></div>
+                    <div class="relative h-1.5 w-full bg-gray-900/80 rounded-full overflow-hidden backdrop-blur-sm border border-white/5">
+                        <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-100 w-0 ease-linear shadow-[0_0_15px_rgba(168,85,247,0.8)]"></div>
+                    </div>
+                </div>
+
+                <!-- Extra Details Panel -->
+                <div id="detailsPanel" class="mt-10 sm:mt-12 flex space-x-12 sm:space-x-20 opacity-0 transform translate-y-4 transition-all duration-700 pointer-events-none">
+                    <div class="flex flex-col items-center bg-black/30 p-4 rounded-xl border border-white/5 backdrop-blur-md">
+                        <span class="text-purple-400 text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase mb-1 sm:mb-2"><i class="fas fa-network-wired mr-2"></i>Latency</span>
+                        <span id="pingValue" class="text-white text-lg sm:text-2xl font-semibold">--</span>
+                    </div>
+                    <div class="flex flex-col items-center bg-black/30 p-4 rounded-xl border border-white/5 backdrop-blur-md">
+                        <span class="text-purple-400 text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase mb-1 sm:mb-2"><i class="fas fa-database mr-2"></i>Data Used</span>
+                        <span id="dataValue" class="text-white text-lg sm:text-2xl font-semibold">--</span>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="mt-8 h-16 flex items-center justify-center">
+                    <button id="actionBtn" class="hidden px-8 py-3.5 bg-white/10 hover:bg-white/20 active:scale-95 transition-all text-white font-bold rounded-full border border-white/10 backdrop-blur-md flex items-center space-x-2">
+                        <i class="fas fa-redo-alt text-sm"></i>
+                        <span>Test Again</span>
+                    </button>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="w-full p-6 text-center text-purple-300/40 text-xs font-medium z-10 uppercase tracking-widest">
+            100% Real-time network throughput diagnostic
+        </footer>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // --- 3D Background Engine (Three.js) ---
+        let scene, camera, renderer, particles;
+        let baseSpeed = 0.5;
+        let warpSpeedTarget = 0;
+        let currentWarpSpeed = 0;
+
+        function init3D() {
+            const canvas = document.getElementById('bg-canvas');
+            scene = new THREE.Scene();
+            
+            // Add a subtle fog to blend particles into the distance
+            scene.fog = new THREE.FogExp2(0x030008, 0.0015);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.z = 1000;
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Create Star/Network Particles
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+
+            // Generate 8000 particles spread out in a tunnel shape
+            for (let i = 0; i < 8000; i++) {
+                const x = THREE.MathUtils.randFloatSpread(2500);
+                const y = THREE.MathUtils.randFloatSpread(2500);
+                const z = THREE.MathUtils.randFloatSpread(3000);
+                vertices.push(x, y, z);
+
+                // Mix of purple and cyan colors for "Phantom" vibe
+                const color = new THREE.Color();
+                color.setHSL(THREE.MathUtils.randFloat(0.7, 0.8), 1.0, THREE.MathUtils.randFloat(0.4, 0.8));
+                colors.push(color.r, color.g, color.b);
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 3,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            // Handle Resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            animate3D();
+        }
+
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+
+            // Smoothly interpolate current warp speed towards the target
+            currentWarpSpeed += (warpSpeedTarget - currentWarpSpeed) * 0.05;
+            const totalSpeed = baseSpeed + currentWarpSpeed;
+
+            const positions = particles.geometry.attributes.position.array;
+
+            // Move particles towards camera
+            for (let i = 2; i < positions.length; i += 3) {
+                positions[i] += totalSpeed;
+
+                // If particle passes camera, loop it back to the far distance
+                if (positions[i] > 1000) {
+                    positions[i] -= 3000;
+                }
+            }
+
+            // Slight rotation for dynamic feel
+            particles.rotation.z += 0.0005 + (currentWarpSpeed * 0.0001);
+
+            particles.geometry.attributes.position.needsUpdate = true;
+            renderer.render(scene, camera);
+        }
+
+        // Initialize 3D Engine on load
+        window.onload = init3D;
+
+
+        // --- Network Speed Test Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const elStartScreen = document.getElementById('startScreen');
+            const elTestScreen = document.getElementById('testScreen');
+            const elMainStartBtn = document.getElementById('mainStartBtn');
+            const elSpeed = document.getElementById('speedValue');
+            const elProgress = document.getElementById('progressBar');
+            const elStatus = document.getElementById('statusText');
+            const elBtn = document.getElementById('actionBtn');
+            const elPing = document.getElementById('pingValue');
+            const elData = document.getElementById('dataValue');
+            const elDetails = document.getElementById('detailsPanel');
+            const elLoading = document.getElementById('loadingIndicator');
+
+            // Test Configuration
+            const CONFIG = {
+                testDuration: 15000, // 15 seconds test
+                connections: 6,      // Number of concurrent downloads to saturate bandwidth
+                updateInterval: 100, // UI update interval in ms
+                urls: [
+                    'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=4000&q=100', 
+                    'https://upload.wikimedia.org/wikipedia/commons/3/3e/Tokyo_Sky_Tree_2012.JPG', 
+                    'https://images.unsplash.com/photo-1440613905118-99b921710b5c?w=4000&q=100', 
+                    'https://upload.wikimedia.org/wikipedia/commons/4/4e/Pleiades_large.jpg',
+                    'https://images.unsplash.com/photo-1506744626753-14c0eec33345?w=4000&q=100'
+                ]
+            };
+
+            let state = {
+                status: 'idle',
+                startTime: 0,
+                totalBytes: 0,
+                ping: 0,
+                controllers: []
+            };
+
+            // Bind Event Listeners
+            elMainStartBtn.addEventListener('click', prepareAndStartTest);
+            elBtn.addEventListener('click', prepareAndStartTest);
+
+            function prepareAndStartTest() {
+                // UI Transition
+                elStartScreen.classList.remove('scale-100', 'opacity-100');
+                elStartScreen.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'absolute');
+                
+                elTestScreen.classList.remove('absolute', 'opacity-0', 'pointer-events-none', 'scale-95');
+                elTestScreen.classList.add('relative', 'opacity-100', 'scale-100');
+                
+                // Increase base speed slightly for suspense
+                warpSpeedTarget = 5; 
+                
+                startTest();
+            }
+
+            async function startTest() {
+                if (state.status === 'pinging' || state.status === 'downloading') return;
+                
+                if (!navigator.onLine) {
+                    elStatus.innerText = 'NO INTERNET CONNECTION';
+                    return;
+                }
+
+                // Reset State
+                state.status = 'pinging';
+                state.totalBytes = 0;
+                state.controllers = [];
+                let displaySpeed = 0;
+                let snapshots = [];
+                let warmupBytes = 0;
+                let warmupTime = 0;
+
+                // Reset UI
+                elSpeed.innerText = '0';
+                elProgress.style.width = '0%';
+                elStatus.innerText = 'ESTABLISHING CONNECTION...';
+                elStatus.classList.remove('text-purple-400');
+                elStatus.classList.add('text-purple-300');
+                
+                elBtn.classList.add('hidden');
+                
+                elDetails.classList.remove('opacity-100', 'translate-y-0');
+                elDetails.classList.add('opacity-0', 'translate-y-4');
+                elDetails.classList.add('pointer-events-none');
+                
+                elLoading.classList.remove('opacity-0');
+                elSpeed.classList.remove('text-purple-400');
+                elSpeed.classList.add('text-white');
+                elPing.innerText = '--';
+                elData.innerText = '--';
+
+                // 1. Measure Latency (Ping)
+                state.ping = await measurePing();
+                elPing.innerText = `${state.ping} ms`;
+
+                // 2. Measure Download Speed
+                state.status = 'downloading';
+                elStatus.innerText = 'MEASURING THROUGHPUT...';
+                state.startTime = performance.now();
+
+                // Spawn workers
+                for (let i = 0; i < CONFIG.connections; i++) {
+                    downloadWorker(i);
+                }
+
+                // 3. UI & 3D Update Loop
+                const timer = setInterval(() => {
+                    const now = performance.now();
+                    const elapsed = now - state.startTime;
+
+                    snapshots.push({ time: now, bytes: state.totalBytes });
+                    if (snapshots.length > 20) snapshots.shift();
+
+                    if (elapsed >= CONFIG.testDuration) {
+                        clearInterval(timer);
+                        endTest(displaySpeed);
+                    } else {
+                        // Calculate Speed
+                        let currentMbps = 0;
+                        if (snapshots.length > 1) {
+                            const oldest = snapshots[0];
+                            const newest = snapshots[snapshots.length - 1];
+                            const dBytes = newest.bytes - oldest.bytes;
+                            const dTime = (newest.time - oldest.time) / 1000;
+                            if (dTime > 0) currentMbps = (dBytes * 8 / 1000000) / dTime;
+                        }
+
+                        if (elapsed < 2000) {
+                            displaySpeed += (currentMbps - displaySpeed) * 0.2;
+                        } else {
+                            if (warmupTime === 0) {
+                                warmupBytes = state.totalBytes;
+                                warmupTime = now;
+                            }
+                            const mBytes = state.totalBytes - warmupBytes;
+                            const mTime = (now - warmupTime) / 1000;
+                            const overallMbps = mTime > 0 ? (mBytes * 8 / 1000000) / mTime : currentMbps;
+                            displaySpeed += (overallMbps - displaySpeed) * 0.1;
+                        }
+
+                        displaySpeed = Math.max(0, displaySpeed);
+                        elSpeed.innerText = displaySpeed > 100 ? Math.round(displaySpeed) : displaySpeed.toFixed(1);
+                        
+                        // Link 3D Warp Speed to Network Speed (maxes out visually around ~500Mbps)
+                        warpSpeedTarget = 5 + (displaySpeed * 0.15);
+                        
+                        // Update Progress Bar
+                        const progress = (elapsed / CONFIG.testDuration) * 100;
+                        elProgress.style.width = `${progress}%`;
+                    }
+                }, CONFIG.updateInterval);
+            }
+
+            async function measurePing() {
+                let minPing = Infinity;
+                for (let i = 0; i < 3; i++) {
+                    const start = performance.now();
+                    try {
+                        await fetch(CONFIG.urls[0], { method: 'HEAD', cache: 'no-store' });
+                        const p = performance.now() - start;
+                        if (p < minPing) minPing = p;
+                    } catch (e) { }
+                }
+                return minPing === Infinity ? '--' : Math.round(minPing);
+            }
+
+            async function downloadWorker(id) {
+                while (state.status === 'downloading') {
+                    const url = CONFIG.urls[id % CONFIG.urls.length];
+                    const controller = new AbortController();
+                    state.controllers.push(controller);
+
+                    try {
+                        const response = await fetch(url, {
+                            signal: controller.signal,
+                            cache: 'no-store' // 100% Real speed bypassing cache
+                        });
+
+                        if (!response.body) throw new Error('Readable stream not supported');
+
+                        const reader = response.body.getReader();
+                        while (state.status === 'downloading') {
+                            const { done, value } = await reader.read();
+                            if (done) break;
+                            if (value) state.totalBytes += value.length;
+                        }
+                    } catch (e) {
+                        await new Promise(r => setTimeout(r, 250));
+                    }
+                }
+            }
+
+            function endTest(finalSpeed) {
+                state.status = 'done';
+                state.controllers.forEach(c => c.abort()); 
+                state.controllers = [];
+                
+                // Slow down 3D background
+                warpSpeedTarget = 1; 
+
+                // Final UI Updates
+                elStatus.innerText = 'SCAN COMPLETE';
+                elStatus.classList.remove('text-purple-300');
+                elStatus.classList.add('text-purple-400', 'font-bold');
+
+                elProgress.style.width = '100%';
+                elLoading.classList.add('opacity-0');
+                
+                finalSpeed = Math.max(0, finalSpeed);
+                elSpeed.innerText = finalSpeed > 100 ? Math.round(finalSpeed) : finalSpeed.toFixed(1);
+                
+                elSpeed.classList.remove('text-white');
+                elSpeed.classList.add('text-purple-300', 'scale-105');
+                setTimeout(() => elSpeed.classList.remove('scale-105'), 300);
+
+                const mbUsed = (state.totalBytes / (1024 * 1024)).toFixed(1);
+                elData.innerText = `${mbUsed} MB`;
+
+                elDetails.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                elDetails.classList.add('opacity-100', 'translate-y-0');
+                
+                elBtn.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
