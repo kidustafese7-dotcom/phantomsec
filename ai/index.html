@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>phantomsAI - Intelligent Chat Assistant</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Animations */
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        @keyframes spin-slow {
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 3s linear infinite;
+        }
+        
+        /* Base styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #020617; /* slate-950 */
+            color: #f8fafc; /* slate-50 */
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overflow: hidden;
+            overscroll-behavior-y: none;
+        }
+
+        ::selection {
+            background: rgba(16, 185, 129, 0.3); /* emerald-500/30 */
+        }
+    </style>
+</head>
+<body class="flex h-screen relative bg-slate-950 text-slate-50 font-sans selection:bg-emerald-500/30">
+
+    <!-- 3D Animated Background Canvas -->
+    <canvas id="bg-canvas" class="absolute inset-0 z-0 pointer-events-none" style="background: radial-gradient(circle at center, #0f172a 0%, #020617 100%)"></canvas>
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-20 hidden md:hidden backdrop-blur-sm cursor-pointer" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed md:static inset-y-0 left-0 z-30 w-[260px] bg-slate-900/60 backdrop-blur-xl flex flex-col transition-transform duration-300 ease-in-out border-r border-white/10 shadow-2xl -translate-x-full md:translate-x-0">
+        <div class="p-3">
+            <button onclick="startNewChat()" class="flex items-center gap-3 w-full p-3 rounded-lg border border-white/10 bg-slate-800/40 hover:bg-slate-700/60 hover:border-emerald-500/50 transition-all group text-sm font-medium shadow-sm">
+                <i data-lucide="plus" class="w-[18px] h-[18px] text-emerald-400 group-hover:scale-110 transition-transform drop-shadow-[0_0_5px_rgba(52,211,113,0.8)]"></i>
+                New Chat
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-3 flex flex-col" id="recent-chats-container">
+            <div class="text-xs font-semibold text-slate-400 mb-3 px-3 uppercase tracking-wider">Recent</div>
+            <div id="no-chats-msg" class="px-3 py-2 text-sm text-slate-500 italic">No recent chats</div>
+            <!-- Recent chat items will be injected here -->
+        </div>
+
+        <div class="p-5 border-t border-white/10 flex items-center gap-3 text-sm bg-black/20">
+            <i data-lucide="bot" class="w-5 h-5 text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,113,0.8)]"></i>
+            <span class="font-bold tracking-wide bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">phantomsAI</span>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col h-full relative z-10">
+        
+        <!-- Prominent Header -->
+        <div class="flex items-center justify-between p-4 border-b border-white/10 bg-slate-900/40 backdrop-blur-md sticky top-0 z-10 shadow-sm">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleSidebar()" class="text-slate-300 hover:text-white md:hidden p-1">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <span class="font-extrabold text-2xl tracking-wide bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent flex items-center gap-2 drop-shadow-lg">
+                    <i data-lucide="sparkles" class="w-6 h-6 text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,113,0.8)]"></i> 
+                    phantomsAI
+                </span>
+            </div>
+            <div class="text-xs font-mono font-semibold text-emerald-400/80 hidden md:flex items-center gap-2 border border-emerald-500/30 px-3 py-1.5 rounded-full bg-emerald-500/10 backdrop-blur-sm">
+                <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
+                System Online
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 scroll-smooth pb-32">
+            
+            <!-- Empty State / Welcome Screen -->
+            <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center max-w-2xl mx-auto px-4 mt-[-5vh]">
+                <div class="w-28 h-28 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-full flex items-center justify-center mb-8 shadow-[0_0_60px_rgba(16,185,129,0.25)] backdrop-blur-xl border border-white/10 relative">
+                    <div class="absolute inset-0 rounded-full border-t border-emerald-400/50 animate-spin-slow"></div>
+                    <i data-lucide="sparkles" class="w-12 h-12 text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,113,0.9)]"></i>
+                </div>
+                
+                <h1 class="text-4xl md:text-6xl font-black mb-6 text-white tracking-tight drop-shadow-2xl leading-tight">
+                    Welcome to <br class="md:hidden" />
+                    <span class="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(52,211,113,0.4)]">phantomsAI</span>
+                </h1>
+                
+                <p class="text-slate-300 mb-12 max-w-lg mx-auto text-lg drop-shadow-md font-medium leading-relaxed">
+                    I'm phantomsAI, a highly advanced assistant. Ask me to write code, explain concepts, or brainstorm ideas. No login required.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-xl" id="suggestion-grid">
+                    <!-- Suggestions rendered by JS -->
+                </div>
+            </div>
+
+            <!-- Messages Wrapper -->
+            <div id="messages-wrapper" class="max-w-4xl mx-auto w-full hidden">
+                <!-- Messages injected here -->
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="max-w-4xl mx-auto w-full hidden">
+                <div class="py-6 flex gap-4 md:gap-6 px-4 md:px-6 rounded-3xl mb-4 bg-slate-900/70 border border-white/10 shadow-lg backdrop-blur-sm">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 text-white flex items-center justify-center shrink-0 mt-1 shadow-[0_0_10px_rgba(52,211,113,0.5)]">
+                        <i data-lucide="bot" class="w-[18px] h-[18px]"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-bold text-slate-300 mb-2 tracking-wide text-sm drop-shadow-sm">
+                            <span class="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">phantomsAI</span>
+                        </div>
+                        <div class="flex gap-1.5 items-center mt-2 h-6">
+                            <div class="w-2 h-2 rounded-full bg-emerald-400/80 animate-bounce shadow-[0_0_5px_rgba(52,211,113,0.8)]" style="animation-delay: 0ms"></div>
+                            <div class="w-2 h-2 rounded-full bg-cyan-400/80 animate-bounce shadow-[0_0_5px_rgba(6,182,212,0.8)]" style="animation-delay: 150ms"></div>
+                            <div class="w-2 h-2 rounded-full bg-emerald-400/80 animate-bounce shadow-[0_0_5px_rgba(52,211,113,0.8)]" style="animation-delay: 300ms"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Anchor for scrolling -->
+            <div id="chat-anchor"></div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent p-4 md:p-6 pb-6 pt-12">
+            <div class="max-w-4xl mx-auto w-full relative">
+                <div class="relative flex items-end bg-slate-900/80 backdrop-blur-xl border border-white/20 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.5)] overflow-hidden focus-within:ring-2 focus-within:ring-emerald-500/50 focus-within:border-emerald-400/70 transition-all">
+                    <textarea
+                        id="chat-input"
+                        placeholder="Message phantomsAI..."
+                        class="w-full max-h-[200px] bg-transparent text-slate-100 placeholder-slate-400 p-4 pr-14 focus:outline-none resize-none overflow-y-auto leading-relaxed font-medium"
+                        rows="1"
+                    ></textarea>
+                    <button
+                        id="send-btn"
+                        class="absolute right-3 bottom-3 p-2.5 rounded-xl bg-slate-800 text-slate-500 transition-all cursor-not-allowed"
+                        disabled
+                    >
+                        <i data-lucide="send" class="w-[18px] h-[18px]"></i>
+                    </button>
+                </div>
+                <div class="text-center mt-3 text-xs text-slate-400 drop-shadow-md font-medium tracking-wide">
+                    phantomsAI can make mistakes. Consider verifying important information.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // --- 1. Global State ---
+        let messages = [];
+        let isLoading = false;
+        const apiKey = ""; // System injected
+        
+        // --- 2. DOM Elements ---
+        const ui = {
+            sidebar: document.getElementById('sidebar'),
+            overlay: document.getElementById('sidebar-overlay'),
+            chatContainer: document.getElementById('chat-container'),
+            emptyState: document.getElementById('empty-state'),
+            messagesWrapper: document.getElementById('messages-wrapper'),
+            loadingIndicator: document.getElementById('loading-indicator'),
+            chatAnchor: document.getElementById('chat-anchor'),
+            chatInput: document.getElementById('chat-input'),
+            sendBtn: document.getElementById('send-btn'),
+            suggestionGrid: document.getElementById('suggestion-grid'),
+            noChatsMsg: document.getElementById('no-chats-msg'),
+            recentChatsContainer: document.getElementById('recent-chats-container')
+        };
+
+        // Initialize Icons
+        lucide.createIcons();
+
+        // --- 3. 3D Background System ---
+        function init3DBackground() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let animationFrameId;
+            const particles = [];
+            const particleCount = 120; // Slightly reduced for performance without react batching
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+
+            window.addEventListener('resize', () => {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = (Math.random() - 0.5) * width * 2;
+                    this.y = (Math.random() - 0.5) * height * 2;
+                    this.z = Math.random() * 1000; 
+                    this.vx = (Math.random() - 0.5) * 0.8;
+                    this.vy = (Math.random() - 0.5) * 0.8;
+                    this.vz = (Math.random() - 0.5) * 2; 
+                    this.color = `hsla(${150 + Math.random() * 50}, 100%, 60%, ${Math.random() * 0.8 + 0.2})`; 
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.z += this.vz;
+
+                    if (this.z < 1) this.z = 1000;
+                    if (this.z > 1000) this.z = 1;
+                    if (this.x < -width) this.x = width;
+                    if (this.x > width) this.x = -width;
+                    if (this.y < -height) this.y = height;
+                    if (this.y > height) this.y = -height;
+                }
+
+                draw() {
+                    const fov = 350;
+                    const scale = fov / (fov + this.z);
+                    const x2d = this.x * scale + width / 2;
+                    const y2d = this.y * scale + height / 2;
+                    const radius = Math.max(0.1, 2.5 * scale);
+
+                    ctx.beginPath();
+                    ctx.arc(x2d, y2d, radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                    
+                    return { x: x2d, y: y2d, scale };
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+
+            function render() {
+                ctx.fillStyle = 'rgba(2, 6, 23, 0.3)'; 
+                ctx.fillRect(0, 0, width, height);
+
+                const projectedPoints = [];
+                particles.forEach(p => {
+                    p.update();
+                    projectedPoints.push(p.draw());
+                });
+
+                ctx.lineWidth = 0.5;
+                for (let i = 0; i < projectedPoints.length; i++) {
+                    for (let j = i + 1; j < projectedPoints.length; j++) {
+                        const p1 = projectedPoints[i];
+                        const p2 = projectedPoints[j];
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < 120) {
+                            const opacity = (1 - dist / 120) * p1.scale * p2.scale * 1.5;
+                            ctx.strokeStyle = `rgba(52, 211, 113, ${opacity})`;
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(render);
+            }
+            render();
+        }
+
+        // --- 4. Suggestions UI ---
+        const suggestions = [
+            "Explain quantum computing in simple terms",
+            "Write a Python script to scrape a website",
+            "Give me 5 creative ideas for a 10-year-old's birthday",
+            "How do I center a div using Tailwind CSS?"
+        ];
+        
+        ui.suggestionGrid.innerHTML = suggestions.map(text => `
+            <button onclick="setSuggestion('${text.replace(/'/g, "\\'")}')" class="p-4 rounded-xl border border-white/10 bg-slate-900/50 backdrop-blur-md hover:bg-slate-800/80 hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all text-sm text-slate-200 text-left group flex items-start gap-3">
+                <span class="text-emerald-400 group-hover:text-cyan-400 transition-colors mt-0.5">✦</span>
+                <span class="leading-relaxed">${text}</span>
+            </button>
+        `).join('');
+
+        function setSuggestion(text) {
+            ui.chatInput.value = text;
+            handleInput();
+            ui.chatInput.focus();
+        }
+
+        // --- 5. UI Interactions ---
+        function toggleSidebar() {
+            const isClosed = ui.sidebar.classList.contains('-translate-x-full');
+            if (isClosed) {
+                ui.sidebar.classList.remove('-translate-x-full');
+                if (window.innerWidth < 768) ui.overlay.classList.remove('hidden');
+            } else {
+                ui.sidebar.classList.add('-translate-x-full');
+                ui.overlay.classList.add('hidden');
+            }
+        }
+
+        function scrollToBottom() {
+            setTimeout(() => {
+                ui.chatContainer.scrollTop = ui.chatContainer.scrollHeight;
+            }, 50);
+        }
+
+        function handleInput() {
+            const val = ui.chatInput.value.trim();
+            ui.chatInput.style.height = 'auto';
+            ui.chatInput.style.height = Math.min(ui.chatInput.scrollHeight, 200) + 'px';
+
+            if (val && !isLoading) {
+                ui.sendBtn.classList.remove('bg-slate-800', 'text-slate-500', 'cursor-not-allowed');
+                ui.sendBtn.classList.add('bg-gradient-to-r', 'from-emerald-500', 'to-cyan-500', 'text-white', 'shadow-lg', 'hover:shadow-[0_0_15px_rgba(52,211,113,0.4)]', 'hover:from-emerald-400', 'hover:to-cyan-400');
+                ui.sendBtn.disabled = false;
+            } else {
+                ui.sendBtn.classList.add('bg-slate-800', 'text-slate-500', 'cursor-not-allowed');
+                ui.sendBtn.classList.remove('bg-gradient-to-r', 'from-emerald-500', 'to-cyan-500', 'text-white', 'shadow-lg', 'hover:shadow-[0_0_15px_rgba(52,211,113,0.4)]', 'hover:from-emerald-400', 'hover:to-cyan-400');
+                ui.sendBtn.disabled = true;
+            }
+        }
+
+        ui.chatInput.addEventListener('input', handleInput);
+        ui.chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        ui.sendBtn.addEventListener('click', sendMessage);
+
+        // --- 6. Formatting & Copy Logic ---
+        function copyToClipboardText(btn, textStr) {
+            const text = decodeURIComponent(textStr);
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const span = btn.querySelector('span');
+                const icon = btn.querySelector('i');
+                const originalText = span.innerText;
+                
+                span.innerText = 'Copied!';
+                icon.setAttribute('data-lucide', 'check');
+                icon.classList.add('text-emerald-400');
+                lucide.createIcons();
+
+                setTimeout(() => {
+                    span.innerText = originalText;
+                    icon.setAttribute('data-lucide', 'copy');
+                    icon.classList.remove('text-emerald-400');
+                    lucide.createIcons();
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy', err);
+            }
+            document.body.removeChild(textArea);
+        }
+        
+        // Expose to window for inline onclick handlers generated dynamically
+        window.copyCode = copyToClipboardText;
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+            }[tag]));
+        }
+
+        function formatMessageText(text) {
+            const parts = text.split(/(```[\s\S]*?```)/g);
+            let html = '<div class="text-slate-200 leading-7">';
+            
+            parts.forEach((part) => {
+                if (part.startsWith('```') && part.endsWith('```')) {
+                    const match = part.match(/```([\w-]*)\n([\s\S]*?)```/);
+                    const language = match?.[1] || 'code';
+                    const code = match?.[2] || part.slice(3, -3).trim();
+                    const encodedCode = encodeURIComponent(code);
+                    
+                    html += `
+                        <div class="my-4 rounded-lg bg-[#0d1117] overflow-hidden border border-slate-700/50 shadow-md">
+                            <div class="flex justify-between items-center px-4 py-2 bg-slate-800 text-xs text-slate-300 font-sans">
+                                <span class="uppercase font-semibold tracking-wider text-slate-400">${language}</span>
+                                <button onclick="window.copyCode(this, '${encodedCode}')" class="flex items-center gap-1.5 hover:text-white transition-colors py-1 px-2 rounded-md hover:bg-slate-700">
+                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                    <span>Copy code</span>
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto p-4 text-sm font-mono text-slate-50 leading-relaxed">
+                                <pre><code>${escapeHTML(code)}</code></pre>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const paragraphs = part.split('\n\n');
+                    paragraphs.forEach(p => {
+                        if (!p.trim()) return;
+                        
+                        // Handle bold
+                        let formatted = p.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-white">$1</strong>');
+                        // Handle inline code
+                        formatted = formatted.replace(/`([^`]+)`/g, '<code class="bg-slate-700/50 text-emerald-300 px-1.5 py-0.5 rounded font-mono text-sm">$1</code>');
+                        
+                        html += `<p class="mb-4 last:mb-0">${formatted}</p>`;
+                    });
+                }
+            });
+            html += '</div>';
+            return html;
+        }
+
+        // --- 7. Chat Logic & API ---
+        async function fetchWithBackoff(url, options, retries = 5) {
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return await response.json();
+                } catch (error) {
+                    if (i === retries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, delays[i]));
+                }
+            }
+        }
+
+        function appendMessageToUI(msg) {
+            const div = document.createElement('div');
+            const isUser = msg.role === 'user';
+            
+            div.className = `py-6 flex gap-4 md:gap-6 px-4 md:px-6 rounded-3xl mb-4 backdrop-blur-sm transition-all ${
+                !isUser ? 'bg-slate-900/70 border border-white/10 shadow-lg' : 'bg-transparent border border-transparent'
+            }`;
+            
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1 shadow-md ${
+                    isUser 
+                        ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white' 
+                        : 'bg-gradient-to-br from-emerald-400 to-cyan-500 text-white shadow-[0_0_10px_rgba(52,211,113,0.5)]'
+                }">
+                    <i data-lucide="${isUser ? 'user' : 'bot'}" class="w-[18px] h-[18px]"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-bold text-slate-300 mb-1.5 tracking-wide text-sm drop-shadow-sm flex items-center gap-2">
+                        ${isUser ? 'You' : '<span class="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">phantomsAI</span>'}
+                    </div>
+                    ${isUser 
+                        ? `<div class="text-slate-100 whitespace-pre-wrap leading-relaxed font-medium">${escapeHTML(msg.content)}</div>` 
+                        : formatMessageText(msg.content)
+                    }
+                </div>
+            `;
+            
+            ui.messagesWrapper.appendChild(div);
+            lucide.createIcons({ root: div });
+        }
+
+        function updateRecentChats() {
+            if (messages.length > 0) {
+                ui.noChatsMsg.style.display = 'none';
+                // Remove old recent item if exists (keeping it simple, just showing the first message)
+                const existingBtn = ui.recentChatsContainer.querySelector('button');
+                if (existingBtn) existingBtn.remove();
+                
+                const btn = document.createElement('button');
+                btn.className = "flex items-center gap-3 w-full p-3 rounded-lg hover:bg-slate-700/50 transition-colors text-sm text-slate-200 text-left border border-transparent hover:border-white/5";
+                btn.innerHTML = `
+                    <i data-lucide="message-square" class="w-4 h-4 text-emerald-500/70 shrink-0"></i>
+                    <span class="truncate flex-1 drop-shadow-sm">${escapeHTML(messages[0].content)}</span>
+                `;
+                ui.recentChatsContainer.appendChild(btn);
+                lucide.createIcons({ root: btn });
+            } else {
+                ui.noChatsMsg.style.display = 'block';
+                const existingBtn = ui.recentChatsContainer.querySelector('button');
+                if (existingBtn) existingBtn.remove();
+            }
+        }
+
+        window.startNewChat = function() {
+            messages = [];
+            ui.messagesWrapper.innerHTML = '';
+            ui.chatInput.value = '';
+            handleInput();
+            ui.emptyState.classList.remove('hidden');
+            ui.messagesWrapper.classList.add('hidden');
+            
+            if (window.innerWidth < 768) {
+                ui.sidebar.classList.add('-translate-x-full');
+                ui.overlay.classList.add('hidden');
+            }
+        };
+
+        async function sendMessage() {
+            const text = ui.chatInput.value.trim();
+            if (!text || isLoading) return;
+
+            // Update UI State
+            ui.emptyState.classList.add('hidden');
+            ui.messagesWrapper.classList.remove('hidden');
+            
+            const userMsg = { role: 'user', content: text };
+            messages.push(userMsg);
+            appendMessageToUI(userMsg);
+            updateRecentChats();
+            
+            ui.chatInput.value = '';
+            ui.chatInput.style.height = 'auto';
+            handleInput();
+            
+            isLoading = true;
+            ui.loadingIndicator.classList.remove('hidden');
+            scrollToBottom();
+
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                
+                const contents = messages.map(msg => ({
+                    role: msg.role === 'user' ? 'user' : 'model',
+                    parts: [{ text: msg.content }]
+                }));
+
+                const payload = {
+                    contents,
+                    systemInstruction: {
+                        parts: [{ text: "You are phantomsAI, a highly capable, helpful, and friendly AI assistant. Answer accurately and format your responses clearly using markdown when helpful (especially for code)." }]
+                    }
+                };
+
+                const result = await fetchWithBackoff(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const botText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                if (botText) {
+                    const aiMsg = { role: 'model', content: botText };
+                    messages.push(aiMsg);
+                    appendMessageToUI(aiMsg);
+                } else {
+                    throw new Error("No text found in response");
+                }
+            } catch (error) {
+                console.error("AI Generation Error:", error);
+                const errorMsg = { role: 'model', content: "I'm sorry, I encountered an error while trying to process your request. Please try again." };
+                messages.push(errorMsg);
+                appendMessageToUI(errorMsg);
+            } finally {
+                isLoading = false;
+                ui.loadingIndicator.classList.add('hidden');
+                scrollToBottom();
+            }
+        }
+
+        // Initialize 3D Background on load
+        window.addEventListener('load', init3DBackground);
+
+    </script>
+</body>
+</html>
