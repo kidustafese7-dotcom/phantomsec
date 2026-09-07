@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phantom Security - Admin Dashboard</title>
+    <title>Phantom Security - Secure Chat Matrix</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,33 +18,24 @@
             font-family: 'Inter', sans-serif;
             background-color: #050508;
             color: white;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
         }
-
         .font-mono, h1, h2, h3, h4, h5, h6 {
             font-family: 'Space Grotesk', monospace;
         }
-
         .cyber-grid {
             background-size: 50px 50px;
             background-image: 
                 linear-gradient(to right, rgba(0, 255, 65, 0.03) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
         }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #050508;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #00ff4140;
-            border-radius: 4px;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050508; }
+        ::-webkit-scrollbar-thumb { background: #00ff4140; border-radius: 4px; }
     </style>
 </head>
-<body id="dashboardBody" class="relative min-h-screen bg-[#050508] text-white">
+<body id="dashboardBody" class="relative h-screen bg-[#050508] text-white flex flex-col">
 
     <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div class="absolute inset-0 cyber-grid opacity-40"></div>
@@ -52,11 +43,10 @@
         <div class="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-[#00ffff] rounded-full mix-blend-screen filter blur-[200px] opacity-5"></div>
     </div>
 
-    <div class="relative z-10 flex flex-col min-h-screen">
-
-        <header class="border-b border-[#00ff41]/20 bg-[#0a1118]/80 backdrop-blur-xl sticky top-0 z-50">
+    <div class="relative z-10 flex flex-col h-full">
+        <!-- Header -->
+        <header class="border-b border-[#00ff41]/20 bg-[#0a1118]/80 backdrop-blur-xl shrink-0">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                
                 <div class="flex items-center gap-3">
                     <div class="relative">
                         <i data-lucide="shield-check" class="text-[#00ff41] w-8 h-8"></i>
@@ -64,7 +54,7 @@
                     </div>
                     <div>
                         <h1 class="font-mono text-lg font-bold tracking-wider text-white">PHANTOM SECURITY</h1>
-                        <p class="text-[10px] font-mono text-[#00ff41] tracking-widest uppercase">Command Center v2.4</p>
+                        <p class="text-[10px] font-mono text-[#00ff41] tracking-widest uppercase">Global Telegram-Style Matrix</p>
                     </div>
                 </div>
 
@@ -86,67 +76,59 @@
             </div>
         </header>
 
-        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-gray-800 pb-6">
-                <div>
-                    <h2 class="text-2xl font-mono font-bold tracking-wide">SYSTEM OVERVIEW</h2>
-                    <p class="text-xs text-gray-400">Authenticated Administrative Control Node.</p>
-                </div>
-                <div class="flex items-center gap-2 text-xs font-mono text-gray-400">
-                    <i data-lucide="clock" class="w-4 h-4 text-[#00ff41]"></i>
-                    <span id="systemTime">--:--:-- UTC</span>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="p-5 rounded-xl bg-[#0a1118]/80 border border-[#00ff41]/20 backdrop-blur-md">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-mono uppercase text-gray-400">Threat Level</span>
-                        <i data-lucide="shield-alert" class="w-5 h-5 text-[#00ff41]"></i>
-                    </div>
-                    <div class="text-2xl font-mono font-bold text-white">DEFCON 4</div>
-                    <div class="text-[10px] font-mono text-[#00ff41] mt-1">● System Protected</div>
-                </div>
-
-                <div class="p-5 rounded-xl bg-[#0a1118]/80 border border-[#00ffff]/20 backdrop-blur-md">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-mono uppercase text-gray-400">Active Nodes</span>
-                        <i data-lucide="cpu" class="w-5 h-5 text-[#00ffff]"></i>
-                    </div>
-                    <div class="text-2xl font-mono font-bold text-white">128 / 128</div>
-                    <div class="text-[10px] font-mono text-[#00ffff] mt-1">100% Operational</div>
-                </div>
-
-                <div class="p-5 rounded-xl bg-[#0a1118]/80 border border-[#8a2be2]/20 backdrop-blur-md">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-mono uppercase text-gray-400">Encryption</span>
-                        <i data-lucide="lock" class="w-5 h-5 text-[#8a2be2]"></i>
-                    </div>
-                    <div class="text-2xl font-mono font-bold text-white">2,048-bit</div>
-                    <div class="text-[10px] font-mono text-purple-400 mt-1">Active SSL / TLS</div>
-                </div>
-
-                <div class="p-5 rounded-xl bg-[#0a1118]/80 border border-green-500/20 backdrop-blur-md">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-mono uppercase text-gray-400">Uptime</span>
-                        <i data-lucide="activity" class="w-5 h-5 text-green-400"></i>
-                    </div>
-                    <div class="text-2xl font-mono font-bold text-white">99.98%</div>
-                    <div class="text-[10px] font-mono text-green-400 mt-1">Status: Stable</div>
-                </div>
-            </div>
-
-            <div class="rounded-xl bg-[#0a1118]/80 border border-gray-800 p-5 font-mono text-xs backdrop-blur-md h-[300px] flex flex-col">
+        <!-- Main Chat Area Filling the Screen -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex gap-6 overflow-hidden">
+            
+            <!-- Online Users Sidebar -->
+            <div class="w-72 rounded-xl bg-[#0a1118]/80 border border-gray-800 p-4 font-mono text-xs backdrop-blur-md flex flex-col shrink-0">
                 <div class="flex items-center justify-between border-b border-gray-800 pb-3 mb-3">
                     <div class="flex items-center gap-2">
-                        <i data-lucide="terminal" class="w-4 h-4 text-[#00ff41]"></i>
-                        <span class="font-bold text-gray-200">REALTIME AUDIT LOG</span>
+                        <i data-lucide="users" class="w-4 h-4 text-[#00ff41]"></i>
+                        <span class="font-bold text-gray-200">ONLINE MEMBERS</span>
                     </div>
+                    <span id="onlineCount" class="text-[10px] bg-[#00ff41]/10 text-[#00ff41] px-2 py-0.5 rounded border border-[#00ff41]/20">0</span>
                 </div>
-                <div id="terminalLog" class="flex-1 overflow-y-auto space-y-2 text-gray-300">
-                    <p class="text-gray-500">[SYSTEM] Session initialized.</p>
+                <div id="usersSidebarList" class="flex-1 overflow-y-auto space-y-2 text-gray-300">
+                    <p class="text-gray-500">Scanning nodes...</p>
                 </div>
+            </div>
+
+            <!-- Chat Room Main Window -->
+            <div class="flex-1 rounded-xl bg-[#0a1118]/80 border border-[#00ff41]/20 backdrop-blur-md flex flex-col overflow-hidden shadow-[0_0_30px_rgba(0,255,65,0.05)]">
+                <div class="flex items-center justify-between border-b border-gray-800 px-5 py-4 bg-[#05080f]/50 shrink-0">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="message-square" class="w-4 h-4 text-[#00ff41]"></i>
+                        <div>
+                            <span class="font-bold font-mono text-sm text-gray-200 block">PUBLIC GROUP CHAT</span>
+                            <span class="text-[10px] text-gray-400 font-mono">All authenticated members connected globally</span>
+                        </div>
+                    </div>
+                    <span class="text-[10px] font-mono text-[#00ff41] bg-[#00ff41]/10 px-2.5 py-1 rounded-full border border-[#00ff41]/30">LIVE SYNC</span>
+                </div>
+
+                <!-- Chat Messages Log Feed -->
+                <div id="chatFeed" class="flex-1 overflow-y-auto p-5 space-y-3 font-sans text-sm flex flex-col">
+                    <!-- Messages dynamically inserted here -->
+                </div>
+
+                <!-- Message Input Form -->
+                <form id="chatForm" class="p-4 border-t border-gray-800 bg-[#05080f]/50 flex items-center gap-3 shrink-0">
+                    <input 
+                        type="text" 
+                        id="chatInput" 
+                        placeholder="Write a message to the group..." 
+                        autocomplete="off"
+                        required
+                        class="flex-1 bg-[#05080f] border border-gray-800 rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-[#00ff41] focus:border-[#00ff41] text-sm"
+                    />
+                    <button 
+                        type="submit" 
+                        class="bg-[#00ff41] hover:bg-[#00cc33] text-[#050508] font-bold font-mono px-5 py-3 rounded-lg transition-all flex items-center gap-2 cursor-pointer"
+                    >
+                        <span>SEND</span>
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </form>
             </div>
 
         </main>
@@ -154,18 +136,12 @@
 
     <script>
         lucide.createIcons();
-
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('systemTime').textContent = now.toUTCString().split(' ')[4] + ' UTC';
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, query, orderBy, onSnapshot, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC1_m2aMJeAW93BkgQ0VUM9KdtzT2OZelM",
@@ -179,40 +155,137 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
         const logoutBtn = document.getElementById('logoutBtn');
         const logoutText = document.getElementById('logoutText');
         const userEmailDisplay = document.getElementById('userEmailDisplay');
-        const terminalLog = document.getElementById('terminalLog');
+        const chatFeed = document.getElementById('chatFeed');
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        const usersSidebarList = document.getElementById('usersSidebarList');
+        const onlineCount = document.getElementById('onlineCount');
 
-        // Auth guard redirects to index.html if unauthenticated
-        onAuthStateChanged(auth, (user) => {
+        let currentUser = null;
+
+        // Auth guard and status tracker
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                document.body.style.display = "block";
+                currentUser = user;
+                document.body.style.display = "flex";
                 userEmailDisplay.textContent = user.email;
 
-                const p = document.createElement('p');
-                p.className = 'text-[#00ff41]';
-                p.textContent = `[${new Date().toLocaleTimeString()}] Authenticated as: ${user.email}`;
-                terminalLog.appendChild(p);
+                // Register online presence in Firestore
+                const userDocRef = doc(db, "users", user.uid);
+                await setDoc(userDocRef, {
+                    email: user.email,
+                    online: true,
+                    lastActive: serverTimestamp()
+                }, { merge: true });
+
+                // Handle tab close / unexpected disconnect cleanup
+                window.addEventListener('beforeunload', () => {
+                    navigator.sendBeacon ? null : setDoc(userDocRef, { online: false }, { merge: true });
+                });
+
+                initChatListeners();
             } else {
                 window.location.replace("index.html");
             }
         });
 
-        // Logout handler redirects to index.html
+        // Initialize Realtime Firestore Chat & User Presence Listeners
+        function initChatListeners() {
+            // Listen to global public group chat messages feed
+            const q = query(collection(db, "global_chat"), orderBy("timestamp", "asc"));
+            onSnapshot(q, (snapshot) => {
+                chatFeed.innerHTML = "";
+                snapshot.docs.forEach(docSnap => {
+                    const msg = docSnap.data();
+                    const isMe = msg.sender === currentUser.email;
+
+                    const msgWrapper = document.createElement('div');
+                    msgWrapper.className = `flex flex-col max-w-[70%] ${isMe ? 'self-end items-end' : 'self-start items-start'} mb-2`;
+
+                    const senderLabel = document.createElement('span');
+                    senderLabel.className = 'text-[10px] font-mono text-gray-400 mb-1 px-1';
+                    senderLabel.textContent = msg.sender;
+
+                    const bubble = document.createElement('div');
+                    bubble.className = `p-3 rounded-lg text-sm leading-relaxed ${isMe ? 'bg-[#00ff41]/20 border border-[#00ff41]/30 text-white rounded-br-none' : 'bg-[#05080f] border border-gray-800 text-gray-200 rounded-bl-none'}`;
+                    bubble.textContent = msg.text;
+
+                    msgWrapper.appendChild(senderLabel);
+                    msgWrapper.appendChild(bubble);
+                    chatFeed.appendChild(msgWrapper);
+                });
+                chatFeed.scrollTop = chatFeed.scrollHeight;
+            });
+
+            // Listen to online users list in real-time
+            onSnapshot(collection(db, "users"), (snapshot) => {
+                usersSidebarList.innerHTML = "";
+                let count = 0;
+                snapshot.docs.forEach(docSnap => {
+                    const u = docSnap.data();
+                    if (u.online) {
+                        count++;
+                        const userItem = document.createElement('div');
+                        userItem.className = 'flex items-center gap-2 p-2 rounded hover:bg-gray-800/40 transition-colors';
+                        userItem.innerHTML = `
+                            <div class="w-2 h-2 rounded-full bg-[#00ff41] shadow-[0_0_6px_#00ff41]"></div>
+                            <span class="truncate text-gray-300">${u.email}</span>
+                        `;
+                        usersSidebarList.appendChild(userItem);
+                    }
+                });
+                onlineCount.textContent = count;
+                if (count === 0) {
+                    usersSidebarList.innerHTML = `<p class="text-gray-500">No active members online.</p>`;
+                }
+            });
+        }
+
+        // Send Message Handler to Global Collection
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const text = chatInput.value.trim();
+            if (!text || !currentUser) return;
+
+            try {
+                await addDoc(collection(db, "global_chat"), {
+                    text: text,
+                    sender: currentUser.email,
+                    timestamp: serverTimestamp()
+                });
+                chatInput.value = "";
+            } catch (err) {
+                console.error("Error sending message:", err);
+            }
+        });
+
+        // 100% Real, Robust Logout Handler
         logoutBtn.addEventListener('click', async () => {
             try {
                 logoutBtn.disabled = true;
                 logoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
                 logoutText.textContent = "TERMINATING...";
 
-                await signOut(auth);
+                if (currentUser) {
+                    // Instantly set online status to false in Firebase before killing session
+                    await setDoc(doc(db, "users", currentUser.uid), { 
+                        online: false,
+                        lastActive: serverTimestamp()
+                    }, { merge: true });
+                }
 
+                // Perform real Firebase sign out
+                await signOut(auth);
+                
+                // Clear local storage/session tokens if any linger and redirect
                 window.location.replace("index.html");
             } catch (error) {
                 console.error("Logout Error:", error);
-                alert("Failed to log out: " + error.message);
                 logoutBtn.disabled = false;
                 logoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
                 logoutText.textContent = "TERMINATE SESSION";
