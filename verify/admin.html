@@ -78,7 +78,7 @@
 </head>
 <body class="h-full text-gray-200 antialiased flex items-center justify-center p-0 md:p-6 overflow-hidden">
 
-    <!-- Loading Overlay (Prevents instant logout while session loads) -->
+    <!-- Loading Overlay -->
     <div id="auth-loader" class="fixed inset-0 bg-[#07090e] z-50 flex flex-col items-center justify-center gap-3 transition-opacity duration-300">
         <div class="w-10 h-10 border-4 border-brand-500/20 border-t-brand-500 rounded-full animate-spin"></div>
         <p class="text-xs font-mono text-gray-400 uppercase tracking-widest">Verifying Session...</p>
@@ -115,7 +115,7 @@
                 </div>
             </div>
 
-            <!-- Profile & Manual Logout Section -->
+            <!-- Profile & Sidebar Logout Button -->
             <div class="p-3 border-t border-white/5 bg-dark-900/40">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3 overflow-hidden">
@@ -131,7 +131,6 @@
                         </div>
                     </div>
 
-                    <!-- Logout Button -->
                     <button id="logout-btn" title="Logout" class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors flex items-center gap-1">
                         <i data-lucide="log-out" class="w-4 h-4"></i>
                     </button>
@@ -151,6 +150,7 @@
                     </div>
                 </div>
 
+                <!-- Header Logout Button -->
                 <button id="logout-btn-header" class="bg-red-600/20 border border-red-500/30 hover:bg-red-600 text-red-400 hover:text-white text-xs font-bold px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5">
                     <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
                     <span>LOGOUT</span>
@@ -213,7 +213,7 @@
 
         let currentUser = null;
 
-        // Force persistent browser session so page refreshes keep user logged in
+        // Persist session across tab reloads
         setPersistence(auth, browserLocalPersistence);
 
         // Authentication State Listener
@@ -224,11 +224,11 @@
                 userDisplayName.textContent = name;
                 userAvatar.textContent = name.charAt(0).toUpperCase();
 
-                // Hide loader once authentication is confirmed
+                // Hide loader once verified
                 authLoader.classList.add('opacity-0', 'pointer-events-none');
                 setTimeout(() => authLoader.remove(), 300);
             } else {
-                // Redirect to login portal if not signed in
+                // Redirect unauthenticated users to index.html
                 window.location.href = "index.html"; 
             }
         });
