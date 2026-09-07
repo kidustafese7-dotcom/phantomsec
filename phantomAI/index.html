@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
   <style>
     * {
@@ -158,6 +159,11 @@
     .text-body {
       flex: 1;
       overflow-x: auto;
+    }
+
+    .text-body.user-text {
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .text-body p {
@@ -341,14 +347,14 @@
 
         if (!response.ok) {
           const errData = await response.json();
-          aiTextBody.innerHTML = `<span style="color:#ef4444;">API Error: ${errData.error?.message || response.statusText}</span>`;
+          renderError(aiTextBody, `API Error: ${errData.error?.message || response.statusText}`);
           return;
         }
 
         const data = await response.json();
         const fullContent = data.choices[0]?.message?.content || 'No response returned.';
 
-        aiTextBody.innerHTML = marked.parse(fullContent);
+        aiTextBody.innerHTML = DOMPurify.sanitize(marked.parse(fullContent));
         hljs.highlightAll();
         
         const container = document.getElementById('messages-container');
@@ -357,7 +363,7 @@
         activeMessages.push({ role: 'assistant', content: fullContent });
 
       } catch (err) {
-        aiTextBody.innerHTML = `<span style="color:#ef4444;">Network Error: ${err.message}</span>`;
+        renderError(aiTextBody, `Network Error: ${err.message}`);
       }
     }
 
@@ -369,13 +375,28 @@
       const avatarClass = role === 'user' ? 'user-avatar' : 'ai-avatar';
       const iconClass = role === 'user' ? 'fa-user' : 'fa-robot';
 
-      row.innerHTML = `
-        <div class="message-content">
-          <div class="avatar ${avatarClass}"><i class="fa-solid ${iconClass}"></i></div>
-          <div class="text-body">${marked.parse(text)}</div>
-        </div>
-      `;
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+
+      const avatarDiv = document.createElement('div');
+      avatarDiv.className = `avatar ${avatarClass}`;
+      avatarDiv.innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
+
+      const textBodyDiv = document.createElement('div');
+      textBodyDiv.className = 'text-body';
+
+      if (role === 'user') {
+        textBodyDiv.classList.add('user-text');
+        textBodyDiv.textContent = text;
+      } else {
+        textBodyDiv.innerHTML = DOMPurify.sanitize(marked.parse(text));
+      }
+
+      contentDiv.appendChild(avatarDiv);
+      contentDiv.appendChild(textBodyDiv);
+      row.appendChild(contentDiv);
       container.appendChild(row);
+
       hljs.highlightAll();
       container.scrollTop = container.scrollHeight;
     }
@@ -388,15 +409,32 @@
       const avatarClass = role === 'user' ? 'user-avatar' : 'ai-avatar';
       const iconClass = role === 'user' ? 'fa-user' : 'fa-robot';
 
-      row.innerHTML = `
-        <div class="message-content">
-          <div class="avatar ${avatarClass}"><i class="fa-solid ${iconClass}"></i></div>
-          <div class="text-body">Thinking...</div>
-        </div>
-      `;
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+
+      const avatarDiv = document.createElement('div');
+      avatarDiv.className = `avatar ${avatarClass}`;
+      avatarDiv.innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
+
+      const textBodyDiv = document.createElement('div');
+      textBodyDiv.className = 'text-body';
+      textBodyDiv.textContent = 'Thinking...';
+
+      contentDiv.appendChild(avatarDiv);
+      contentDiv.appendChild(textBodyDiv);
+      row.appendChild(contentDiv);
       container.appendChild(row);
+
       container.scrollTop = container.scrollHeight;
-      return row.querySelector('.text-body');
+      return textBodyDiv;
+    }
+
+    function renderError(element, message) {
+      element.innerHTML = '';
+      const errSpan = document.createElement('span');
+      errSpan.style.color = '#ef4444';
+      errSpan.textContent = message;
+      element.appendChild(errSpan);
     }
   </script>
 </body>
