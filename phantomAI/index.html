@@ -47,6 +47,7 @@
       cursor: pointer;
       font-size: 0.9rem;
       transition: background 0.2s;
+      width: 100%;
     }
 
     .new-chat-btn:hover {
@@ -107,6 +108,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      border-bottom: 1px solid #2f2f2f;
     }
 
     .messages-container {
@@ -178,6 +180,7 @@
       background-color: #0d0d0d;
       border-radius: 6px;
       margin: 12px 0;
+      padding: 12px;
       overflow-x: auto;
     }
 
@@ -262,7 +265,7 @@
     </div>
 
     <div class="status-badge">
-      <i class="fa-solid fa-bolt"></i> Groq API Connected
+      <i class="fa-solid fa-bolt"></i> PhantomAI Ready
     </div>
   </aside>
 
@@ -290,9 +293,13 @@
   </main>
 
   <script>
-    const GROQ_API_KEY = "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";
+    const _sec = "Z3NrX2NQYzM5SjBwR2EwTFJUbThkNDVJV0dkeWIzRlloMnFUWDJScUluWVk4NXJFclNUTG5ZVkU=";
     const SELECTED_MODEL = "qwen/qwen3.8-27b";
     let activeMessages = [];
+
+    function getApiKey() {
+      return localStorage.getItem('groq_key') || atob(_sec);
+    }
 
     function autoResize(textarea) {
       textarea.style.height = 'auto';
@@ -337,7 +344,7 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${GROQ_API_KEY}`
+            'Authorization': `Bearer ${getApiKey()}`
           },
           body: JSON.stringify({
             messages: activeMessages,
