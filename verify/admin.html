@@ -103,7 +103,7 @@
                             <span class="text-[10px] text-gray-400 font-mono">100% Real-time sync across all connected clients</span>
                         </div>
                     </div>
-                    <span class="text-[10px] font-mono text-[#00ff41] bg-[#00ff41]/10 px-2.5 py-1 rounded-full border border-[#00ff41]/30">LIVE </span>
+                    <span class="text-[10px] font-mono text-[#00ff41] bg-[#00ff41]/10 px-2.5 py-1 rounded-full border border-[#00ff41]/30">LIVE</span>
                 </div>
 
                 <!-- Chat Messages Log Feed -->
@@ -141,7 +141,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, query, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC1_m2aMJeAW93BkgQ0VUM9KdtzT2OZelM",
@@ -175,19 +175,18 @@
                 document.body.style.display = "flex";
                 userEmailDisplay.textContent = user.email;
 
-                // Explicitly register/update user profile in Firestore 'users' collection with email
-                const userDocRef = doc(db, "users", user.uid);
-                await setDoc(userDocRef, {
-                    uid: user.uid,
-                    email: user.email,
-                    online: true,
-                    lastSeen: serverTimestamp()
-                }, { merge: true });
-
-                // Clean up presence status on accidental tab close / disconnect
-                window.addEventListener('beforeunload', () => {
-                    navigator.sendBeacon ? null : setDoc(userDocRef, { online: false }, { merge: true });
-                });
+                // Explicitly register user profile in Firestore 'users' collection using UID as document ID
+                try {
+                    const userDocRef = doc(db, "users", user.uid);
+                    await setDoc(userDocRef, {
+                        uid: user.uid,
+                        email: user.email,
+                        online: true,
+                        lastSeen: serverTimestamp()
+                    }, { merge: true });
+                } catch (err) {
+                    console.error("Error setting user presence:", err);
+                }
 
                 initRealtimeChatAndUsers();
             } else {
@@ -195,14 +194,25 @@
             }
         });
 
-        // Setup real-time listeners for both global messages and all registered/active users
+        // Setup real-time listeners without requiring indexes
         function initRealtimeChatAndUsers() {
-            // 1. Real-time Message Stream (Telegram group style)
-            const messagesQuery = query(collection(db, "global_chat"), orderBy("timestamp", "asc"));
+            // 1. Real-time Message Stream (Client-side sorting to avoid missing composite index errors)
+            const messagesQuery = collection(db, "global_chat");
             onSnapshot(messagesQuery, (snapshot) => {
                 chatFeed.innerHTML = "";
+                let messages = [];
                 snapshot.docs.forEach(docSnap => {
-                    const msg = docSnap.data();
+                    messages.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                
+                // Sort messages by timestamp safely in JavaScript
+                messages.sort((a, b) => {
+                    const timeA = a.timestamp?.toMillis ? a.timestamp.toMillis() : 0;
+                    const timeB = b.timestamp?.toMillis ? b.timestamp.toMillis() : 0;
+                    return timeA - timeB;
+                });
+
+                messages.forEach(msg => {
                     const isMe = msg.sender === currentUser.email;
 
                     const msgWrapper = document.createElement('div');
@@ -221,10 +231,13 @@
                     chatFeed.appendChild(msgWrapper);
                 });
                 chatFeed.scrollTop = chatFeed.scrollHeight;
+            }, (error) => {
+                console.error("Chat sync error:", error);
             });
 
-            // 2. Real-time Firebase Users List (Shows all registered user emails in database)
-            onSnapshot(collection(db, "users"), (snapshot) => {
+            // 2. Real-time Firebase Users List
+            const usersQuery = collection(db, "users");
+            onSnapshot(usersQuery, (snapshot) => {
                 usersSidebarList.innerHTML = "";
                 let count = 0;
                 snapshot.docs.forEach(docSnap => {
@@ -243,6 +256,8 @@
                 if (count === 0) {
                     usersSidebarList.innerHTML = `<p class="text-gray-500">No users found in database.</p>`;
                 }
+            }, (error) => {
+                console.error("Users sync error:", error);
             });
         }
 
@@ -261,6 +276,7 @@
                 chatInput.value = "";
             } catch (err) {
                 console.error("Error sending message:", err);
+                alert("Failed to send message. Check console or Firebase security rules.");
             }
         });
 
@@ -272,17 +288,13 @@
                 logoutText.textContent = "TERMINATING...";
 
                 if (currentUser) {
-                    // Update online status in Firestore before clearing session
                     await setDoc(doc(db, "users", currentUser.uid), { 
                         online: false,
                         lastSeen: serverTimestamp()
                     }, { merge: true });
                 }
 
-                // Execute Firebase Auth sign-out
                 await signOut(auth);
-                
-                // Redirect user back to login page securely
                 window.location.replace("index.html");
             } catch (error) {
                 console.error("Logout Error:", error);
