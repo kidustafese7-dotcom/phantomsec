@@ -79,17 +79,17 @@
         <!-- Main Chat Area Filling the Screen -->
         <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex gap-6 overflow-hidden">
             
-            <!-- Online Users Sidebar -->
+            <!-- Users Sidebar pulled live from Firestore 'users' collection -->
             <div class="w-72 rounded-xl bg-[#0a1118]/80 border border-gray-800 p-4 font-mono text-xs backdrop-blur-md flex flex-col shrink-0">
                 <div class="flex items-center justify-between border-b border-gray-800 pb-3 mb-3">
                     <div class="flex items-center gap-2">
                         <i data-lucide="users" class="w-4 h-4 text-[#00ff41]"></i>
-                        <span class="font-bold text-gray-200">ONLINE MEMBERS</span>
+                        <span class="font-bold text-gray-200">FIRESTORE USERS</span>
                     </div>
-                    <span id="onlineCount" class="text-[10px] bg-[#00ff41]/10 text-[#00ff41] px-2 py-0.5 rounded border border-[#00ff41]/20">0</span>
+                    <span id="userCount" class="text-[10px] bg-[#00ff41]/10 text-[#00ff41] px-2 py-0.5 rounded border border-[#00ff41]/20">0</span>
                 </div>
                 <div id="usersSidebarList" class="flex-1 overflow-y-auto space-y-2 text-gray-300">
-                    <p class="text-gray-500">Scanning nodes...</p>
+                    <p class="text-gray-500">Syncing database...</p>
                 </div>
             </div>
 
@@ -99,11 +99,11 @@
                     <div class="flex items-center gap-2">
                         <i data-lucide="message-square" class="w-4 h-4 text-[#00ff41]"></i>
                         <div>
-                            <span class="font-bold font-mono text-sm text-gray-200 block">PUBLIC GROUP CHAT</span>
-                            <span class="text-[10px] text-gray-400 font-mono">All authenticated members connected globally</span>
+                            <span class="font-bold font-mono text-sm text-gray-200 block">GLOBAL TELEGRAM GROUP</span>
+                            <span class="text-[10px] text-gray-400 font-mono">100% Real-time sync across all connected clients</span>
                         </div>
                     </div>
-                    <span class="text-[10px] font-mono text-[#00ff41] bg-[#00ff41]/10 px-2.5 py-1 rounded-full border border-[#00ff41]/30">LIVE SYNC</span>
+                    <span class="text-[10px] font-mono text-[#00ff41] bg-[#00ff41]/10 px-2.5 py-1 rounded-full border border-[#00ff41]/30">LIVE </span>
                 </div>
 
                 <!-- Chat Messages Log Feed -->
@@ -116,7 +116,7 @@
                     <input 
                         type="text" 
                         id="chatInput" 
-                        placeholder="Write a message to the group..." 
+                        placeholder="Type message to everyone..." 
                         autocomplete="off"
                         required
                         class="flex-1 bg-[#05080f] border border-gray-800 rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-[#00ff41] focus:border-[#00ff41] text-sm"
@@ -141,7 +141,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, query, orderBy, onSnapshot, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC1_m2aMJeAW93BkgQ0VUM9KdtzT2OZelM",
@@ -164,55 +164,56 @@
         const chatForm = document.getElementById('chatForm');
         const chatInput = document.getElementById('chatInput');
         const usersSidebarList = document.getElementById('usersSidebarList');
-        const onlineCount = document.getElementById('onlineCount');
+        const userCount = document.getElementById('userCount');
 
         let currentUser = null;
 
-        // Auth guard and status tracker
+        // 100% Real Authentication State & User Registry Sync
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
                 document.body.style.display = "flex";
                 userEmailDisplay.textContent = user.email;
 
-                // Register online presence in Firestore
+                // Explicitly register/update user profile in Firestore 'users' collection with email
                 const userDocRef = doc(db, "users", user.uid);
                 await setDoc(userDocRef, {
+                    uid: user.uid,
                     email: user.email,
                     online: true,
-                    lastActive: serverTimestamp()
+                    lastSeen: serverTimestamp()
                 }, { merge: true });
 
-                // Handle tab close / unexpected disconnect cleanup
+                // Clean up presence status on accidental tab close / disconnect
                 window.addEventListener('beforeunload', () => {
                     navigator.sendBeacon ? null : setDoc(userDocRef, { online: false }, { merge: true });
                 });
 
-                initChatListeners();
+                initRealtimeChatAndUsers();
             } else {
                 window.location.replace("index.html");
             }
         });
 
-        // Initialize Realtime Firestore Chat & User Presence Listeners
-        function initChatListeners() {
-            // Listen to global public group chat messages feed
-            const q = query(collection(db, "global_chat"), orderBy("timestamp", "asc"));
-            onSnapshot(q, (snapshot) => {
+        // Setup real-time listeners for both global messages and all registered/active users
+        function initRealtimeChatAndUsers() {
+            // 1. Real-time Message Stream (Telegram group style)
+            const messagesQuery = query(collection(db, "global_chat"), orderBy("timestamp", "asc"));
+            onSnapshot(messagesQuery, (snapshot) => {
                 chatFeed.innerHTML = "";
                 snapshot.docs.forEach(docSnap => {
                     const msg = docSnap.data();
                     const isMe = msg.sender === currentUser.email;
 
                     const msgWrapper = document.createElement('div');
-                    msgWrapper.className = `flex flex-col max-w-[70%] ${isMe ? 'self-end items-end' : 'self-start items-start'} mb-2`;
+                    msgWrapper.className = `flex flex-col max-w-[70%] ${isMe ? 'self-end items-end' : 'self-start items-start'} mb-3`;
 
                     const senderLabel = document.createElement('span');
                     senderLabel.className = 'text-[10px] font-mono text-gray-400 mb-1 px-1';
                     senderLabel.textContent = msg.sender;
 
                     const bubble = document.createElement('div');
-                    bubble.className = `p-3 rounded-lg text-sm leading-relaxed ${isMe ? 'bg-[#00ff41]/20 border border-[#00ff41]/30 text-white rounded-br-none' : 'bg-[#05080f] border border-gray-800 text-gray-200 rounded-bl-none'}`;
+                    bubble.className = `p-3 rounded-lg text-sm leading-relaxed shadow-md ${isMe ? 'bg-[#00ff41]/20 border border-[#00ff41]/30 text-white rounded-br-none' : 'bg-[#05080f] border border-gray-800 text-gray-200 rounded-bl-none'}`;
                     bubble.textContent = msg.text;
 
                     msgWrapper.appendChild(senderLabel);
@@ -222,31 +223,30 @@
                 chatFeed.scrollTop = chatFeed.scrollHeight;
             });
 
-            // Listen to online users list in real-time
+            // 2. Real-time Firebase Users List (Shows all registered user emails in database)
             onSnapshot(collection(db, "users"), (snapshot) => {
                 usersSidebarList.innerHTML = "";
                 let count = 0;
                 snapshot.docs.forEach(docSnap => {
-                    const u = docSnap.data();
-                    if (u.online) {
-                        count++;
-                        const userItem = document.createElement('div');
-                        userItem.className = 'flex items-center gap-2 p-2 rounded hover:bg-gray-800/40 transition-colors';
-                        userItem.innerHTML = `
-                            <div class="w-2 h-2 rounded-full bg-[#00ff41] shadow-[0_0_6px_#00ff41]"></div>
-                            <span class="truncate text-gray-300">${u.email}</span>
-                        `;
-                        usersSidebarList.appendChild(userItem);
-                    }
+                    const userData = docSnap.data();
+                    count++;
+                    
+                    const userItem = document.createElement('div');
+                    userItem.className = 'flex items-center gap-2.5 p-2 rounded bg-gray-900/40 border border-gray-800/60 hover:bg-gray-800/50 transition-colors';
+                    userItem.innerHTML = `
+                        <div class="w-2 h-2 rounded-full ${userData.online ? 'bg-[#00ff41] shadow-[0_0_8px_#00ff41]' : 'bg-gray-600'}"></div>
+                        <span class="truncate text-gray-300 font-mono text-xs">${userData.email || 'Unknown User'}</span>
+                    `;
+                    usersSidebarList.appendChild(userItem);
                 });
-                onlineCount.textContent = count;
+                userCount.textContent = count;
                 if (count === 0) {
-                    usersSidebarList.innerHTML = `<p class="text-gray-500">No active members online.</p>`;
+                    usersSidebarList.innerHTML = `<p class="text-gray-500">No users found in database.</p>`;
                 }
             });
         }
 
-        // Send Message Handler to Global Collection
+        // Send Message to Firestore Global Group
         chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const text = chatInput.value.trim();
@@ -264,7 +264,7 @@
             }
         });
 
-        // 100% Real, Robust Logout Handler
+        // 100% Real Logout Handler
         logoutBtn.addEventListener('click', async () => {
             try {
                 logoutBtn.disabled = true;
@@ -272,17 +272,17 @@
                 logoutText.textContent = "TERMINATING...";
 
                 if (currentUser) {
-                    // Instantly set online status to false in Firebase before killing session
+                    // Update online status in Firestore before clearing session
                     await setDoc(doc(db, "users", currentUser.uid), { 
                         online: false,
-                        lastActive: serverTimestamp()
+                        lastSeen: serverTimestamp()
                     }, { merge: true });
                 }
 
-                // Perform real Firebase sign out
+                // Execute Firebase Auth sign-out
                 await signOut(auth);
                 
-                // Clear local storage/session tokens if any linger and redirect
+                // Redirect user back to login page securely
                 window.location.replace("index.html");
             } catch (error) {
                 console.error("Logout Error:", error);
