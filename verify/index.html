@@ -3,358 +3,1194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phantom Security - Admin Portal</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Phantom Chat</title>
+
+    <!-- Firebase JS SDK -->
+    <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-database.js"></script>
 
     <style>
-        :root {
-            --color-bg: #050508;
-            --color-neon-green: #00ff41;
-            --color-cyan: #00ffff;
-            --color-purple: #8a2be2;
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
         }
 
         body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--color-bg);
-            color: white;
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(99, 102, 241, 0.25),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(139, 92, 246, 0.2),
+                    transparent 35%
+                ),
+                #0b1020;
+            color: #fff;
             overflow: hidden;
         }
 
-        .font-mono, h1, h2, h3, h4, h5, h6 {
-            font-family: 'Space Grotesk', monospace;
+        /* =========================
+           LOGIN SCREEN
+        ========================= */
+
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(99, 102, 241, 0.25),
+                    transparent 40%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(139, 92, 246, 0.2),
+                    transparent 40%
+                ),
+                #080d1a;
         }
 
-        .cyber-grid {
-            background-size: 50px 50px;
-            background-image: 
-                linear-gradient(to right, rgba(0, 255, 65, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
-            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        .login-box {
+            width: min(420px, 100%);
+
+            padding: 35px;
+
+            background: rgba(15, 23, 42, 0.9);
+
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            border-radius: 24px;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.45);
+
+            text-align: center;
         }
 
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus, 
-        input:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0 30px #0a1118 inset !important;
-            -webkit-text-fill-color: white !important;
-            transition: background-color 5000s ease-in-out 0s;
+        .login-icon {
+            width: 65px;
+            height: 65px;
+
+            margin: 0 auto 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #8b5cf6
+                );
+
+            font-size: 30px;
+
+            box-shadow:
+                0 10px 30px rgba(99, 102, 241, 0.35);
         }
-        
-        ::-webkit-scrollbar {
+
+        .login-box h1 {
+            margin: 0 0 8px;
+
+            font-size: 26px;
+        }
+
+        .login-box p {
+            margin: 0 0 25px;
+
+            color: #94a3b8;
+
+            font-size: 14px;
+        }
+
+        .login-input {
+            width: 100%;
+            height: 50px;
+
+            margin-bottom: 12px;
+
+            padding: 0 16px;
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            border-radius: 12px;
+
+            outline: none;
+
+            background: rgba(255, 255, 255, 0.06);
+
+            color: #fff;
+
+            font-size: 14px;
+
+            transition: 0.25s ease;
+        }
+
+        .login-input::placeholder {
+            color: #64748b;
+        }
+
+        .login-input:focus {
+            border-color: #8b5cf6;
+
+            background: rgba(255, 255, 255, 0.09);
+
+            box-shadow:
+                0 0 0 3px rgba(139, 92, 246, 0.12);
+        }
+
+        #loginButton {
+            width: 100%;
+            height: 50px;
+
+            margin-top: 8px;
+
+            border: none;
+            border-radius: 12px;
+
+            cursor: pointer;
+
+            color: #fff;
+
+            font-size: 15px;
+            font-weight: 700;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #8b5cf6
+                );
+
+            box-shadow:
+                0 8px 25px rgba(99, 102, 241, 0.3);
+
+            transition: 0.25s ease;
+        }
+
+        #loginButton:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 30px rgba(139, 92, 246, 0.45);
+        }
+
+        #loginButton:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #loginError {
+            display: none;
+
+            margin-top: 15px;
+            padding: 10px;
+
+            border-radius: 10px;
+
+            color: #fca5a5;
+
+            background: rgba(239, 68, 68, 0.1);
+
+            border: 1px solid rgba(239, 68, 68, 0.2);
+
+            font-size: 13px;
+        }
+
+        /* =========================
+           CHAT HEADER
+        ========================= */
+
+        .chat-header {
+            position: fixed;
+
+            top: 0;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: min(700px, calc(100% - 40px));
+
+            height: 70px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 0 24px;
+
+            background: rgba(15, 23, 42, 0.88);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+            border-radius: 0 0 18px 18px;
+
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, 0.25);
+
+            z-index: 10;
+        }
+
+        .chat-icon {
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #8b5cf6
+                );
+
+            font-size: 20px;
+
+            box-shadow:
+                0 5px 18px rgba(99, 102, 241, 0.35);
+        }
+
+        .chat-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .online-status {
+            margin-left: auto;
+
+            display: flex;
+            align-items: center;
+
+            gap: 7px;
+
+            color: #94a3b8;
+
+            font-size: 12px;
+        }
+
+        .online-dot {
             width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            box-shadow:
+                0 0 10px #22c55e;
         }
-        ::-webkit-scrollbar-track {
-            background: #050508;
+
+        #logoutButton {
+            margin-left: 12px;
+
+            padding: 7px 10px;
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            color: #cbd5e1;
+
+            background: rgba(255, 255, 255, 0.05);
+
+            font-size: 11px;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #00ff4140;
-            border-radius: 4px;
+
+        #logoutButton:hover {
+            color: #fff;
+
+            background: rgba(239, 68, 68, 0.15);
+
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        /* =========================
+           MESSAGES
+        ========================= */
+
+        #messages {
+            position: fixed;
+
+            top: 85px;
+            bottom: 105px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: min(700px, calc(100% - 40px));
+
+            margin: 0;
+
+            padding: 15px 8px 25px;
+
+            list-style: none;
+
+            overflow-y: auto;
+
+            scroll-behavior: smooth;
+        }
+
+        #messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #messages::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.35);
+
+            border-radius: 10px;
+        }
+
+        #messages li {
+            width: fit-content;
+
+            max-width: 80%;
+
+            margin: 0 0 13px;
+
+            padding: 12px 15px;
+
+            border-radius: 17px 17px 17px 5px;
+
+            background: rgba(30, 41, 59, 0.9);
+
+            border: 1px solid rgba(255, 255, 255, 0.07);
+
+            color: #e2e8f0;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+            box-shadow:
+                0 6px 18px rgba(0, 0, 0, 0.15);
+
+            animation: messageIn 0.25s ease-out;
+
+            word-break: break-word;
+        }
+
+        #messages li button {
+            margin-left: 10px;
+
+            padding: 5px 9px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            color: #fca5a5;
+
+            background: rgba(239, 68, 68, 0.12);
+
+            font-size: 11px;
+        }
+
+        #messages li button:hover {
+            color: #fff;
+
+            background: #ef4444;
+        }
+
+        /* =========================
+           MESSAGE FORM
+        ========================= */
+
+        form {
+            position: fixed;
+
+            bottom: 20px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: min(700px, calc(100% - 40px));
+
+            display: flex;
+
+            gap: 10px;
+
+            padding: 12px;
+
+            background: rgba(15, 23, 42, 0.9);
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 15px 45px rgba(0, 0, 0, 0.35);
+
+            z-index: 20;
+        }
+
+        #message {
+            flex: 1;
+
+            min-width: 0;
+
+            height: 48px;
+
+            padding: 0 17px;
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            border-radius: 13px;
+
+            outline: none;
+
+            background: rgba(255, 255, 255, 0.07);
+
+            color: #fff;
+
+            font-size: 15px;
+        }
+
+        #message::placeholder {
+            color: #94a3b8;
+        }
+
+        #message:focus {
+            border-color: #8b5cf6;
+
+            box-shadow:
+                0 0 0 3px rgba(139, 92, 246, 0.15);
+        }
+
+        input[type="submit"] {
+            height: 48px;
+
+            padding: 0 23px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            cursor: pointer;
+
+            color: #fff;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #8b5cf6
+                );
+
+            box-shadow:
+                0 7px 20px rgba(99, 102, 241, 0.3);
+
+            transition: 0.25s ease;
+        }
+
+        input[type="submit"]:hover {
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           ANIMATION
+        ========================= */
+
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            .login-box {
+                padding: 28px 20px;
+            }
+
+            .chat-header {
+                width: calc(100% - 20px);
+
+                height: 60px;
+
+                padding: 0 16px;
+            }
+
+            .chat-icon {
+                width: 36px;
+                height: 36px;
+
+                font-size: 17px;
+            }
+
+            .chat-title {
+                font-size: 18px;
+            }
+
+            .online-status {
+                font-size: 11px;
+            }
+
+            #logoutButton {
+                margin-left: 5px;
+                padding: 6px 8px;
+            }
+
+            #messages {
+                top: 70px;
+                bottom: 90px;
+
+                width: calc(100% - 20px);
+            }
+
+            #messages li {
+                max-width: 88%;
+            }
+
+            form {
+                width: calc(100% - 20px);
+
+                bottom: 10px;
+
+                padding: 9px;
+
+                border-radius: 15px;
+            }
+
+            #message {
+                height: 45px;
+            }
+
+            input[type="submit"] {
+                height: 45px;
+
+                padding: 0 17px;
+            }
         }
     </style>
 </head>
-<body class="relative min-h-screen flex items-center justify-center p-4">
 
-    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#050508]">
-        <div class="absolute inset-0 cyber-grid opacity-50"></div>
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00ff41] rounded-full mix-blend-screen filter blur-[150px] opacity-10"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#00ffff] rounded-full mix-blend-screen filter blur-[150px] opacity-10"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#8a2be2] rounded-full mix-blend-screen filter blur-[200px] opacity-[0.03]"></div>
-        
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] text-[#00ff41] flex items-center justify-center">
-            <i data-lucide="shield-check" class="w-[800px] h-[800px]" stroke-width="0.5"></i>
-        </div>
+<body>
 
-        <canvas id="bg-canvas" class="absolute inset-0"></canvas>
-    </div>
+    <!-- =========================
+         LOGIN SCREEN
+    ========================= -->
 
-    <div class="relative z-10 w-full max-w-[420px]">
-        <div class="absolute -inset-1 bg-gradient-to-r from-[#00ff41]/20 to-[#00ffff]/20 rounded-2xl blur-lg opacity-50"></div>
-        
-        <div class="relative bg-[#0a1118]/80 backdrop-blur-xl border border-[#00ff41]/30 rounded-2xl p-8 shadow-[0_0_40px_rgba(0,255,65,0.1)]">
-            
-            <div class="text-center mb-8">
-                <div class="flex justify-center mb-4">
-                    <div class="relative">
-                        <i data-lucide="shield-check" class="text-[#00ff41] w-12 h-12" stroke-width="1.5"></i>
-                        <div class="absolute inset-0 bg-[#00ff41] blur-md opacity-30"></div>
-                    </div>
-                </div>
-                
-                <h1 class="text-2xl font-mono font-bold tracking-wider text-white mb-1">
-                    PHANTOM SECURITY
-                </h1>
-                
-                <div class="flex items-center justify-center gap-2 mb-3">
-                    <div class="w-2 h-2 rounded-full bg-[#00ff41] animate-pulse shadow-[0_0_10px_#00ff41]"></div>
-                    <span class="text-[10px] font-mono tracking-[0.2em] text-[#00ff41]">
-                        SECURE ADMIN PORTAL
-                    </span>
-                </div>
-                
-                <h2 class="text-sm font-semibold tracking-widest text-gray-300 mb-2 border-b border-gray-800 pb-3">
-                    ADMINISTRATOR ACCESS
-                </h2>
-                
-                <p class="text-xs text-gray-500 mt-2">
-                    Authorized personnel only. All access attempts are logged and monitored.
-                </p>
+    <div id="loginScreen">
+
+        <div class="login-box">
+
+            <div class="login-icon">
+                💬
             </div>
 
-            <form id="loginForm" class="space-y-5">
-                
-                <div class="space-y-1.5">
-                    <label for="username" class="block text-xs font-medium text-gray-400 uppercase tracking-wider">
-                        Username or Email
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i data-lucide="user" class="h-4 w-4 text-gray-500"></i>
-                        </div>
-                        <input
-                            id="username"
-                            type="text"
-                            class="block w-full pl-10 pr-3 py-2.5 bg-[#05080f]/80 border border-gray-800 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-[#00ff41] focus:border-[#00ff41] transition-colors sm:text-sm"
-                            placeholder="Enter username or email"
-                            autocomplete="username"
-                            required
-                        />
-                    </div>
-                </div>
+            <h1>Phantom Chat</h1>
 
-                <div class="space-y-1.5">
-                    <label for="password" class="block text-xs font-medium text-gray-400 uppercase tracking-wider">
-                        Password
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i data-lucide="lock" class="h-4 w-4 text-gray-500"></i>
-                        </div>
-                        <input
-                            id="password"
-                            type="password"
-                            class="block w-full pl-10 pr-10 py-2.5 bg-[#05080f]/80 border border-gray-800 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-[#00ff41] focus:border-[#00ff41] transition-colors sm:text-sm"
-                            placeholder="Enter administrator password"
-                            autocomplete="current-password"
-                            required
-                        />
-                        <button
-                            type="button"
-                            id="togglePassword"
-                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-300 focus:outline-none"
-                            title="Toggle Password Visibility"
-                        >
-                            <i data-lucide="eye" id="eyeIcon" class="h-4 w-4"></i>
-                        </button>
-                    </div>
-                </div>
+            <p>
+                Sign in with your Firebase account
+            </p>
 
-                <div id="errorMessage" class="hidden items-center gap-2 p-3 rounded bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
-                    <i data-lucide="alert-triangle" class="h-4 w-4 flex-shrink-0"></i>
-                    <span id="errorText">Invalid credentials.</span>
-                </div>
+            <input
+                id="loginEmail"
+                class="login-input"
+                type="email"
+                placeholder="Email address"
+                autocomplete="email"
+                required
+            >
 
-                <button
-                    type="submit"
-                    id="submitBtn"
-                    class="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-[#050508] bg-[#00ff41] hover:bg-[#00cc33] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#0a1118] focus:ring-[#00ff41] transition-all mt-6 group"
-                >
-                    <span id="btnText" class="flex items-center">
-                        SIGN IN
-                        <i data-lucide="terminal" class="ml-2 h-4 w-4 opacity-70 group-hover:opacity-100 transition-opacity"></i>
-                    </span>
-                    <span id="btnLoader" class="hidden flex items-center">
-                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-[#050508]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        AUTHENTICATING...
-                    </span>
-                </button>
-            </form>
+            <input
+                id="loginPassword"
+                class="login-input"
+                type="password"
+                placeholder="Password"
+                autocomplete="current-password"
+                required
+            >
 
-            <div class="mt-8 flex items-center justify-center text-[10px] text-gray-600 font-mono gap-4 border-t border-gray-800/50 pt-4">
-                <span class="flex items-center gap-1"><i data-lucide="lock" class="w-3 h-3"></i> 256-bit AES</span>
-                <span class="flex items-center gap-1"><i data-lucide="activity" class="w-3 h-3"></i> System Nominal</span>
-            </div>
+            <button id="loginButton" type="button">
+                Sign In
+            </button>
+
+            <div id="loginError"></div>
 
         </div>
+
     </div>
+
+
+    <!-- =========================
+         CHAT
+    ========================= -->
+
+    <header class="chat-header">
+
+        <div class="chat-icon">
+            💬
+        </div>
+
+        <div class="chat-title">
+            Phantom Chat
+        </div>
+
+        <div class="online-status">
+            <span class="online-dot"></span>
+            Online
+        </div>
+
+        <button id="logoutButton" type="button">
+            Logout
+        </button>
+
+    </header>
+
+
+    <!-- Messages -->
+
+    <ul id="messages"></ul>
+
+
+    <!-- Send message -->
+
+    <form id="messageForm">
+
+        <input
+            id="message"
+            type="text"
+            placeholder="Type a message..."
+            autocomplete="off"
+            maxlength="1000"
+            required
+        >
+
+        <input
+            type="submit"
+            value="Send"
+        >
+
+    </form>
+
 
     <script>
-        lucide.createIcons();
 
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
+        // ==========================================
+        // FIREBASE CONFIGURATION
+        // ==========================================
 
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2;
-                this.alpha = Math.random() * 0.5 + 0.1;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-            draw() {
-                ctx.fillStyle = `rgba(0, 255, 65, ${this.alpha})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < 100; i++) {
-            particles.push(new Particle());
-        }
-
-        function drawLines() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 120) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(0, 255, 65, ${0.1 - distance / 1200})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            drawLines();
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('password');
-        const eyeIcon = document.getElementById('eyeIcon');
-        let isPasswordVisible = false;
-
-        togglePassword.addEventListener('click', () => {
-            isPasswordVisible = !isPasswordVisible;
-            passwordInput.type = isPasswordVisible ? 'text' : 'password';
-            eyeIcon.setAttribute('data-lucide', isPasswordVisible ? 'eye-off' : 'eye');
-            lucide.createIcons();
-        });
-    </script>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-
-        const firebaseConfig = {
+        var firebaseConfig = {
             apiKey: "AIzaSyC1_m2aMJeAW93BkgQ0VUM9KdtzT2OZelM",
             authDomain: "phantomsec-ca297.firebaseapp.com",
+            databaseURL: "https://phantomsec-ca297-default-rtdb.firebaseio.com",
             projectId: "phantomsec-ca297",
             storageBucket: "phantomsec-ca297.firebasestorage.app",
             messagingSenderId: "15497490169",
-            appId: "1:15497490169:web:a8454e1ed0fda9de04fc28",
-            measurementId: "G-G0LKRPYMXW"
+            appId: "1:15497490169:web:a8454e1ed0fda9de04fc28"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const auth = getAuth(app);
 
-        const loginForm = document.getElementById('loginForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const btnText = document.getElementById('btnText');
-        const btnLoader = document.getElementById('btnLoader');
-        const errorMessage = document.getElementById('errorMessage');
-        const errorText = document.getElementById('errorText');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
+        // Initialize Firebase
 
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        firebase.initializeApp(firebaseConfig);
 
-            const rawInput = usernameInput.value.trim();
-            const password = passwordInput.value;
 
-            const email = rawInput.includes('@') 
-                ? rawInput 
-                : `${rawInput}@phantomsec.com`;
+        // Firebase services
 
-            errorMessage.classList.add('hidden');
-            errorMessage.classList.remove('flex');
+        var auth = firebase.auth();
 
-            submitBtn.disabled = true;
-            submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
-            btnText.classList.add('hidden');
-            btnLoader.classList.remove('hidden');
-            usernameInput.disabled = true;
-            passwordInput.disabled = true;
+        var database = firebase.database();
 
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                console.log("Authentication successful:", userCredential.user.email);
-                
-                // Redirects to admin.html on success
-                window.location.href = "admin.html";
 
-            } catch (error) {
-                console.error("Firebase Login Error:", error.code, error.message);
+        // Current Firebase user
 
-                errorMessage.classList.remove('hidden');
-                errorMessage.classList.add('flex');
-                
-                if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                    errorText.textContent = "Invalid administrator credentials.";
-                } else if (error.code === 'auth/too-many-requests') {
-                    errorText.textContent = "Account temporarily locked due to failed attempts.";
-                } else {
-                    errorText.textContent = error.message.replace("Firebase: ", "");
+        var currentUser = null;
+
+
+        // ==========================================
+        // ELEMENTS
+        // ==========================================
+
+        var loginScreen =
+            document.getElementById("loginScreen");
+
+        var loginEmail =
+            document.getElementById("loginEmail");
+
+        var loginPassword =
+            document.getElementById("loginPassword");
+
+        var loginButton =
+            document.getElementById("loginButton");
+
+        var loginError =
+            document.getElementById("loginError");
+
+        var logoutButton =
+            document.getElementById("logoutButton");
+
+        var messageForm =
+            document.getElementById("messageForm");
+
+        var messageInput =
+            document.getElementById("message");
+
+        var messages =
+            document.getElementById("messages");
+
+
+        // ==========================================
+        // INITIAL AUTH STATE
+        // ==========================================
+
+        auth.onAuthStateChanged(function(user) {
+
+            if (user) {
+
+                // User is logged in
+
+                currentUser = user;
+
+                loginScreen.style.display = "none";
+
+                loadMessages();
+
+            } else {
+
+                // User is logged out
+
+                currentUser = null;
+
+                loginScreen.style.display = "flex";
+
+                messages.innerHTML = "";
+
+            }
+
+        });
+
+
+        // ==========================================
+        // LOGIN
+        // ==========================================
+
+        loginButton.addEventListener("click", function() {
+
+            var email =
+                loginEmail.value.trim();
+
+            var password =
+                loginPassword.value;
+
+
+            if (!email || !password) {
+
+                showLoginError(
+                    "Please enter your email and password."
+                );
+
+                return;
+            }
+
+
+            loginButton.disabled = true;
+
+            loginButton.textContent =
+                "Signing in...";
+
+            hideLoginError();
+
+
+            auth.signInWithEmailAndPassword(
+                email,
+                password
+            )
+
+            .then(function(result) {
+
+                currentUser =
+                    result.user;
+
+            })
+
+            .catch(function(error) {
+
+                var message =
+                    "Login failed.";
+
+                switch (error.code) {
+
+                    case "auth/user-not-found":
+                        message =
+                            "No account found with this email.";
+                        break;
+
+                    case "auth/wrong-password":
+                        message =
+                            "Incorrect password.";
+                        break;
+
+                    case "auth/invalid-email":
+                        message =
+                            "Please enter a valid email address.";
+                        break;
+
+                    case "auth/user-disabled":
+                        message =
+                            "This account has been disabled.";
+                        break;
+
+                    case "auth/too-many-requests":
+                        message =
+                            "Too many attempts. Please try again later.";
+                        break;
+
+                    case "auth/invalid-credential":
+                        message =
+                            "Invalid email or password.";
+                        break;
                 }
 
-                passwordInput.value = '';
-                passwordInput.focus();
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
-                btnText.classList.remove('hidden');
-                btnLoader.classList.add('hidden');
-                usernameInput.disabled = false;
-                passwordInput.disabled = false;
-            }
+                showLoginError(message);
+
+            })
+
+            .finally(function() {
+
+                loginButton.disabled = false;
+
+                loginButton.textContent =
+                    "Sign In";
+
+            });
+
         });
+
+
+        // ==========================================
+        // ENTER KEY LOGIN
+        // ==========================================
+
+        loginPassword.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (event.key === "Enter") {
+                    loginButton.click();
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // LOGIN ERROR
+        // ==========================================
+
+        function showLoginError(message) {
+
+            loginError.textContent =
+                message;
+
+            loginError.style.display =
+                "block";
+
+        }
+
+
+        function hideLoginError() {
+
+            loginError.style.display =
+                "none";
+
+        }
+
+
+        // ==========================================
+        // LOGOUT
+        // ==========================================
+
+        logoutButton.addEventListener(
+            "click",
+            function() {
+
+                auth.signOut();
+
+            }
+        );
+
+
+        // ==========================================
+        // SEND MESSAGE
+        // ==========================================
+
+        messageForm.addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+
+                if (!currentUser) {
+                    return;
+                }
+
+
+                var message =
+                    messageInput.value.trim();
+
+
+                if (!message) {
+                    return;
+                }
+
+
+                database
+                    .ref("messages")
+                    .push({
+                        sender: currentUser.email,
+                        uid: currentUser.uid,
+                        message: message,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    });
+
+
+                messageInput.value = "";
+
+                messageInput.focus();
+
+            }
+        );
+
+
+        // ==========================================
+        // LOAD MESSAGES
+        // ==========================================
+
+        function loadMessages() {
+
+            messages.innerHTML = "";
+
+
+            database
+                .ref("messages")
+                .off("child_added");
+
+            database
+                .ref("messages")
+                .off("child_removed");
+
+
+            database
+                .ref("messages")
+                .on(
+                    "child_added",
+                    function(snapshot) {
+
+                        var data =
+                            snapshot.val();
+
+                        var li =
+                            document.createElement("li");
+
+
+                        li.id =
+                            "message-" +
+                            snapshot.key;
+
+
+                        var text =
+                            document.createTextNode(
+                                data.sender +
+                                ": " +
+                                data.message +
+                                " "
+                            );
+
+
+                        li.appendChild(text);
+
+
+                        // Delete own messages
+
+                        if (
+                            currentUser &&
+                            data.uid === currentUser.uid
+                        ) {
+
+                            var button =
+                                document.createElement(
+                                    "button"
+                                );
+
+                            button.type =
+                                "button";
+
+                            button.textContent =
+                                "Delete";
+
+                            button.setAttribute(
+                                "data-id",
+                                snapshot.key
+                            );
+
+
+                            button.onclick =
+                                function() {
+
+                                    deleteMessage(
+                                        this
+                                    );
+
+                                };
+
+
+                            li.appendChild(button);
+
+                        }
+
+
+                        messages.appendChild(li);
+
+
+                        // Scroll to newest
+
+                        messages.scrollTop =
+                            messages.scrollHeight;
+
+                    }
+                );
+
+
+            // Deleted messages
+
+            database
+                .ref("messages")
+                .on(
+                    "child_removed",
+                    function(snapshot) {
+
+                        var messageElement =
+                            document.getElementById(
+                                "message-" +
+                                snapshot.key
+                            );
+
+
+                        if (messageElement) {
+
+                            messageElement.textContent =
+                                "This message has been removed";
+
+                        }
+
+                    }
+                );
+
+        }
+
+
+        // ==========================================
+        // DELETE MESSAGE
+        // ==========================================
+
+        function deleteMessage(button) {
+
+            if (!currentUser) {
+                return;
+            }
+
+
+            var messageId =
+                button.getAttribute(
+                    "data-id"
+                );
+
+
+            database
+                .ref("messages")
+                .child(messageId)
+                .once("value")
+                .then(function(snapshot) {
+
+                    var data =
+                        snapshot.val();
+
+
+                    // Only allow the owner
+                    // to delete the message
+
+                    if (
+                        data &&
+                        data.uid === currentUser.uid
+                    ) {
+
+                        return database
+                            .ref("messages")
+                            .child(messageId)
+                            .remove();
+
+                    }
+
+                });
+
+        }
+
     </script>
+
 </body>
 </html>
