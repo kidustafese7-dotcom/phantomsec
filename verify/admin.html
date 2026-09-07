@@ -242,14 +242,14 @@
                 userDisplayName.textContent = name;
                 userAvatar.textContent = name.charAt(0).toUpperCase();
             } else {
-                window.location.href = "login.html"; // Redirect to login if unauthenticated
+                window.location.href = "index.html"; // Redirect to login if unauthenticated
             }
         });
 
         // Logout listener
         logoutBtn.addEventListener('click', () => {
             signOut(auth).then(() => {
-                window.location.href = "login.html";
+                window.location.href = "index.html";
             });
         });
 
