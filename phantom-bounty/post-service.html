@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Publish Researcher Profile — phantom-bounty</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="post-service">
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="index.html">◈ phantom<span>-bounty</span></a>
+      <div class="navright" id="navRight"></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="sidebar">
+      <div class="sideprofile" id="sideProfileInfo"></div>
+      <div class="side-menu">
+        <a href="index.html">Hunt vulnerabilities</a>
+        <a href="researchers.html">Discover researchers</a>
+        <a href="profile.html">My profile</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="card panel">
+        <h2>Publish Hunter Service Profile</h2>
+        <p class="muted">Offer security audits, penetration testing, or code review services.</p>
+        <form id="serviceForm">
+          <div class="formgrid">
+            <div class="formrow full">
+              <label>Service Title *</label>
+              <input class="field" name="title" required placeholder="e.g. Senior Smart Contract & Web3 Security Auditor">
+            </div>
+            <div class="formrow">
+              <label>Starting Rate / Fee *</label>
+              <input class="field" name="price" required placeholder="e.g. $80 / hr or $1,000 / audit">
+            </div>
+            <div class="formrow full">
+              <label>Service Description & Experience *</label>
+              <textarea class="field" name="description" required placeholder="Describe your methodology, certifications, and past CVEs or findings..."></textarea>
+            </div>
+            <div class="formrow full">
+              <label>Expertise Tags (comma separated)</label>
+              <input class="field" name="skills" placeholder="Web Pentesting, Reverse Engineering, iOS, Burp Suite">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit">Publish Listing</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    $('#serviceForm').onsubmit = async (e) => {
+      e.preventDefault();
+      if (!currentUser) return toast('Please log in first', true);
+      const fd = new FormData(e.target);
+      const skills = fd.get('skills').split(',').map(s => s.trim()).filter(Boolean);
+
+      const ref = db.ref('services/' + currentUser.uid);
+      await ref.set({
+        id: currentUser.uid,
+        ownerId: currentUser.uid,
+        title: fd.get('title'),
+        price: fd.get('price'),
+        description: fd.get('description'),
+        skills,
+        createdAt: Date.now()
+      });
+
+      toast('Hunter service profile updated!');
+      window.location.href = 'researchers.html';
+    };
+  </script>
+</body>
+</html>

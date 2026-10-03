@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log In — phantom-bounty</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="login">
+  <div class="auth-screen">
+    <section class="auth-art">
+      <div class="brand">phantom<span>-bounty</span></div>
+      <h1>Welcome back.</h1>
+      <p>Log in to manage programs, triage vulnerability reports, and communicate directly with security researchers.</p>
+    </section>
+
+    <section class="auth-form-wrap">
+      <div class="auth-form">
+        <h2>Log In</h2>
+        
+        <div id="authAlert" class="error hidden"></div>
+
+        <form id="loginForm">
+          <div class="formrow">
+            <label for="email">Email Address</label>
+            <input class="field" id="email" name="email" type="email" autocomplete="email" required placeholder="name@domain.com">
+          </div>
+          
+          <div class="formrow">
+            <label for="password">Password</label>
+            <input class="field" id="password" name="password" type="password" autocomplete="current-password" required placeholder="••••••••">
+          </div>
+
+          <button class="btn primary" id="submitBtn" style="width:100%; margin-top:18px" type="submit">
+            Log In
+          </button>
+        </form>
+
+        <p style="margin-top:20px; font-size:14px; text-align:center" class="muted">
+          Don't have an account? <a href="signup.html">Create an account</a>
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Firebase v10 SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+
+  <script>
+    // Firebase Initialization
+    const firebaseConfig = {
+      apiKey: "AIzaSyC1_m2aMJeAW93BkgQ0VUM9KdtzT2OZelM",
+      authDomain: "phantomsec-ca297.firebaseapp.com",
+      databaseURL: "https://phantomsec-ca297-default-rtdb.firebaseio.com",
+      projectId: "phantomsec-ca297",
+      storageBucket: "phantomsec-ca297.firebasestorage.app",
+      messagingSenderId: "15497490169",
+      appId: "1:15497490169:web:a8454e1ed0fda9de04fc28"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const auth = firebase.auth();
+
+    const alertBox = document.getElementById('authAlert');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Auto-redirect if user is already logged in
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        window.location.href = 'index.html';
+      }
+    });
+
+    // Helper function to format Firebase error codes
+    function getErrorMessage(code) {
+      switch (code) {
+        case 'auth/invalid-credential':
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+          return 'Invalid email or password. Please try again.';
+        case 'auth/invalid-email':
+          return 'Please enter a valid email address.';
+        case 'auth/user-disabled':
+          return 'This account has been disabled.';
+        case 'auth/too-many-requests':
+          return 'Too many failed login attempts. Please try again later.';
+        default:
+          return 'An error occurred during log in. Please try again.';
+      }
+    }
+
+    // Login Form Submission
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      alertBox.classList.add('hidden');
+      alertBox.textContent = '';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Authenticating...';
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        window.location.href = 'index.html';
+      } catch (err) {
+        alertBox.textContent = getErrorMessage(err.code);
+        alertBox.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Log In';
+      }
+    });
+  </script>
+</body>
+</html>

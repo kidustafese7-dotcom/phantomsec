@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Vulnerability Report — Phantom Bounty</title>
+  <!-- Link to your stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="submit-report" style="display: none;"> <!-- Protected by app.js guard (Hunter only) -->
+
+  <div class="app-layout">
+    <!-- Sidebar / Navigation -->
+    <aside class="sidebar">
+      <div class="brand" style="padding: 20px; font-size: 20px; font-weight: bold; color: #00e676;">
+        Phantom Bounty
+      </div>
+      <div id="sideProfileInfo"></div>
+      <nav class="side-nav" style="display: flex; flex-direction: column; gap: 8px; padding: 0 14px;">
+        <a href="index.html" style="padding: 10px 14px; color: #aaa; text-decoration: none; border-radius: 8px;">Bounty Programs</a>
+        <a href="community.html" style="padding: 10px 14px; color: #aaa; text-decoration: none; border-radius: 8px;">Community</a>
+        <a href="messages.html" style="padding: 10px 14px; color: #aaa; text-decoration: none; border-radius: 8px;">Messages</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content" style="padding: 30px; flex: 1; background: #0a0a0c; color: #fff; min-height: 100vh;">
+      <header class="top-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 20px;">
+        <div>
+          <h1 style="font-size: 26px; margin: 0 0 6px 0;">Submit Vulnerability Report</h1>
+          <p class="muted" style="color: #aaa; margin: 0; font-size: 14px;">Disclose your security findings responsibly to the program owner.</p>
+        </div>
+        <div id="navRight"></div>
+      </header>
+
+      <section class="content-section" style="max-width: 800px; margin: 0 auto;">
+        <div class="card" style="padding: 30px; background: #121318; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+          
+          <form id="submitReportForm">
+            
+            <!-- Vulnerability Title -->
+            <div style="margin-bottom: 20px;">
+              <label for="reportTitle" style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #fff;">Vulnerability Title</label>
+              <input type="text" id="reportTitle" placeholder="e.g., Remote Code Execution via Unsecured Endpoint" required 
+                style="width: 100%; padding: 12px 16px; background: #1a1b23; color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 14px; outline: none;">
+            </div>
+
+            <!-- Severity Dropdown -->
+            <div style="margin-bottom: 20px;">
+              <label for="reportSeverity" style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #fff;">Severity Level</label>
+              <select id="reportSeverity" 
+                style="width: 100%; padding: 12px 16px; background: #1a1b23; color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 14px; outline: none; cursor: pointer;">
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+                <option value="Critical">Critical</option>
+              </select>
+            </div>
+
+            <!-- Description / Proof of Concept -->
+            <div style="margin-bottom: 24px;">
+              <label for="reportDescription" style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #fff;">Proof of Concept / Description & Steps to Reproduce</label>
+              <textarea id="reportDescription" rows="8" placeholder="Provide detailed steps, HTTP requests, or code snippets demonstrating the flaw..." required
+                style="width: 100%; padding: 12px 16px; background: #1a1b23; color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 14px; outline: none; resize: vertical; font-family: inherit;"></textarea>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; justify-content: flex-end; gap: 12px;">
+              <a href="index.html" class="btn secondary" style="padding: 10px 20px; background: transparent; color: #aaa; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; text-decoration: none; font-weight: 600;">Cancel</a>
+              <button type="submit" class="btn primary" style="padding: 10px 24px; background: #00e676; color: #0a0a0c; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Submit Report</button>
+            </div>
+
+          </form>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Firebase App (Compat SDKs) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <!-- Core Application Script -->
+  <script src="js/app.js"></script>
+</body>
+</html>

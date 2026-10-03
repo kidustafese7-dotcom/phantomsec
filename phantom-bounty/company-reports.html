@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" data-page="company-reports">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Reports - Phantom Bounty</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="company-reports">
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="wrap nav">
+      <div class="brand">Phantom<span>Bounty</span></div>
+      <nav class="navlinks">
+        <a href="index.html">Bounties</a>
+        <a href="community.html">Community</a>
+                <a href="reports.html">Reports</a>
+
+        <a href="company-reports.html" class="active">Received Reports</a>
+        <a href="messages.html">Messages</a>
+      </nav>
+      <!-- User Bar Populated Automatically by js/app.js renderNav() -->
+      <div class="navright" id="navRight"></div>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <div class="wrap layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Profile Box Populated Automatically by js/app.js renderNav() -->
+      <div id="sideProfileInfo"></div>
+      
+      <div class="side-menu" style="margin-top: 15px;">
+        <a href="index.html">Hunt Vulnerabilities</a>
+        <a href="company-reports.html" class="active">Received Reports</a>
+                <a href="reports.html">Reports</a>
+
+        <a href="messages.html">Messages</a>
+        <a href="profile.html">My Profile</a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main>
+      <div class="card">
+        <h2>Received Vulnerability Reports</h2>
+        <p class="muted">Review and triage incoming bug reports submitted by security researchers.</p>
+        
+        <!-- Status Filter -->
+        <div style="margin: 20px 0; display: flex; gap: 10px; align-items: center;">
+          <label style="font-size: 13px; font-weight: 600;">Filter Status:</label>
+          <select id="statusFilter" onchange="renderCompanyReports()" style="padding: 6px 12px; background: #1a1b23; color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px;">
+            <option value="ALL">All Reports</option>
+            <option value="Pending Review">Pending Review</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Rewarded">Rewarded</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+
+        <!-- Dynamic Reports Container -->
+        <div id="companyReportsContainer">
+          <div class="card" style="padding: 30px; text-align: center;">Loading received reports...</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  
+  <!-- Core Application Script -->
+  <script src="js/app.js"></script>
+</body>
+</html>

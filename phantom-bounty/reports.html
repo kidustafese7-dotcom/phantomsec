@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" data-page="reports">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Submitted Reports - Phantom Bounty</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="reports">
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="wrap nav">
+      <div class="brand">Phantom<span>Bounty</span></div>
+      <nav class="navlinks">
+        <a href="index.html">Bounties</a>
+        <a href="community.html">Community</a>
+        <a href="reports.html" class="active">My Reports</a>
+        <a href="messages.html">Messages</a>
+      </nav>
+      <!-- User Bar & Logout Populated Automatically -->
+      <div class="navright" id="navRight"></div>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <div class="wrap layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div id="sideProfileInfo"></div>
+      
+      <div class="side-menu" style="margin-top: 15px;">
+        <a href="index.html">Hunt Vulnerabilities</a>
+        <a href="reports.html" class="active">My Submitted Reports</a>
+        <a href="messages.html">Messages</a>
+        <a href="profile.html">My Profile</a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main>
+      <div class="card">
+        <h2>My Submitted Vulnerability Reports</h2>
+        <p class="muted">Track the status of the security reports you have submitted to target companies.</p>
+        
+        <!-- Dynamic Hunter Reports Container -->
+        <div id="hunterReportsContainer" style="margin-top: 20px;">
+          <div class="card" style="padding: 30px; text-align: center;">Loading your reports...</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  
+  <script src="js/app.js"></script>
+</body>
+</html>

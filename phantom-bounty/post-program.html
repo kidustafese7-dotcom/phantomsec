@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Bounty Program — Phantom Sec</title>
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body data-page="post-program" style="display: none;">
+
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="container nav-container" style="display:flex; justify-content:space-between; align-items:center; padding: 16px 0;">
+      <a href="index.html" class="brand" style="font-size:20px; font-weight:700; text-decoration:none; color:#fff;">
+        <span class="brand-accent" style="color:#00e676;">Phantom</span>Sec
+      </a>
+      <nav class="nav-right" id="navRight">
+        <!-- Injected dynamically by app.js -->
+      </nav>
+    </div>
+  </header>
+
+  <!-- Form Container -->
+  <main class="container" style="max-width: 768px; margin: 40px auto;">
+    <div class="card" style="padding: 32px; background:#121318; border:1px solid rgba(255,255,255,0.1); border-radius:12px;">
+      
+      <div style="margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 16px;">
+        <h1 style="font-size: 24px; margin-bottom: 6px;">Create New Bounty Program</h1>
+        <p class="muted" style="color:#aaa;">Publish a vulnerability disclosure program or bug bounty to receive security reports from researchers.</p>
+      </div>
+
+      <form id="postProgramForm">
+        
+        <!-- Program Title -->
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label for="title" style="display:block; font-weight:600; margin-bottom: 8px;">
+            Program Name / Title <span style="color:#ff4d4f">*</span>
+          </label>
+          <input type="text" id="title" required placeholder="e.g., Acro Corp Web & API Bug Bounty Program" class="input-field" style="width:100%; padding: 12px; background:#1a1b23; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:6px;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+          
+          <!-- Category -->
+          <div class="form-group">
+            <label for="category" style="display:block; font-weight:600; margin-bottom: 8px;">
+              Primary Scope Category <span style="color:#ff4d4f">*</span>
+            </label>
+            <select id="category" required class="input-field" style="width:100%; padding: 12px; background:#1a1b23; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:6px;">
+              <option value="">Select Category</option>
+              <option value="Web Application">Web Application</option>
+              <option value="Mobile App (iOS/Android)">Mobile App (iOS/Android)</option>
+              <option value="REST / GraphQL API">REST / GraphQL API</option>
+              <option value="Cloud Infrastructure">Cloud Infrastructure</option>
+              <option value="Smart Contracts / Web3">Smart Contracts / Web3</option>
+              <option value="Network / Endpoint">Network / Endpoint</option>
+            </select>
+          </div>
+
+          <!-- Bounty Reward Range -->
+          <div class="form-group">
+            <label for="budget" style="display:block; font-weight:600; margin-bottom: 8px;">
+              Bounty Reward Range <span style="color:#ff4d4f">*</span>
+            </label>
+            <input type="text" id="budget" required placeholder="e.g., $100 - $5,000 / report" class="input-field" style="width:100%; padding: 12px; background:#1a1b23; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:6px;">
+          </div>
+
+        </div>
+
+        <!-- Target Scope & Instructions -->
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label for="description" style="display:block; font-weight:600; margin-bottom: 8px;">
+            In-Scope Targets & Description <span style="color:#ff4d4f">*</span>
+          </label>
+          <textarea id="description" required rows="8" placeholder="Specify eligible domain names, endpoints, out-of-scope targets, program rules, and disclosure guidelines..." style="width:100%; padding: 12px; background:#1a1b23; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
+        </div>
+
+        <!-- Target Technologies / Tags -->
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label for="skills" style="display:block; font-weight:600; margin-bottom: 8px;">
+            Target Tech Stack <span class="muted small" style="color:#aaa;">(Comma-separated)</span>
+          </label>
+          <input type="text" id="skills" placeholder="e.g., React, Node.js, AWS, Kubernetes" class="input-field" style="width:100%; padding: 12px; background:#1a1b23; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:6px;">
+        </div>
+
+        <!-- Form Action Buttons -->
+        <div style="display:flex; justify-content:flex-end; gap:12px; border-top:1px solid rgba(255,255,255,0.08); padding-top:20px;">
+          <a href="index.html" class="btn secondary" style="padding:10px 20px; background:rgba(255,255,255,0.1); color:#fff; text-decoration:none; border-radius:6px;">Cancel</a>
+          <button type="submit" id="submitBtn" class="btn primary" style="padding:10px 20px; background:#00e676; color:#0a0a0c; font-weight:700; border:none; border-radius:6px; cursor:pointer;">Publish Bounty Program</button>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // 1. Role Guard & Self-Healing Profile Check
+      auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+          window.location.replace('login.html');
+          return;
+        }
+
+        try {
+          const profileRef = db.ref('profiles/' + user.uid);
+          let profileSnap = await profileRef.once('value');
+          let profile = profileSnap.val();
+
+          // Auto-heal missing role or profile node
+          if (!profile || !profile.role) {
+            await profileRef.update({
+              uid: user.uid,
+              email: user.email,
+              displayName: profile?.displayName || user.displayName || user.email.split('@')[0],
+              role: 'company'
+            });
+            profileSnap = await profileRef.once('value');
+            profile = profileSnap.val();
+          }
+
+          const userRole = (profile?.role || '').toLowerCase().trim();
+
+          if (userRole !== 'company') {
+            alert(`Access Restricted: Only Company accounts can access this page.\nYour detected database role is: "${profile?.role}"`);
+            window.location.replace('index.html');
+            return;
+          }
+
+          // Grant access and display form
+          document.body.style.display = 'block';
+        } catch (err) {
+          console.error("Profile authorization error:", err);
+          alert("Error verifying account credentials.");
+        }
+      });
+
+      // 2. Submit Program Form Handler
+      const form = document.getElementById('postProgramForm');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!auth.currentUser) {
+          alert('You must be logged in to post a program.');
+          window.location.replace('login.html');
+          return;
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        const title = document.getElementById('title').value.trim();
+        const category = document.getElementById('category').value;
+        const budget = document.getElementById('budget').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const rawSkills = document.getElementById('skills').value.trim();
+
+        const skills = rawSkills ? rawSkills.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Publishing...';
+
+        try {
+          const jobRef = db.ref('jobs').push();
+          const jobId = jobRef.key;
+
+          const programData = {
+            id: jobId,
+            title: title,
+            category: category,
+            budget: budget,
+            description: description,
+            skills: skills,
+            ownerId: auth.currentUser.uid,
+            ownerName: myProfile?.displayName || myProfile?.companyName || auth.currentUser.email,
+            applicantsCount: 0,
+            createdAt: Date.now()
+          };
+
+          await jobRef.set(programData);
+
+          alert('Bounty program published successfully!');
+          window.location.replace('index.html');
+        } catch (error) {
+          console.error("Error publishing program:", error);
+          alert('Failed to publish program: ' + error.message);
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Publish Bounty Program';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
