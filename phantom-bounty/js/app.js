@@ -104,28 +104,32 @@ auth.onAuthStateChanged(async (user) => {
 
   if (user) {
     currentUser = user;
-
+    
     try {
       const profileRef = db.ref('profiles/' + user.uid);
       const snap = await profileRef.once('value');
       myProfile = snap.val();
 
-      // Auto-heal missing profile entries
-      if (!myProfile || !myProfile.role) {
+      // Auto-heal missing profile entries ONLY if role is completely missing
+      if (!myProfile) {
         const defaultRole = (currentPage === 'post-program' || currentPage === 'company-reports') ? 'company' : 'hunter';
-        await profileRef.update({
+        await profileRef.set({
           uid: user.uid,
           email: user.email,
-          displayName: myProfile?.displayName || user.displayName || user.email.split('@')[0],
-          role: defaultRole
+          displayName: user.displayName || user.email.split('@')[0],
+          role: defaultRole,
+          createdAt: Date.now()
         });
         const updatedSnap = await profileRef.once('value');
         myProfile = updatedSnap.val();
+      } else if (!myProfile.role) {
+        // If profile exists but role property is missing, default safely
+        await profileRef.update({ role: 'hunter' });
+        myProfile.role = 'hunter';
       }
     } catch (err) {
       console.error("Error loading profile:", err);
     }
-
     const userRole = (myProfile?.role || '').toLowerCase().trim();
 
     // Guard Company-only routes
