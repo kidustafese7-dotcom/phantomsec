@@ -1,0 +1,257 @@
+/* ==========================================================================
+   phantom-bounty — Global Dark Theme Stylesheet (All Pages)
+   ========================================================================== */
+
+:root {
+  --bg: #050812; 
+  --bg2: #08101f; 
+  --panel: rgba(10, 18, 34, 0.72);
+  --panel-strong: rgba(12, 22, 41, 0.9); 
+  --panel-soft: rgba(16, 27, 48, 0.58);
+  --ink: #edf7ff; 
+  --muted: #8ea1b8; 
+  --muted2: #61738b;
+  --line: rgba(119, 164, 208, 0.18); 
+  --line-strong: rgba(55, 214, 255, 0.32);
+  --cyan: #28dcff; 
+  --cyan2: #0ca8ff; 
+  --blue: #4b7dff; 
+  --violet: #9b6cff;
+  --red: #ff5f78; 
+  --amber: #ffc857;
+  --shadow: 0 20px 70px rgba(0,0,0,0.34), 0 0 0 1px rgba(255,255,255,0.025) inset;
+  --glow: 0 0 30px rgba(40,220,255,0.12);
+  --radius: 18px; 
+  --radius-sm: 12px;
+}
+
+* { 
+  box-sizing: border-box; 
+  margin: 0;
+  padding: 0;
+}
+
+html { 
+  scroll-behavior: smooth; 
+}
+
+body {
+  margin: 0; 
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(61,94,255,0.10), transparent 30%),
+    radial-gradient(circle at 90% 12%, rgba(40,220,255,0.08), transparent 28%),
+    linear-gradient(145deg, #03050a 0%, #07101d 48%, #050812 100%);
+  color: var(--ink);
+  font: 15px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: ""; 
+  position: fixed; 
+  inset: 0; 
+  pointer-events: none; 
+  z-index: -2;
+  background: linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 48px 48px; 
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 85%);
+}
+
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+a { color: var(--cyan); text-decoration: none; }
+.hidden { display: none !important; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.wrap { max-width: 1280px; margin: auto; padding: 0 24px; }
+
+#scene { 
+  position: fixed; 
+  inset: 0; 
+  width: 100%; 
+  height: 100%; 
+  z-index: -1; 
+  pointer-events: none; 
+  opacity: 0.92; 
+}
+
+.ambient { 
+  position: fixed; 
+  inset: auto auto 8% 8%; 
+  width: 380px; 
+  height: 380px; 
+  border-radius: 50%; 
+  background: rgba(73,94,255,0.12); 
+  filter: blur(90px); 
+  pointer-events: none; 
+  z-index: -1; 
+}
+.ambient.two { inset: 10% 5% auto auto; background: rgba(40,220,255,0.08); }
+
+/* ==========================================================================
+   Header & Navigation
+   ========================================================================== */
+
+header {
+  height: 76px; 
+  background: rgba(4,9,18,0.72); 
+  border-bottom: 1px solid rgba(130,170,210,0.14);
+  position: sticky; 
+  top: 0; 
+  z-index: 50; 
+  backdrop-filter: blur(20px) saturate(140%);
+}
+
+.nav { height: 100%; display: flex; align-items: center; gap: 28px; }
+.brand { font-size: 22px; font-weight: 900; letter-spacing: -1px; color: #f1fbff; white-space: nowrap; }
+.brand span { color: var(--cyan); }
+.navlinks { display: flex; gap: 6px; align-items: center; flex: 1; }
+.navlinks a, .linkbtn {
+  border: 1px solid transparent; background: transparent; color: #91a4bb; font-weight: 700;
+  padding: 9px 12px; border-radius: 10px; transition: 0.2s; display: inline-block;
+}
+.navlinks a:hover, .linkbtn:hover { color: #eaf9ff; background: rgba(255,255,255,0.045); border-color: var(--line); }
+.navlinks a.active { color: #eaffff; background: rgba(40,220,255,0.09); border-color: rgba(40,220,255,0.18); }
+.navright { display: flex; align-items: center; gap: 9px; }
+
+/* ==========================================================================
+   Buttons & UI Elements
+   ========================================================================== */
+
+.btn {
+  border: 1px solid var(--line); background: rgba(11,20,36,0.72); color: #eaf6ff;
+  padding: 10px 15px; border-radius: 11px; font-weight: 750; transition: transform .2s, box-shadow .2s;
+  display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
+}
+.btn:hover { transform: translateY(-2px); border-color: rgba(40,220,255,0.4); }
+.btn.primary {
+  background: linear-gradient(135deg, #1ccdf0, #386eff); border-color: rgba(94,226,255,0.58); color: #fff;
+}
+.btn.danger { color: #ff9baa; border-color: rgba(255,95,120,0.3); }
+
+.avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: linear-gradient(135deg, rgba(40,220,255,0.16), rgba(155,108,255,0.2));
+  border: 1px solid rgba(108,213,255,0.28); display: inline-flex; align-items: center; justify-content: center;
+  color: #c9f7ff; font-weight: 850; overflow: hidden; flex-shrink: 0;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.userpill { display: flex; align-items: center; gap: 9px; font-weight: 750; }
+
+/* ==========================================================================
+   Layout & Sidebar Structure
+   ========================================================================== */
+
+.layout { display: grid; grid-template-columns: 250px minmax(0,1fr); gap: 25px; padding-top: 30px; padding-bottom: 70px; }
+.sidebar, .card {
+  background: linear-gradient(145deg, rgba(13,24,43,0.82), rgba(7,14,27,0.72));
+  border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: blur(18px);
+}
+.sidebar { padding: 17px; height: max-content; position: sticky; top: 98px; }
+.sideprofile { display: flex; align-items: center; gap: 11px; padding: 5px 4px 17px; border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+.side-menu { display: grid; gap: 5px; }
+.side-menu a {
+  border: 1px solid transparent; background: transparent; text-align: left; padding: 11px 12px;
+  border-radius: 11px; color: #8fa2b8; font-weight: 700; transition: 0.18s; display: block;
+}
+.side-menu a.active, .side-menu a:hover {
+  background: linear-gradient(90deg, rgba(40,220,255,0.11), rgba(155,108,255,0.05));
+  border-color: rgba(40,220,255,0.15); color: #e9fbff;
+}
+
+/* ==========================================================================
+   Hero & Dashboard Content
+   ========================================================================== */
+
+.welcome {
+  position: relative; overflow: hidden; padding: 34px;
+  background: radial-gradient(circle at 92% 18%, rgba(40,220,255,0.14), transparent 28%),
+              linear-gradient(135deg, rgba(14,28,51,0.92), rgba(7,15,29,0.75));
+  border: 1px solid rgba(85,187,255,0.2); border-radius: 22px; margin-bottom: 24px;
+}
+.welcome h1 { font-size: clamp(28px, 4vw, 48px); letter-spacing: -1.8px; margin: 0 0 11px; }
+.welcome p { margin: 0 0 21px; color: #9dafc2; }
+.searchbar { display: flex; gap: 9px; max-width: 760px; }
+
+.field {
+  width: 100%; border: 1px solid rgba(123,163,204,0.19); border-radius: 11px; padding: 11px 13px;
+  background: rgba(4,10,20,0.62); color: var(--ink); outline: none; transition: 0.2s;
+}
+.field:focus { border-color: rgba(40,220,255,0.55); }
+textarea.field { resize: vertical; min-height: 110px; }
+
+.sectionhead { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 28px 0 13px; }
+.sectionhead h2 { font-size: 20px; margin: 0; }
+.joblist { display: grid; gap: 13px; }
+.job { padding: 21px; }
+.jobtop { display: flex; justify-content: space-between; gap: 15px; }
+.job h3 { font-size: 17px; margin: 0 0 5px; }
+.tags { display: flex; gap: 7px; flex-wrap: wrap; margin: 13px 0; }
+.tag { font-size: 12px; background: rgba(83,121,163,0.11); border: 1px solid rgba(108,153,199,0.13); border-radius: 999px; padding: 5px 9px; color: #a9bdd1; }
+.jobfoot { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid rgba(119,164,208,0.12); padding-top: 13px; margin-top: 14px; }
+.jobactions { display: flex; gap: 8px; flex-wrap: wrap; }
+.jobmeta { display: flex; gap: 15px; flex-wrap: wrap; color: var(--muted2); font-size: 12px; }
+
+.panel { padding: 23px; }
+.formgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.formrow { display: grid; gap: 7px; }
+.formrow.full { grid-column: 1 / -1; }
+.formrow label { font-size: 13px; font-weight: 750; color: #b4c5d7; }
+.form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 19px; }
+
+/* ==========================================================================
+   Badges, Stats, & Alerts
+   ========================================================================== */
+
+.badge-sev { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+.badge-critical { background: rgba(255,95,120,0.22); color: #ff9baa; border: 1px solid rgba(255,95,120,0.4); }
+.badge-high { background: rgba(255,160,60,0.22); color: #ffc27d; border: 1px solid rgba(255,160,60,0.4); }
+.badge-medium { background: rgba(255,200,80,0.22); color: #ffe28a; border: 1px solid rgba(255,200,80,0.4); }
+.badge-low { background: rgba(40,220,255,0.22); color: #a0f0ff; border: 1px solid rgba(40,220,255,0.4); }
+.badge-info { background: rgba(150,170,200,0.2); color: #cbd9ea; border: 1px solid rgba(150,170,200,0.3); }
+
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 23px; }
+.stat-card { padding: 12px 14px; border: 1px solid rgba(119,164,208,0.13); border-radius: 13px; background: rgba(3,10,20,0.38); }
+.stat-value { font-size: 20px; font-weight: 850; color: #e9faff; }
+.stat-label { font-size: 11px; color: #6f849a; text-transform: uppercase; }
+
+/* ==========================================================================
+   Auth & Messaging
+   ========================================================================== */
+
+.auth-screen { min-height: calc(100vh - 76px); display: grid; grid-template-columns: 1.05fr 0.95fr; }
+.auth-art { padding: clamp(30px, 6vw, 90px); display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--line); }
+.auth-form-wrap { display: flex; align-items: center; justify-content: center; padding: 30px; }
+.auth-form { width: min(100%, 440px); background: rgba(9,17,31,0.66); border: 1px solid var(--line); border-radius: 22px; padding: 27px; }
+
+.chat-layout { display: grid; grid-template-columns: 280px minmax(0,1fr); min-height: 520px; }
+.chat-list { border-right: 1px solid var(--line); padding: 14px; }
+.chat-person { padding: 12px; border-radius: 11px; cursor: pointer; display: flex; gap: 10px; align-items: center; }
+.chat-person.active, .chat-person:hover { background: rgba(40,220,255,0.07); }
+.chat-window { display: flex; flex-direction: column; min-height: 520px; }
+.chat-title { padding: 16px 19px; border-bottom: 1px solid var(--line); font-weight: 800; }
+.messages { flex: 1; padding: 18px; display: flex; flex-direction: column; gap: 10px; max-height: 470px; overflow: auto; }
+.bubble { max-width: 78%; padding: 10px 13px; border-radius: 14px; background: rgba(80,110,142,0.12); align-self: flex-start; }
+.bubble.mine { align-self: flex-end; background: linear-gradient(135deg, rgba(40,220,255,0.13), rgba(75,125,255,0.13)); }
+.chat-compose { display: flex; gap: 8px; padding: 13px; border-top: 1px solid var(--line); }
+
+.toast { position: fixed; right: 20px; bottom: 20px; z-index: 100; background: #101d31; color: #eaf7ff; border: 1px solid rgba(40,220,255,0.18); padding: 13px 17px; border-radius: 12px; }
+.toast.bad { background: #28131b; border-color: rgba(255,95,120,0.25); }
+.empty { padding: 34px; text-align: center; color: var(--muted); border: 1px dashed rgba(120,160,200,0.2); border-radius: 14px; }
+.notice { padding: 12px 14px; border-radius: 11px; background: rgba(40,220,255,0.06); border: 1px solid rgba(40,220,255,0.13); color: #9edee9; margin: 12px 0; }
+.error { padding: 12px 14px; border-radius: 11px; background: rgba(255,95,120,0.08); border: 1px solid rgba(255,95,120,0.18); color: #ffabb8; margin: 12px 0; }
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+@media(max-width:850px){
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; }
+  .navlinks { display: none; }
+  .chat-layout { grid-template-columns: 1fr; }
+  .auth-screen { grid-template-columns: 1fr; }
+  .auth-art { display: none; }
+}
