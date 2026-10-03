@@ -1,68 +1,166 @@
 <!doctype html>
+
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign Up — phantom-bounty</title>
+  <title>Sign Up — Phantom Bounty</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body data-page="signup">
+
   <div class="auth-screen">
-    <section class="auth-art">
-      <div class="brand">phantom<span>-bounty</span></div>
-      <h1>Join the Platform.</h1>
-      <p>Connect with top security researchers or publish authorized bounty programs to secure your applications.</p>
-    </section>
 
-    <section class="auth-form-wrap">
-      <div class="auth-form">
-        <h2>Create an Account</h2>
+<!-- Left / Branding -->
+<section class="auth-art">
+  <div class="brand">phantom<span>-bounty</span></div>
 
-        <div id="authAlert" class="error hidden"></div>
+  <h1>Join the Platform.</h1>
 
-        <form id="signupForm">
-          <div class="formrow">
-            <label for="displayName">Full Name or Security Handle *</label>
-            <input class="field" id="displayName" name="displayName" type="text" required placeholder="e.g. Alex Vance">
-          </div>
+  <p>
+    Connect with security researchers or publish authorized
+    bounty programs to help secure your applications.
+  </p>
+</section>
 
-          <div class="formrow">
-            <label for="role">I want to *</label>
-            <select class="field" id="role" name="role" required>
-              <option value="hunter">Bug Bounty Hunter (Security Researcher)</option>
-              <option value="company">Company / Organization Manager</option>
-            </select>
-          </div>
 
-          <div class="formrow">
-            <label for="email">Email Address *</label>
-            <input class="field" id="email" name="email" type="email" autocomplete="email" required placeholder="name@domain.com">
-          </div>
+<!-- Right / Form -->
+<section class="auth-form-wrap">
+  <div class="auth-form">
 
-          <div class="formrow">
-            <label for="password">Password *</label>
-            <input class="field" id="password" name="password" type="password" minlength="6" autocomplete="new-password" required placeholder="At least 6 characters">
-          </div>
+    <h2>Create an Account</h2>
 
-          <button class="btn primary" id="submitBtn" style="width:100%; margin-top:18px" type="submit">
-            Create Account
-          </button>
-        </form>
+    <div
+      id="authAlert"
+      class="error hidden"
+      role="alert"
+      aria-live="polite">
+    </div>
 
-        <p style="margin-top:20px; font-size:14px; text-align:center" class="muted">
-          Already have an account? <a href="login.html">Log in</a>
-        </p>
+
+    <form id="signupForm" novalidate>
+
+      <!-- Name -->
+      <div class="formrow">
+        <label for="displayName">
+          Full Name or Security Handle *
+        </label>
+
+        <input
+          class="field"
+          id="displayName"
+          name="displayName"
+          type="text"
+          autocomplete="name"
+          minlength="2"
+          maxlength="60"
+          required
+          placeholder="e.g. Alex Vance">
       </div>
-    </section>
+
+
+      <!-- Role -->
+      <div class="formrow">
+        <label for="role">
+          I want to *
+        </label>
+
+        <select
+          class="field"
+          id="role"
+          name="role"
+          required>
+
+          <option value="hunter">
+            Bug Bounty Hunter (Security Researcher)
+          </option>
+
+          <option value="company">
+            Company / Organization Manager
+          </option>
+
+        </select>
+      </div>
+
+
+      <!-- Email -->
+      <div class="formrow">
+        <label for="email">
+          Email Address *
+        </label>
+
+        <input
+          class="field"
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+          placeholder="name@domain.com">
+      </div>
+
+
+      <!-- Password -->
+      <div class="formrow">
+        <label for="password">
+          Password *
+        </label>
+
+        <input
+          class="field"
+          id="password"
+          name="password"
+          type="password"
+          minlength="6"
+          autocomplete="new-password"
+          required
+          placeholder="At least 6 characters">
+      </div>
+
+
+      <!-- Submit -->
+      <button
+        class="btn primary"
+        id="submitBtn"
+        type="submit"
+        style="width:100%; margin-top:18px">
+
+        Create Account
+
+      </button>
+
+    </form>
+
+
+    <p
+      style="margin-top:20px; font-size:14px; text-align:center"
+      class="muted">
+
+      Already have an account?
+      <a href="login.html">Log in</a>
+
+    </p>
+
+  </div>
+</section>
+
   </div>
 
-  <!-- Firebase v10 SDKs -->
+  <!-- Firebase SDK -->
+
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
   <script>
-    // Firebase Initialization
+
+    /* =========================================================
+       FIREBASE CONFIGURATION
+    ========================================================= */
+
     const firebaseConfig = {
       apiKey: "AIzaSyC1_m2aMJeAW93BkgQ0VUM9KdtzT2OZelM",
       authDomain: "phantomsec-ca297.firebaseapp.com",
@@ -73,79 +171,252 @@
       appId: "1:15497490169:web:a8454e1ed0fda9de04fc28"
     };
 
+
+    /* =========================================================
+       INITIALIZE FIREBASE
+    ========================================================= */
+
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
+
     const auth = firebase.auth();
     const db = firebase.database();
 
-    const alertBox = document.getElementById('authAlert');
-    const submitBtn = document.getElementById('submitBtn');
 
-    // Auto-redirect if user is already logged in
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        window.location.href = 'index.html';
+    /* =========================================================
+       DOM ELEMENTS
+    ========================================================= */
+
+    const signupForm = document.getElementById("signupForm");
+    const displayNameInput = document.getElementById("displayName");
+    const roleInput = document.getElementById("role");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+
+    const alertBox = document.getElementById("authAlert");
+    const submitBtn = document.getElementById("submitBtn");
+
+
+    /* =========================================================
+       ALERT HELPERS
+    ========================================================= */
+
+    function showError(message) {
+      alertBox.textContent = message;
+      alertBox.classList.remove("hidden");
+    }
+
+
+    function hideError() {
+      alertBox.textContent = "";
+      alertBox.classList.add("hidden");
+    }
+
+
+    /* =========================================================
+       FIREBASE ERROR MESSAGES
+    ========================================================= */
+
+    function getErrorMessage(error) {
+
+      if (!error || !error.code) {
+        return "Something went wrong. Please try again.";
       }
-    });
 
-    // Helper function to format Firebase error codes
-    function getErrorMessage(code) {
-      switch (code) {
-        case 'auth/email-already-in-use':
-          return 'An account with this email address already exists.';
-        case 'auth/invalid-email':
-          return 'Please enter a valid email address.';
-        case 'auth/weak-password':
-          return 'Password must be at least 6 characters long.';
-        case 'auth/operation-not-allowed':
-          return 'Email/password accounts are not enabled in Firebase Auth.';
+      switch (error.code) {
+
+        case "auth/email-already-in-use":
+          return "An account with this email address already exists.";
+
+        case "auth/invalid-email":
+          return "Please enter a valid email address.";
+
+        case "auth/weak-password":
+          return "Your password must contain at least 6 characters.";
+
+        case "auth/operation-not-allowed":
+          return "Email/password authentication is not enabled in Firebase.";
+
+        case "auth/network-request-failed":
+          return "Network error. Please check your internet connection.";
+
+        case "auth/too-many-requests":
+          return "Too many attempts. Please wait a moment and try again.";
+
+        case "auth/invalid-api-key":
+          return "Firebase configuration is invalid.";
+
+        case "PERMISSION_DENIED":
+          return "Your account was created, but your profile could not be saved. Check your Firebase Database Rules.";
+
         default:
-          return 'An error occurred during account creation. Please try again.';
+          console.error("Firebase error:", error);
+          return "Unable to create your account. Please try again.";
       }
     }
 
-    // Sign Up Form Submission
-    document.getElementById('signupForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
 
-      alertBox.classList.add('hidden');
-      alertBox.textContent = '';
+    /* =========================================================
+       AUTH STATE
+    ========================================================= */
+
+    auth.onAuthStateChanged((user) => {
+
+      if (user) {
+        // User is already signed in.
+        // Do not interrupt signup submission unnecessarily.
+        console.log("Authenticated user:", user.uid);
+      }
+
+    });
+
+
+    /* =========================================================
+       FORM SUBMISSION
+    ========================================================= */
+
+    signupForm.addEventListener("submit", async (event) => {
+
+      event.preventDefault();
+
+      hideError();
+
+
+      /* -------------------------------------------------------
+         Read values
+      ------------------------------------------------------- */
+
+      const displayName = displayNameInput.value.trim();
+      const role = roleInput.value;
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value;
+
+
+      /* -------------------------------------------------------
+         Client-side validation
+      ------------------------------------------------------- */
+
+      if (displayName.length < 2) {
+        showError("Please enter your name or security handle.");
+        displayNameInput.focus();
+        return;
+      }
+
+
+      if (!["hunter", "company"].includes(role)) {
+        showError("Please select a valid account type.");
+        roleInput.focus();
+        return;
+      }
+
+
+      if (!email) {
+        showError("Please enter your email address.");
+        emailInput.focus();
+        return;
+      }
+
+
+      if (password.length < 6) {
+        showError("Password must be at least 6 characters long.");
+        passwordInput.focus();
+        return;
+      }
+
+
+      /* -------------------------------------------------------
+         Disable button
+      ------------------------------------------------------- */
+
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Creating Account...';
+      submitBtn.textContent = "Creating Account...";
 
-      const displayName = document.getElementById('displayName').value.trim();
-      const role = document.getElementById('role').value;
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
 
       try {
-        // 1. Create Authentication User
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+
+        /* =====================================================
+           1. CREATE FIREBASE AUTH ACCOUNT
+        ===================================================== */
+
+        const userCredential =
+          await auth.createUserWithEmailAndPassword(
+            email,
+            password
+          );
+
         const user = userCredential.user;
 
-        // 2. Update Auth Display Name Profile
-        await user.updateProfile({ displayName });
 
-        // 3. Write Full User Profile to Realtime Database
-        await db.ref('profiles/' + user.uid).set({
-          uid: user.uid,
-          email: user.email,
-          displayName: displayName,
-          role: role,
-          bio: role === 'hunter' ? 'Independent Security Researcher' : 'Security Program Manager',
-          location: 'Remote',
-          createdAt: Date.now()
+        if (!user) {
+          throw new Error("Firebase did not return a user.");
+        }
+
+
+        /* =====================================================
+           2. UPDATE FIREBASE AUTH PROFILE
+        ===================================================== */
+
+        await user.updateProfile({
+          displayName: displayName
         });
 
-        window.location.href = 'index.html';
-      } catch (err) {
-        alertBox.textContent = getErrorMessage(err.code);
-        alertBox.classList.remove('hidden');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Create Account';
+
+        /* =====================================================
+           3. CREATE DATABASE PROFILE
+        ===================================================== */
+
+        const profile = {
+
+          uid: user.uid,
+
+          email: user.email,
+
+          displayName: displayName,
+
+          role: role,
+
+          bio:
+            role === "hunter"
+              ? "Independent Security Researcher"
+              : "Security Program Manager",
+
+          location: "Remote",
+
+          createdAt: firebase.database.ServerValue.TIMESTAMP
+
+        };
+
+
+        await db
+          .ref("profiles/" + user.uid)
+          .set(profile);
+
+
+        /* =====================================================
+           4. SUCCESS
+        ===================================================== */
+
+        submitBtn.textContent = "Account Created!";
+
+        window.location.replace("index.html");
+
       }
+
+      catch (error) {
+
+        console.error("Signup error:", error);
+
+        showError(getErrorMessage(error));
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Create Account";
+
+      }
+
     });
+
   </script>
+
 </body>
 </html>
