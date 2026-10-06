@@ -1,0 +1,162 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>phantom-book Library</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fff;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(108, 43, 217, .22), transparent 30%),
+                radial-gradient(circle at 80% 80%, rgba(0, 183, 255, .14), transparent 30%),
+                #050509;
+        }
+
+        header {
+            padding: 20px 30px;
+            background: rgba(10, 10, 18, .85);
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .logo { font-size: 22px; font-weight: 800; }
+        .logo span, .hero h1 span { color: #8b5cf6; }
+
+        main {
+            width: min(1150px, calc(100% - 30px));
+            margin: auto;
+            padding: 40px 0 70px;
+        }
+
+        .hero { margin-bottom: 28px; }
+        .hero h1 { margin-bottom: 10px; font-size: clamp(32px, 6vw, 44px); }
+        .hero p { color: #9292a5; }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 1fr 200px;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 11px;
+            outline: none;
+            background: rgba(0,0,0,.3);
+            color: #fff;
+        }
+
+        input:focus, select:focus { border-color: #8b5cf6; }
+        select option { background: #11111a; }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 18px;
+        }
+
+        .book-card {
+            display: flex;
+            min-height: 240px;
+            flex-direction: column;
+            padding: 21px;
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 17px;
+            background: rgba(255,255,255,.045);
+            cursor: pointer;
+            transition: transform .18s ease, border-color .18s ease;
+        }
+
+        .book-card:hover, .book-card:focus {
+            transform: translateY(-3px);
+            border-color: #8b5cf6;
+            outline: none;
+        }
+
+        .book-title { margin-bottom: 10px; overflow-wrap: anywhere; font-size: 20px; }
+
+        .book-description {
+            flex: 1;
+            margin-bottom: 18px;
+            color: #a3a3b5;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .book-details { display: flex; gap: 8px; margin-bottom: 16px; }
+
+        .book-category, .book-price {
+            padding: 6px 9px;
+            border-radius: 7px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .book-category.free { color: #67e8f9; background: rgba(6,182,212,.12); }
+        .book-category.premium, .book-price { color: #fbbf24; background: rgba(245,158,11,.12); }
+
+        .read-button {
+            width: 100%;
+            padding: 11px 14px;
+            border: 0;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .read-button:hover { filter: brightness(1.12); }
+
+        .empty-message {
+            grid-column: 1 / -1;
+            padding: 28px;
+            border: 1px dashed rgba(255,255,255,.15);
+            border-radius: 12px;
+            color: #9292a5;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            header { padding: 18px; }
+            .filters { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">👻 phantom<span>-book</span></div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Discover <span>Books</span></h1>
+            <p>Choose a free book to read or a premium book to purchase.</p>
+        </section>
+
+        <section class="filters" aria-label="Book filters">
+            <input id="searchInput" type="search" placeholder="Search books..." aria-label="Search books">
+            <select id="categoryFilter" aria-label="Filter by category">
+                <option value="all">All books</option>
+                <option value="free">Free / Normal</option>
+                <option value="premium">Premium</option>
+            </select>
+        </section>
+
+        <section id="booksContainer" class="books-grid" aria-live="polite" aria-label="Books">
+            <p class="empty-message">Loading books...</p>
+        </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+</body>
+</html>
