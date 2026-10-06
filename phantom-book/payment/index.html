@@ -1,0 +1,435 @@
+<!-- Save as payment/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy a Book | phantom-book</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 24px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fff;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(108, 43, 217, .22), transparent 30%),
+                radial-gradient(circle at 80% 80%, rgba(0, 183, 255, .14), transparent 30%),
+                #050509;
+        }
+
+        .container {
+            width: min(650px, 100%);
+            margin: 25px auto;
+        }
+
+        a {
+            color: #c4b5fd;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            margin: 20px 0 8px;
+            font-size: clamp(28px, 5vw, 38px);
+        }
+
+        h2 {
+            margin: 24px 0 8px;
+            font-size: 20px;
+        }
+
+        .muted {
+            color: #a3a3b5;
+            line-height: 1.5;
+        }
+
+        .card {
+            margin-top: 20px;
+            padding: 22px;
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, .045);
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 8px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 9px;
+            outline: none;
+            background: #11111a;
+            color: #fff;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #8b5cf6;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+        }
+
+        .telebirr-number {
+            margin: 12px 0;
+            padding: 16px;
+            border-radius: 10px;
+            background: rgba(124, 58, 237, .18);
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .price {
+            min-height: 22px;
+            margin-top: 9px;
+            color: #fbbf24;
+            font-weight: 700;
+        }
+
+        .button {
+            display: inline-block;
+            width: 100%;
+            margin-top: 20px;
+            padding: 13px 18px;
+            border: 0;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            filter: brightness(1.1);
+        }
+
+        .button:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 14px;
+            line-height: 1.5;
+        }
+
+        .success {
+            color: #86efac;
+        }
+
+        .error {
+            color: #fca5a5;
+        }
+
+        .hint {
+            margin-top: 7px;
+            color: #858598;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .check-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 18px;
+            color: #d8d8e4;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .check-row input {
+            width: auto;
+            margin-top: 3px;
+        }
+
+        .thank-you {
+            padding: 28px 10px;
+            text-align: center;
+        }
+
+        .thank-you[hidden] {
+            display: none;
+        }
+
+        .checkmark {
+            width: 70px;
+            height: 70px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: #22c55e;
+            color: #fff;
+            font-size: 42px;
+            font-weight: 700;
+        }
+
+        .thank-you h2 {
+            margin: 0 0 12px;
+            font-size: 25px;
+        }
+
+        .thank-you p {
+            margin-top: 10px;
+            color: #c4c4d0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <a href="../index.html">← Back to books</a>
+
+        <h1>Buy a premium book</h1>
+        <p class="muted">
+            Choose a book, send its price using Telebirr, then upload your receipt for review.
+        </p>
+
+        <section class="card">
+            <form
+                id="receiptForm"
+                action="https://formsubmit.co/kidustafese7@gmail.com"
+                method="POST"
+                enctype="multipart/form-data"
+                target="receiptFrame"
+            >
+                <input
+                    type="hidden"
+                    name="_subject"
+                    value="Premium book payment receipt"
+                >
+
+                <label for="bookSelect">Choose a premium book</label>
+                <select id="bookSelect" name="book" required>
+                    <option value="">Loading premium books...</option>
+                </select>
+                <p id="bookPrice" class="price"></p>
+
+                <h2>Pay with Telebirr</h2>
+                <p class="muted">
+                    Send the displayed book price to this Telebirr number:
+                </p>
+                <div class="telebirr-number">0911717121</div>
+
+                <label for="customerName">Your name</label>
+                <input
+                    id="customerName"
+                    name="customer_name"
+                    type="text"
+                    maxlength="100"
+                    autocomplete="name"
+                    required
+                >
+
+                <label for="customerEmail">Your email</label>
+                <input
+                    id="customerEmail"
+                    name="_replyto"
+                    type="email"
+                    maxlength="200"
+                    autocomplete="email"
+                    required
+                >
+
+                <label for="customerPhone">Your phone number</label>
+                <input
+                    id="customerPhone"
+                    name="customer_phone"
+                    type="tel"
+                    maxlength="30"
+                    autocomplete="tel"
+                    required
+                >
+
+                <label for="receiptFile">Payment receipt (photo or PDF)</label>
+                <input
+                    id="receiptFile"
+                    name="attachment"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,application/pdf"
+                    required
+                >
+                <p class="hint">
+                    The total file upload limit for this form is 10 MB.
+                </p>
+
+                <label class="check-row">
+                    <input
+                        id="paymentConfirmed"
+                        name="payment_sent"
+                        type="checkbox"
+                        value="Yes"
+                        required
+                    >
+                    <span>
+                        I have sent the payment to the Telebirr number shown above.
+                    </span>
+                </label>
+
+                <button id="submitButton" class="button" type="submit">
+                    Send receipt for review
+                </button>
+
+                <p id="formMessage" class="message" role="status"></p>
+            </form>
+
+            <div id="thankYouMessage" class="thank-you" hidden>
+                <div class="checkmark" aria-label="Success">✓</div>
+                <h2>Receipt sent</h2>
+                <p>Thank you for your purchase request.</p>
+                <p>We’ll review your receipt and email you within 8 hours.</p>
+            </div>
+
+            <iframe
+                id="receiptFrame"
+                name="receiptFrame"
+                title="Receipt submission"
+                style="display: none"
+            ></iframe>
+        </section>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import {
+            getDatabase,
+            ref,
+            onValue
+        } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC1m2aJeAW93BkgQ0VUM9KdtzT2OZelM",
+            authDomain: "phantomsec-ca297.firebaseapp.com",
+            databaseURL: "https://phantomsec-ca297-default-rtdb.firebaseio.com",
+            projectId: "phantomsec-ca297",
+            storageBucket: "phantomsec-ca297.firebasestorage.app",
+            messagingSenderId: "15497490169",
+            appId: "1:15497490169:web:a8454e1ed0fda9de04fc28"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const bookSelect = document.getElementById("bookSelect");
+        const bookPrice = document.getElementById("bookPrice");
+        const receiptForm = document.getElementById("receiptForm");
+        const receiptFile = document.getElementById("receiptFile");
+        const receiptFrame = document.getElementById("receiptFrame");
+        const submitButton = document.getElementById("submitButton");
+        const formMessage = document.getElementById("formMessage");
+        const thankYouMessage = document.getElementById("thankYouMessage");
+
+        let premiumBooks = [];
+        let receiptSubmitted = false;
+
+        function updateBookPrice() {
+            const selectedBook = premiumBooks.find(
+                (book) => book.id === bookSelect.value
+            );
+
+            bookPrice.textContent = selectedBook
+                ? `Price: ${selectedBook.price || 0} ${selectedBook.currency || "ETB"}`
+                : "";
+        }
+
+        onValue(
+            ref(database, "books"),
+            (snapshot) => {
+                const data = snapshot.val();
+
+                premiumBooks = data
+                    ? Object.entries(data)
+                        .map(([id, book]) => ({ id, ...book }))
+                        .filter((book) => book.category === "premium")
+                    : [];
+
+                bookSelect.replaceChildren();
+
+                const placeholder = document.createElement("option");
+                placeholder.value = "";
+                placeholder.textContent = premiumBooks.length
+                    ? "Choose a premium book"
+                    : "No premium books are available";
+                bookSelect.appendChild(placeholder);
+
+                for (const book of premiumBooks) {
+                    const option = document.createElement("option");
+                    option.value = book.id;
+                    option.textContent =
+                        `${book.name || "Untitled"} — ${book.price || 0} ${book.currency || "ETB"}`;
+                    bookSelect.appendChild(option);
+                }
+
+                const requestedBookId =
+                    new URLSearchParams(window.location.search).get("book");
+
+                if (
+                    requestedBookId &&
+                    premiumBooks.some((book) => book.id === requestedBookId)
+                ) {
+                    bookSelect.value = requestedBookId;
+                }
+
+                updateBookPrice();
+            },
+            () => {
+                bookSelect.innerHTML =
+                    '<option value="">Could not load books</option>';
+                formMessage.textContent =
+                    "Could not load books. Please refresh and try again.";
+                formMessage.className = "message error";
+            }
+        );
+
+        bookSelect.addEventListener("change", updateBookPrice);
+
+        receiptForm.addEventListener("submit", (event) => {
+            const file = receiptFile.files[0];
+
+            if (file && file.size > 10 * 1024 * 1024) {
+                event.preventDefault();
+                formMessage.textContent =
+                    "The receipt file must be 10 MB or smaller.";
+                formMessage.className = "message error";
+                return;
+            }
+
+            receiptSubmitted = true;
+            submitButton.disabled = true;
+            submitButton.textContent = "Sending...";
+            formMessage.textContent = "Sending your receipt...";
+            formMessage.className = "message";
+        });
+
+        receiptFrame.addEventListener("load", () => {
+            if (!receiptSubmitted) return;
+
+            receiptSubmitted = false;
+            receiptForm.hidden = true;
+            thankYouMessage.hidden = false;
+        });
+    </script>
+</body>
+</html>
