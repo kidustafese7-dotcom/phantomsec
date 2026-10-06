@@ -1,0 +1,15 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /books/{adminUid}/{fileName} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.auth.uid == 'OZ5sD1Lz8NNDJXoDifhfRxtQpKX2'
+                   && request.resource.contentType == 'application/pdf'
+                   && request.resource.size <= 50 * 1024 * 1024;
+      allow delete: if request.auth != null
+                    && request.auth.uid == 'OZ5sD1Lz8NNDJXoDifhfRxtQpKX2';
+    }
+  }
+}
